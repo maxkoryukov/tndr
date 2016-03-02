@@ -21,7 +21,7 @@ router.post('/login', function(req, res, next) {
 			url = b.toString();
 			if (!url.startsWith('/'))
 				url = '/';
-		};
+		}
 		res.redirect(url);
 	} else {
 		res.render('login', { error: { message: 'Unknown user' }, r: req.query.r });

@@ -34,7 +34,7 @@ TODO : move to gulp
 var lessopt = {
 	dest : path.join(__dirname, 'assets'),
 	debug : true,
-}
+};
 var lesssrc = path.join(__dirname, 'billets');
 app.use(lessmw(lesssrc, lessopt));
 
@@ -50,11 +50,11 @@ var session_config = {
 	resave: false,
 	saveUninitialized: false,
 	cookie: {},
-}
+};
 
 if (app.get('env') !== 'development') {
-	app.set('trust proxy', 1) // trust first proxy
-	session_config.cookie.secure = true // serve secure cookies
+	app.set('trust proxy', 1); // trust first proxy
+	session_config.cookie.secure = true; // serve secure cookies
 }
 
 app.use(session(session_config));
