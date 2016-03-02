@@ -1,0 +1,22 @@
+<h1>Sign In</h1>
+
+{{#if error}}
+	<div class="panel error">
+		{{error.message}}
+	</div>
+{{/if}}
+
+<form action="/login" method="POST">
+	<label>
+		Username
+		<input type="text" name="username" />
+	</label>
+
+	<label>
+		Password
+		<input type="password" name="password" />
+	</label>
+
+	<input type="hidden" value="{{r}}" />
+	<button type="submit">GO</button>
+</form>
