@@ -12,7 +12,17 @@ router.post('/login', function(req, res, next) {
 	if (id && id > 0){
 		req.session.userId = id;
 		req.session.save();
-		res.redirect('/');
+
+		// TODO : fill address:
+		r = null;
+		url = '/';
+		if (r){
+			var b = new Buffer(r, 'base64');
+			url = b.toString();
+			if (!url.startsWith('/'))
+				url = '/';
+		};
+		res.redirect(url);
 	} else {
 		res.render('login', { error: { message: 'Unknown user' }, r: req.query.r });
 	}
