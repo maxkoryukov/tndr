@@ -1,6 +1,6 @@
 "use strict";
 
-var debug = require('debug')('tndr:model.user');;
+var debug = require('debug')('tndr:model.user');
 
 module.exports = function(sequelize, DataTypes) {
 

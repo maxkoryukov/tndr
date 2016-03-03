@@ -31,7 +31,9 @@ router.post('/login', function(req, res, next) {
 			res.redirect(url);
 		} else {
 			res.render('login', { error: { message: 'Unknown user' }, r: req.query.r });
-		};
+		}
+		// lets try...
+		next();
 	};
 
 	models.user.authenticate(un, pw, done);
