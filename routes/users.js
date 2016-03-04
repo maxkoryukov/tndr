@@ -35,7 +35,7 @@ router.post('/change_password', function(req, res, next) {
 	var pwn2 = req.body.passwordnew2;
 
 	if (pwn1 !== pwn2){
-		req.flash('message', 'New passwords do not match!')
+		req.flash('message', 'New passwords do not match!');
 		res.redirect('back');
 		return;
 	}
