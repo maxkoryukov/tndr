@@ -9,7 +9,8 @@
 
 	"dependencies": {
 		"unused-ignores": [
-			"sqlite3-*"
+			"sqlite3*",
+			"opener*"
 		]
 	}
 }
