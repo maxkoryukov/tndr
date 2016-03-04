@@ -22,7 +22,7 @@ Start date: **2016-02-29**
     * [x] list
     * [ ] create
     * [ ] disable/enable
-* [ ] make site menu well-looks ( #3 )
+* [x] make site menu well-looks ( #3 )
 
 ## Milestone 2
 

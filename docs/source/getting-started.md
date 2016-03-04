@@ -1,8 +1,8 @@
 # Getting started
 
-## Prerequisites
+## Environment
 
-Currently, there is just one dependence: **nodejs**. Download and install an appropriate version: [nodejs.org](http://nodejs.org/#download)
+Currently, there is just one dependency: **nodejs**. Download and install an appropriate version: [nodejs.org](http://nodejs.org/#download)
 
 ## Deploy
 
