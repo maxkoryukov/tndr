@@ -1,11 +1,23 @@
-# Test against this version of Node.js
-environment:
-  nodejs_version: "0.10"
+version: 0.1.{build}-{branch}
 
+# Fix line endings on Windows
+init:
+  - git config --global core.autocrlf true
+
+# What combinations to test
+environment:
+  matrix:
+    - nodejs_version: "4"
+    - nodejs_version: "5"
+    - nodejs_version: "0"   # latest
+# platform:
+#   - x86
+#   - x64
 # Install scripts. (runs after repo cloning)
 install:
   # Get the latest stable version of Node.js or io.js
   - ps: Install-Product node $env:nodejs_version
+  - npm install -g npm
   # install modules
   - npm install
 
@@ -17,5 +29,11 @@ test_script:
   # run tests
   - npm test
 
-# Don't actually build.
-#build: off
+# Don't actually build, there is nothing to build...
+build: off
+
+matrix:
+  fast_finish: true
+
+cache:
+  - node_modules -> package.json
