@@ -1,8 +1,12 @@
 
 {{#if user }}
 	<ul>
-		<li><a href="/users">Users management</a></li>
-		<li>{{user.username}}</li>
-		<li><form method="POST" action="/logout"><button type="submit">Logout</button></form></li>
+		<li><a href="/users/list">Users management</a></li>
+		<li>
+			<a href="/users/me" title="My profile">{{user.username}}</a>
+			<ul>
+				<li><form method="POST" action="/logout"><button type="submit">Logout</button></form></li>
+			</ul>
+		</li>
 	</ul>
 {{/if}}

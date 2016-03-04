@@ -1,0 +1,18 @@
+<h1>Known users</h1>
+
+<table class="tablesorter">
+	<thead><tr>
+		<th>#</th>
+		<th>Username</th>
+		<th>Enabled</th>
+	</th></thead>
+	<tbody>
+		{{#each users}}
+			<tr>
+				<td>{{user}}</td>
+				<td>{{username}}</td>
+				<td><input type="checkbox" class="tndr-user-enabled" value="1" /></td>
+			</tr>
+		{{/each}}
+	</tbody>
+</table>

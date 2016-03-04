@@ -1,6 +1,7 @@
 "use strict";
 
 var debug = require('debug')('tndr:model.user');
+var _     = require('lodash');
 
 module.exports = function(sequelize, DataTypes) {
 
@@ -20,30 +21,45 @@ module.exports = function(sequelize, DataTypes) {
 				allowNull: false },
 		},
 		{
-			"paranoid": true,
+			paranoid: true,
 			classMethods: {
 				associate: function(models) {
 					//User.hasMany(models.Task)
 				},
 
-				authenticate: function authenticate(username, password, done){
-					debug('user.authenticate', username, password);
+				authenticate: function authenticate(username, password){
+					debug('authenticate', username);
 
-					this.findAndCountAll({
-						where: {
-							username: username,
-							password: password
-						},
-						limit: 2,
-					}).then(function(result){
-						if (result.count !== 1){
-							done(null);
-						} else {
-							done(result.rows[0].user);
-						}
-					});
+					let hash = password;
+
+					return this.findAndCountAll({
+							where: {
+								username: username,
+								password: hash
+							},
+							limit: 2,
+						}).then(function(result){
+							if (result.count !== 1){
+								return null;
+							} else {
+								return result.rows[0].user;
+							}
+						});
 				},
 
+				changePassword: function changePassword(username, password, newhash){
+					debug('changePassword', username);
+
+					return this.authenticate(username, password)
+						.then(function(id){
+							return user.update(
+									{ password : newhash },
+									{ where : { user : { $eq : id } } }
+								);
+						})
+						.get(0)
+						.then(Boolean);
+				}
 			}
 		}
 	);

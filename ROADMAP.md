@@ -1,6 +1,4 @@
-# Roadmap
-
-_Roadmap is not 100% detailed, currently, just basic steps._
+# ROADMAP
 
 ## Preparation
 
@@ -9,16 +7,54 @@ _Roadmap is not 100% detailed, currently, just basic steps._
 
 ## Milestone 1: DataStructure Scaffold
 
-**2016-02-29**
+Start date: **2016-02-29**
 
-* [ ] desribe data structures for main entities
-* [ ] Describe the decomposition of project to submodules
+* [x] application scaffold
+    * [x] logging
+    * [x] sessions
+    * [x] db-integration
+    * [x] db-autodeploy
+    * [x] db-models scaffold
+* [x] desribe data structures for `user`
+* [x] authentication
+* [ ] user management ( #2 ):
+    * [x] change password
+    * [x] list
+    * [ ] create
+    * [ ] disable/enable
+* [ ] make site menu well-looks ( #3 )
 
-Next steps - are waiting for decomposition..
+## Milestone 2
 
-Base approach for each module:
+* [ ] persons ( #4 )
+    * [ ] data structures
+    * [ ] link with `user`
+    * [ ] list persons
+    * [ ] create person
+    * [ ] edit person
+    * [ ] delete person
+* [ ] builders ( #5 )
+    * [ ] C builder
+    * [ ] R builder
+    * [ ] U builder
+    * [ ] D builder
+    * [ ] link persons with builder
+* [ ] builder's priorities ( #6 )
+    * [ ] data-field
+    * [ ] description
+    * [ ] style
 
-* [ ] tests
-* [ ] code
+## Milestone 3
 
-## 
+* [ ] tenders PART1
+    * [ ] ????? great ticket
+* [ ] authorization
+    * [ ] data structure for `roles`
+    * [ ] link `user` and `roles`
+    * [ ] add tests for user's priveleges in code
+
+## Milestone 4
+
+* [ ] tenders PART2
+    * [ ] ????? another one great ticket
+* [ ] more style and CSS
