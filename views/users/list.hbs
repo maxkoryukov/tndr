@@ -11,7 +11,13 @@
 			<tr>
 				<td>{{user}}</td>
 				<td>{{username}}</td>
-				<td><input type="checkbox" class="tndr-user-enabled" value="1" /></td>
+				<td>
+					{{#if is_root}}
+						<input type="checkbox" disabled="disabled" readonly="readonly" checked="checked" value="1" />
+					{{else}}
+						<input type="checkbox" class="tndr-user-enabled" value="1" />
+					{{/if}}
+				</td>
 			</tr>
 		{{/each}}
 	</tbody>

@@ -20,7 +20,9 @@ router.get('/list', function(req, res, next) {
 		order: [['username', 'DESC']],
 	}).then(function(users){
 
+		users = _.forEach(users, x => x.is_root = x.username==='root');
 		debug('users ', users);
+
 		res.render('users/list', { users : users });
 
 	});
