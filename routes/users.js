@@ -18,7 +18,7 @@ router.get('/users/list', function(req, res, next) {
 	// TODO : use model???
 	req.app.models.user.findAll({
 		attributes : ['user', 'username', 'deleted_at'],
-		order: [['username', 'DESC']],
+		order: ['deleted_at', ['username', 'ASC']],
 		paranoid: false
 	}).then(function(users){
 

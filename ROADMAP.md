@@ -47,7 +47,7 @@ Start date: **2016-02-29**
 ## Milestone 3
 
 * [ ] tenders PART1
-    * [ ] ????? great ticket
+    * [ ] TODO: break apart
 * [ ] authorization
     * [ ] data structure for `roles`
     * [ ] link `user` and `roles`
@@ -56,5 +56,5 @@ Start date: **2016-02-29**
 ## Milestone 4
 
 * [ ] tenders PART2
-    * [ ] ????? another one great ticket
+    * [ ] TODO: break apart // another one great ticket
 * [ ] more style and CSS
