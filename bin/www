@@ -74,7 +74,7 @@ function onError(error) {
  * Event listener for HTTP server "listening" event.
  */
 
-function onListening() {
+function onListening(x,y,z) {
 	var addr = server.address();
 	var is_piped = typeof addr === 'string';
 	if (is_piped){
@@ -84,11 +84,13 @@ function onListening() {
 	}
 	debug(`Listening on ${bind}`);
 
-	if (!is_piped){
-		var host = addr.address;
-		if (host === '::') host = 'localhost';
+	if (app && app.config && app.config.open_browser){
+		if (!is_piped){
+			var host = addr.address;
+			if (host === '::') host = 'localhost';
 
-		var browser = opener(`http://${host}:${port}`);
-		browser.unref();
+			var browser = opener(`http://${host}:${port}`);
+			browser.unref();
+		}
 	}
 }

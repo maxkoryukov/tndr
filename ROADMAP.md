@@ -20,7 +20,7 @@ Start date: **2016-02-29**
 * [ ] user management ( #2 ):
     * [x] change password
     * [x] list
-    * [ ] create
+    * [x] create
     * [ ] disable/enable
 * [x] make site menu well-looks ( #3 )
 

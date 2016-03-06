@@ -3,7 +3,6 @@
 var express  = require('express');
 var router   = express.Router();
 var debug    = require('debug')('tndr:routes.login');
-var models   = require('../models');
 var _        = require('lodash');
 
 router.get('/login', function(req, res) {
@@ -15,7 +14,7 @@ router.post('/login', function(req, res) {
 	var un = req.body.username;
 	var pw = req.body.password;
 
-	models.user.authenticate(un, pw)
+	req.app.models.user.authenticate(un, pw)
 		.then(function done_auth(id) {
 			if (id && id > 0){
 				req.session.userId = id;
@@ -48,9 +47,13 @@ router.post('/logout', function(req, res) {
 
 /* REQUIRE AUTH for all other requests */
 router.all('*', function (req, res, next){
+
+	// PREAUTH !!
+	req.session.userId = 1;
+
 	if (req.session && req.session.userId){
 
-		models.user.findById(req.session.userId).then(function(user){
+		req.app.models.user.findById(req.session.userId).then(function(user){
 			user = _.omit(user, ['password', 'hash']);
 			res.locals.user = user;
 			debug(res.locals.user);

@@ -1,5 +1,6 @@
 {
-  "development": {
+  "dev": {
+    "open_browser" : false,
     "cookie": {
       "secret" : "Pkp6jVB3ToKEvfqudrFO",
       "secure" : false
@@ -10,6 +11,8 @@
     }
   },
   "test": {
+    "open_browser" : false,
+
     "cookie": {
       "secret" : "Pkp6jVB3ToKEvfqudrFO",
       "secure" : true
@@ -20,6 +23,8 @@
     }
   },
   "production": {
+    "open_browser" : true,
+
     "cookie": {
       "secret" : "Pkp6jVB3ToKEvfqudrFO",
       "secure" : true

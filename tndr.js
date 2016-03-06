@@ -17,20 +17,13 @@ var view_partials   = require('./views/register-partials');
 
 var app             = express();
 
-var envname         = process.env.NODE_ENV || 'development';
+var envname         = process.env.NODE_ENV || 'production';
 var config          = require('./config/app.json')[envname];
 
-/*
-====================================
-DB
-====================================
-*/
-models.init()
-	.then(function(models){
-		app.use(function (req, res, next){
-			app.models = models;
-		});
-	});
+// ALWAYS: print config, when it is read from ENV:
+debug(`ENV: ${envname}`);
+
+app.config = config;
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -79,29 +72,48 @@ app.use(session(session_config));
 
 /*
 ====================================
-ROUTING
+DB
 ====================================
 */
+models.init()
 
-var routes = require('./routes/index');
-var users = require('./routes/users');
-var login = require('./routes/login');
+	// after DB ready, register DB-MW (should be the first MW in chain):
 
-app.use('/', login);
-app.use('/', routes);
-app.use('/users', users);
+	.then(function(){
+		app.use(function (req, res, next){
+			app.models = models;
+			next();
+		});
+	})
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-	// this handler should process all unhandled requests.
-	if (!res.headersSent) {
-		var err = new Error('Not Found');
-		err.status = 404;
-		next(err);
-	} else {
-		next();
-	}
-});
+	.then(function(){
+
+	/*
+	====================================
+	ROUTING
+	====================================
+	*/
+
+		var dashboard = require('./routes/dashboard');
+		var users = require('./routes/users');
+		var login = require('./routes/login');
+
+		app.use('/', login);
+		app.use('/', dashboard);
+		app.use('/', users);
+
+		// catch 404 and forward to error handler
+		app.use(function(req, res, next) {
+			// this handler should process all unhandled requests.
+			if (!res.headersSent) {
+				var err = new Error('Not Found');
+				err.status = 404;
+				next(err);
+			} else {
+				next();
+			}
+		});
+	});
 
 /*
 ====================================
@@ -111,7 +123,7 @@ error handlers
 
 // development error handler
 // will print stacktrace
-if (envname === 'development') {
+if (envname === 'dev') {
 	app.use(function(err, req, res, next) {
 		res.status(err.status || 500);
 		res.render('error', {

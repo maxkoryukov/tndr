@@ -1,20 +1,18 @@
 {
-  "development": {
+  "dev": {
     "username": "tndr",
     "password": "12345678",
     "database": "db-dev",
     "dialect": "sqlite",
     "benchmark": true,
-    "storage": "data/db/db-dev.sqlite",
-    "query" : { "raw": true }
+    "storage": "data/db/db-dev.sqlite"
   },
   "test": {
     "username": "tndr",
     "password": "12345678",
     "database": "db-tst",
     "dialect": "sqlite",
-    "storage": "data/db/db-tst.sqlite",
-    "query" : { "raw": true }
+    "storage": "data/db/db-tst.sqlite"
   },
   "production": {
     "username": "tndr",
@@ -22,7 +20,6 @@
     "database": "db",
     "host": "127.0.0.1",
     "dialect": "sqlite",
-    "storage": "data/db/db.sqlite",
-    "query" : { "raw": true }
+    "storage": "data/db/db.sqlite"
   }
 }

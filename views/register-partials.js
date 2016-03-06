@@ -20,3 +20,5 @@ filenames.forEach(function (filename) {
 	var template = fs.readFileSync(partialsDir + '/' + filename, 'utf8');
 	return hbs.registerPartial(name, template);
 });
+
+module.exports = {};

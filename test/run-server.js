@@ -14,7 +14,11 @@ describe('Run server', function() {
 		server.close(done);
 	});
 
-	it('should be running', function () {
+	it('should be runable out of the box', function () {
+		assert.isTrue(true);
+	});
+
+	it('should run after restart', function () {
 		assert.isTrue(true);
 	});
 });

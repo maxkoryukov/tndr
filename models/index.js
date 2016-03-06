@@ -1,16 +1,28 @@
 "use strict";
 
+/*
+
+DO NOT USE THIS MODULE IN YOUR MODULES.
+
+You could pick appropriate model from your app.models
+The models should be registered there!
+
+*/
+
 var fs              = require('fs');
 var mkdirp          = require('mkdirp');
 var path            = require('path');
 var Sequelize       = require('sequelize');
 var basename        = path.basename(module.filename);
-var envname         = process.env.NODE_ENV || 'development';
+var envname         = process.env.NODE_ENV || 'production';
 var config          = require(__dirname + '/../config/db.json')[envname];
 var _               = require('lodash');
 var debug           = require('debug')('tndr:models.index');
 
 var db              = {};
+
+// ALWAYS: print config, when it is read from ENV:
+debug(`ENV: ${envname}`);
 
 var default_define = {
 	"underscored": true,
@@ -18,6 +30,7 @@ var default_define = {
 };
 
 config.define = _.merge(config.define, default_define);
+config.query = _.merge(config.define, { "raw": true } );
 
 if (config.use_env_variable) {
 	var sequelize = new Sequelize(process.env[config.use_env_variable]);

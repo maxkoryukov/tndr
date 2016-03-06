@@ -4,12 +4,52 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
-a {
-  color: #00B7FF;
-}
 
-.tndr-form-signin
+@color-primary : @brand-primary;
+
+@button-border : 3px;
+
+.tndr
 {
-	margin-left:auto;
-	margin-right: auto;
+
+/*
+=====================================================================
+                COMMON STUFF
+=====================================================================
+*/
+
+	.btn-common
+	{
+		.btn;
+		.btn-sm;
+		background-color:transparent;
+		border-color: @color-primary;
+		border-width: @button-border;
+		border-style: solid;
+		color:@color-primary;
+		border-radius: @border-radius-large;
+	}
+
+/*
+=====================================================================
+                DASHBOARD
+=====================================================================
+*/
+
+	.dashboard
+	{
+		article
+		{
+			.make-md-column(4);
+			.border-radius(@border-radius-base);
+			.panel;
+		}
+	}
+
+/*
+=====================================================================
+                USERS SECTION
+=====================================================================
+*/
+
 }

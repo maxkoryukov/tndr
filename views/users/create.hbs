@@ -1,0 +1,30 @@
+<section class="container">
+	<h1>New user</h1>
+
+	<form method="POST" action="/users/create">
+
+		<div class="form-group col-md-7">
+			<label for="username" class="control-label">Username</label>
+				<input type="text" class="form-control" id="username" name="username" size="30" />
+		</div>
+
+		<div class="form-group col-md-7">
+			<label for="password" class="control-label">New password</label>
+			<div>
+				<input type="password" class="form-control" id="password" name="password" />
+			</div>
+		</div>
+
+		<div class="form-group col-md-7">
+			<label for="password2" class="control-label">Confirm new password</label>
+			<div>
+				<input type="password" class="form-control" id="password2" name="password2" />
+			</div>
+		</div>
+
+		<div class="form-group col-md-7">
+			<a href="/users/list" class="btn btn-cancel" title="Cancel">Cancel</a>
+			<button type="submit" class="btn btn-primary" title="Create new user">Create</a>
+		</div>
+	</form>
+</section>

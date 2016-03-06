@@ -1,24 +1,28 @@
-<h1>Known users</h1>
-
-<table class="tablesorter">
-	<thead><tr>
-		<th>#</th>
-		<th>Username</th>
-		<th>Enabled</th>
-	</th></thead>
-	<tbody>
-		{{#each users}}
-			<tr>
-				<td>{{user}}</td>
-				<td>{{username}}</td>
-				<td>
-					{{#if is_root}}
-						<input type="checkbox" disabled="disabled" readonly="readonly" checked="checked" value="1" />
-					{{else}}
-						<input type="checkbox" class="tndr-user-enabled" value="1" />
-					{{/if}}
-				</td>
-			</tr>
-		{{/each}}
-	</tbody>
-</table>
+<section class="container">
+	<h1>Known users</h1>
+	<div>
+		<a href="/users/create" class="btn btn-common" title="Create new user"><i class="fa fa-user-plus"></i> New user</a>
+	</div>
+	<table class="tablesorter table">
+		<thead><tr>
+			<th>#</th>
+			<th>Username</th>
+			<th>Enabled</th>
+		</th></thead>
+		<tbody>
+			{{#each users}}
+				<tr>
+					<td>{{user}}</td>
+					<td>{{username}}</td>
+					<td>
+						{{#if is_root}}
+							<input type="checkbox" disabled="disabled" readonly="readonly" checked="checked" value="1" />
+						{{else}}
+							<input type="checkbox" class="tndr-user-enabled" value="1" />
+						{{/if}}
+					</td>
+				</tr>
+			{{/each}}
+		</tbody>
+	</table>
+</section>

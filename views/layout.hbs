@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>{{title}}</title>
+	<title>tndr {{#if title}}:{{title}}{{/if}}</title>
 	<link rel='stylesheet' href='/css/style.css' />
 
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 	<!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous"></head>
 	<!-- Optional theme -->
@@ -23,7 +24,25 @@
 	<header>
 		{{> _menu }}
 	</header>
+
+	<main class="tndr">
+
+	{{#if error}}
+		<div class="alert alert-error alert-dismissible" role="alert">
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+			<p>{{error.message}}</p>
+		</div>
+	{{/if}}
+
+	{{#each messages }}
+		<div class="panel default">
+			{{this}}
+		</div>
+	{{/each}}
+
 	{{{body}}}
+	</main>
 
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
