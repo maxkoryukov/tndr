@@ -1,19 +1,20 @@
 
 var assert = require('chai').assert;
 
-describe('Dumb', function() {
+describe('Run server', function() {
 
 	var server;
 
 	beforeEach(function () {
-		server = require('../bin/www');
+		var tndr = require('../tndr');
+		server = tndr.listen(3000);
 	});
 
 	afterEach(function (done) {
-		//server.close(done);
+		server.close(done);
 	});
 
-	it('should be true', function () {
+	it('should be running', function () {
 		assert.isTrue(true);
 	});
 });

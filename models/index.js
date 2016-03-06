@@ -1,14 +1,16 @@
-'use strict';
+"use strict";
 
-var fs				= require('fs');
-var path			= require('path');
-var Sequelize = require('sequelize');
-var basename	= path.basename(module.filename);
-var env			 = process.env.NODE_ENV || 'development';
-var config		= require(__dirname + '/../config/db.json')[env];
-var db				= {};
-var _				 = require('lodash');
-var debug    = require('debug')('tndr:models.index');
+var fs              = require('fs');
+var mkdirp          = require('mkdirp');
+var path            = require('path');
+var Sequelize       = require('sequelize');
+var basename        = path.basename(module.filename);
+var envname         = process.env.NODE_ENV || 'development';
+var config          = require(__dirname + '/../config/db.json')[envname];
+var _               = require('lodash');
+var debug           = require('debug')('tndr:models.index');
+
+var db              = {};
 
 var default_define = {
 	"underscored": true,
@@ -22,6 +24,12 @@ if (config.use_env_variable) {
 } else {
 	var sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
+
+/*
+==================================
+LOAD all models
+==================================
+*/
 
 fs
 	.readdirSync(__dirname)
@@ -42,21 +50,39 @@ Object.keys(db).forEach(function(modelName) {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-db.initialDataLoad = function initialDataLoad(sq){
-	return sq.models.user
-		.count( { where: { username : 'root' } } )
-		.then(function(cnt){
-			if (0 === cnt){
-				debug('Initial loading');
-				return db.user.create({
-						user: 1,
-						username: 'root',
-						password: '123',
-					});
-			}
-			// else
-			return;
-		});
+/*
+==================================
+CREATE initial data
+==================================
+*/
+
+db.init = function init(){
+	// sqlite required the path exists. only sqlite
+	if (config.dialect === 'sqlite') {
+		let dbroot = path.dirname(config.storage);
+		mkdirp(dbroot);
+	}
+
+	return sequelize
+		.sync()
+		.then(function(){
+			return db.user
+				.count( { where: { username : 'root' } } )
+				.then(function(cnt){
+					if (0 === cnt){
+						debug('INIT: create root');
+						return db.user.create({
+								user: 1,
+								username: 'root',
+								password: '123',
+							});
+					}
+					// else
+					return;
+				})
+		})
+
+		.return(db);
 };
 
 

@@ -18,7 +18,7 @@ var view_partials   = require('./views/register-partials');
 var app             = express();
 
 var envname         = process.env.NODE_ENV || 'development';
-var config          = require(__dirname + '/../config/app.json')[envname];
+var config          = require('./config/app.json')[envname];
 
 /*
 ====================================
@@ -35,13 +35,13 @@ models.init()
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
+app.set('trust proxy', config.rproxy.trust_level || 0); // trust first (or nth-) proxy
 
 app.use(favicon(path.join(__dirname, 'assets', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-// TODO : set secret from file
-app.use(cookieParser('TODO: set secret from file'));
+app.use(cookieParser(config.cookie.secret));
 
 app.use(express.static(path.join(__dirname, 'assets')));
 
@@ -67,18 +67,14 @@ SESSIONS
 */
 
 var session_config = {
-	// TODO : set secret from file
-	secret: 'tldrnald',
+	secret: config.cookie.secret,
 	resave: false,
 	saveUninitialized: false,
-	cookie: {},
+	cookie: {
+		secure : config.cookie.secure
+	},
+
 };
-
-if (app.get('env') !== 'development') {
-	app.set('trust proxy', 1); // trust first proxy
-	session_config.cookie.secure = true; // serve secure cookies
-}
-
 app.use(session(session_config));
 
 /*
@@ -115,7 +111,7 @@ error handlers
 
 // development error handler
 // will print stacktrace
-if (app.get('env') === 'development') {
+if (envname === 'development') {
 	app.use(function(err, req, res, next) {
 		res.status(err.status || 500);
 		res.render('error', {

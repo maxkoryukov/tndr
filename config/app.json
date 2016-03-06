@@ -1,0 +1,32 @@
+{
+  "development": {
+    "cookie": {
+      "secret" : "Pkp6jVB3ToKEvfqudrFO",
+      "secure" : false
+    },
+    "rproxy":
+    {
+      "trust_level" : 0
+    }
+  },
+  "test": {
+    "cookie": {
+      "secret" : "Pkp6jVB3ToKEvfqudrFO",
+      "secure" : true
+    },
+    "rproxy":
+    {
+      "trust_level" : 0
+    }
+  },
+  "production": {
+    "cookie": {
+      "secret" : "Pkp6jVB3ToKEvfqudrFO",
+      "secure" : true
+    },
+    "rproxy":
+    {
+      "trust_level" : 0
+    }
+  }
+}
