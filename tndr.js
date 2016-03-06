@@ -1,15 +1,36 @@
-var express      = require('express');
-var path         = require('path');
-var favicon      = require('serve-favicon');
-var logger       = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser   = require('body-parser');
-var session      = require('express-session');
-var flash        = require('connect-flash');
-// TODO : move to gulp
-var lessmw       = require('less-middleware');
+"use strict";
 
-var app          = express();
+var debug           = require('debug')('tndr:tndr');
+var express         = require('express');
+var path            = require('path');
+var favicon         = require('serve-favicon');
+var logger          = require('morgan');
+var cookieParser    = require('cookie-parser');
+var bodyParser      = require('body-parser');
+var session         = require('express-session');
+var flash           = require('connect-flash');
+// TODO : move to gulp
+var lessmw          = require('less-middleware');
+
+var models          = require('./models');
+var view_partials   = require('./views/register-partials');
+
+var app             = express();
+
+var envname         = process.env.NODE_ENV || 'development';
+var config          = require(__dirname + '/../config/app.json')[envname];
+
+/*
+====================================
+DB
+====================================
+*/
+models.init()
+	.then(function(models){
+		app.use(function (req, res, next){
+			app.models = models;
+		});
+	});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
