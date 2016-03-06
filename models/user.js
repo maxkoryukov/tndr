@@ -18,7 +18,14 @@ module.exports = function(sequelize, DataTypes) {
 			password: {
 				type: DataTypes.STRING(100),
 				collate: 'BINARY',
-				allowNull: false },
+				validate: {
+					len: {
+						args: [2, 100],
+						msg: "The length should be at least 2, and at most 100 chars",
+					}
+				},
+				allowNull: false,
+			},
 		},
 		{
 			paranoid: true,
@@ -59,7 +66,28 @@ module.exports = function(sequelize, DataTypes) {
 						})
 						.get(0)
 						.then(Boolean);
-				}
+				},
+
+				setState: function setState(uid, enabled){
+					debug('setState', uid, enabled);
+
+					return this
+						.findById(uid, { paranoid: false, raw: false} )
+						.then(function(u){
+							if (u.username === 'root'){
+								throw new Error('Vorbidden');
+								return;
+							}
+							return u;
+						})
+						.then(function(u){
+							if (enabled){
+								return u.restore({ paranoid: false});
+							} else {
+								return u.destroy();
+							};
+						});
+				},
 			}
 		}
 	);

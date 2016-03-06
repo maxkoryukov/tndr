@@ -1,4 +1,4 @@
-version: 0.1.2.{build}-{branch}
+version: 0.2.0.{build}-{branch}
 
 # Fix line endings on Windows
 init:

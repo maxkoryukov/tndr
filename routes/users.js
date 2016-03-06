@@ -14,14 +14,21 @@ router.get('/users/me', function(req, res, next) {
 
 /* GET users listing. */
 router.get('/users/list', function(req, res, next) {
+
+	// TODO : use model???
 	req.app.models.user.findAll({
-		attributes : ['user', 'username'],
+		attributes : ['user', 'username', 'deleted_at'],
 		order: [['username', 'DESC']],
+		paranoid: false
 	}).then(function(users){
 
-		users = _.forEach(users, x => x.is_root = x.username==='root');
-		debug('users ', users);
+		users = _.chain(users)
+			.forEach(x => { x.is_root = x.username==='root'; })
+			.forEach(x => { x.enabled = !x.deleted_at; })
+			.map(_.partial(_.omit, _, 'deleted_at'))
+			.value();
 
+		debug(users);
 		res.render('users/list', { users : users });
 
 	});
@@ -65,13 +72,13 @@ router.route('/users/create')
 		var pw = req.body.password;
 		var pw2 = req.body.password2;
 
-		debug(un, pw, pw2);
 		if (pw !== pw2){
 			req.flash('message', 'Passwords do not match!');
 			res.redirect('back');
 			return;
 		}
 
+		// TODO : use model???
 		req.app.models.user.create({
 				username: un,
 				password: pw,
@@ -85,5 +92,25 @@ router.route('/users/create')
 				res.render('users/create');
 			});
 	});
+
+
+router.route('/users/:user/enabled')
+	.post(function(req, res, next) {
+		var u = res.locals.user;
+
+		var uid = parseInt(req.params.user);
+		var state = JSON.parse(req.body.enabled);
+
+		req.app.models.user.setState(uid, state)
+			.catch(function(err){
+				res.error = err;
+
+				// error saved - go to next step
+			})
+			.then(function(){
+				res.redirect('/users/list');
+			});
+	});
+
 
 module.exports = router;

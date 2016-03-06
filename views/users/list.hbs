@@ -8,18 +8,21 @@
 			<th>#</th>
 			<th>Username</th>
 			<th>Enabled</th>
-		</th></thead>
+		</tr></thead>
 		<tbody>
 			{{#each users}}
 				<tr>
 					<td>{{user}}</td>
 					<td>{{username}}</td>
 					<td>
-						{{#if is_root}}
-							<input type="checkbox" disabled="disabled" readonly="readonly" checked="checked" value="1" />
-						{{else}}
-							<input type="checkbox" class="tndr-user-enabled" value="1" />
-						{{/if}}
+						<input type="checkbox" disabled="disabled" {{#if enabled}}checked="checked"{{/if}} value="1" />
+						{{#unless is_root}}
+							{{#if enabled}}
+								<form method="POST" action="/users/{{user}}/enabled"><input type="hidden" name="enabled" value="false"/><button type="submit" class="btn btn-danger btn-xs">Disable</button></form>
+							{{else}}
+								<form method="POST" action="/users/{{user}}/enabled"><input type="hidden" name="enabled" value="true"/><button type="submit" class="btn btn-default btn-xs">Enable</button></form>
+							{{/if}}
+						{{/unless}}
 					</td>
 				</tr>
 			{{/each}}

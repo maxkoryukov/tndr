@@ -17,11 +17,11 @@ Start date: **2016-02-29**
     * [x] db-models scaffold
 * [x] desribe data structures for `user`
 * [x] authentication
-* [ ] user management ( #2 ):
+* [x] user management ( #2 ):
     * [x] change password
     * [x] list
     * [x] create
-    * [ ] disable/enable
+    * [x] disable/enable
 * [x] make site menu well-looks ( #3 )
 
 ## Milestone 2
