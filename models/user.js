@@ -76,7 +76,6 @@ module.exports = function(sequelize, DataTypes) {
 						.then(function(u){
 							if (u.username === 'root'){
 								throw new Error('Vorbidden');
-								return;
 							}
 							return u;
 						})
@@ -85,7 +84,7 @@ module.exports = function(sequelize, DataTypes) {
 								return u.restore({ paranoid: false});
 							} else {
 								return u.destroy();
-							};
+							}
 						});
 				},
 			}

@@ -92,7 +92,7 @@ db.init = function init(){
 					}
 					// else
 					return;
-				})
+				});
 		})
 
 		.return(db);
