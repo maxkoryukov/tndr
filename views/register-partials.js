@@ -21,4 +21,9 @@ filenames.forEach(function (filename) {
 	return hbs.registerPartial(name, template);
 });
 
+// Register i18n stub
+hbs.registerHelper('__', function(s) {
+	return s;
+});
+
 module.exports = {};

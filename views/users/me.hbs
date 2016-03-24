@@ -1,36 +1,36 @@
 <section class="container">
 
-	<h1>My profile</h1>
-	<h2>Common info</h2>
+	<h1>{{__ "My profile"}}</h1>
+	<h2>{{__ "Common info"}}</h2>
 
 	<form>
 	<p>
-		<span>Login: </span><strong>{{user.username}}</strong>
+		<span>{{__ "Login:"}} </span><strong>{{user.username}}</strong>
 	</p>
 
 	</form>
 
 	<hr/>
 
-	<h2>Change password</h2>
+	<h2>{{__ "Change password"}}</h2>
 	<form class="form-horizontal" method="POST" action="/users/change_password">
 
 		<div class="form-group">
-			<label for="passwordold" class="col-sm-2 control-label">Old password</label>
+			<label for="passwordold" class="col-sm-2 control-label">{{__ "Old password"}}</label>
 			<div class="col-sm-10">
 				<input type="password" class="form-control" id="passwordold" name="passwordold" />
 			</div>
 		</div>
 
 		<div class="form-group">
-			<label for="passwordnew1" class="col-sm-2 control-label">New password</label>
+			<label for="passwordnew1" class="col-sm-2 control-label">{{__ "New password"}}</label>
 			<div class="col-sm-10">
 				<input type="password" class="form-control" id="passwordnew1" name="passwordnew1" />
 			</div>
 		</div>
 
 		<div class="form-group">
-			<label for="passwordnew2" class="col-sm-2 control-label">Confirm new password</label>
+			<label for="passwordnew2" class="col-sm-2 control-label">{{__ "Confirm new password"}}</label>
 			<div class="col-sm-10">
 				<input type="password" class="form-control" id="passwordnew2" name="passwordnew2" />
 			</div>
@@ -38,7 +38,7 @@
 
 		<div class="form-group">
 			<div class="col-sm-offset-2 col-sm-10">
-				<button type="submit" class="btn btn-primary">Save</button>
+				<button type="submit" class="btn btn-primary">{{__ "Save"}}</button>
 			</div>
 		</div>
 	</form>
