@@ -96,7 +96,7 @@ db.init = function init(){
 								person: {
 									name: 'root',
 									surname: 'root',
-									note: 'system account',
+									note: 'System account',
 								}
 							},{
 								include : [ db.person ],

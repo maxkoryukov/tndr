@@ -94,4 +94,8 @@ var classMethods = {
 				}
 			});
 	},
+
+	allowed: function allowed(perm){
+		return true;
+	}
 }
