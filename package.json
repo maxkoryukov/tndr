@@ -6,7 +6,7 @@
   "main": "./bin/www",
   "scripts": {
     "start": "node ./bin/www",
-    "test": "NODE_ENV=test DEBUG=tndr* node_modules/.bin/mocha"
+    "test": "node_modules/.bin/mocha"
   },
   "repository": {
     "type": "git",

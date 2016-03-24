@@ -9,7 +9,6 @@ var default_language = 'en';
 var default_culture = 'AU';
 
 router.use(function(req, res, next) {
-	debug('=================================================================');
 	debug('LOCALE SETTINGS:', req.lang);
 	next();
 	return;

@@ -83,11 +83,13 @@ db.init = function init(){
 		.sync({
 			logging: debug
 		}).then(function(){
+			/* CHECK FOR EMPTYNESS */
 			return db.user
 				.count( { where: { username : 'root' } } )
 				.then(function(cnt){
 					if (0 === cnt){
-						debug('INIT: create root');
+						debug('INIT DATA');
+
 
 						return db.user.create({
 								user: 1,
@@ -100,7 +102,9 @@ db.init = function init(){
 								}
 							},{
 								include : [ db.person ],
-							});
+							})
+
+							.then(db.builder_category.initialFill(db));
 					}
 					// else
 					return;

@@ -10,11 +10,13 @@ module.exports = function(sequelize, DataTypes) {
 				type: DataTypes.INTEGER,
 				allowNull: false,
 				primaryKey: true,
-				autoIncrement: true },
+				autoIncrement: true
+			},
 			username: {
 				type: DataTypes.STRING(100),
 				allowNull: false,
-				unique: true },
+				unique: true
+			},
 			password: {
 				type: DataTypes.STRING(100),
 				collate: 'BINARY',
@@ -30,6 +32,7 @@ module.exports = function(sequelize, DataTypes) {
 		{
 			paranoid: true,
 			classMethods: classMethods,
+			instanceMethods : instanceMethods,
 		}
 	);
 
@@ -95,6 +98,9 @@ var classMethods = {
 			});
 	},
 
+};
+
+var instanceMethods = {
 	allowed: function allowed(perm){
 		return true;
 	},

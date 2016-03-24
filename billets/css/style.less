@@ -9,6 +9,14 @@ body {
 
 @button-border :  1px;
 
+// Builder category colors:
+
+@bcat1 : #00B0F0;
+@bcat2 : #92D050;
+@bcat3 : #FFFF00;
+@bcat4 : #FFC000;
+@bcat5 : #C00000;
+
 .tndr
 {
 
@@ -52,4 +60,33 @@ body {
 =====================================================================
 */
 
+
+/*
+=====================================================================
+                BUILDERS
+=====================================================================
+*/
+	.builder-cat
+	{
+		.priority
+		{
+			background-color: @bcat1;
+		}
+		.decent
+		{
+			background-color: @bcat2;
+		}
+		.considerable
+		{
+			background-color: @bcat3;
+		}
+		.tentative
+		{
+			background-color: @bcat4;
+		}
+		.unfavourable
+		{
+			background-color: @bcat5;
+		}
+	}
 }
