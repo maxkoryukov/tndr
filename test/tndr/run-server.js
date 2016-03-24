@@ -2,26 +2,24 @@
 var assert = require('chai').assert;
 var path   = require('path');
 
-var mod_path     = path.join(process.cwd(), 'tndr');
+var modpath = path.join(process.cwd(), 'tndr');
+var model_init_test = path.join(process.cwd(), 'test', 'models', 'init');
+var mi = require(model_init_test);
 
 describe('tndr', function() {
 
-	var server;
+	describe('run and re-run', function(){
 
-	beforeEach(function () {
-		var tndr = require(mod_path);
-		server = tndr.listen(3000);
-	});
-
-	afterEach(function (done) {
-		server.close(done);
-	});
-
-	it('should be runable out of the box', function () {
-		assert.isTrue(true);
-	});
-
-	it('should run after restart', function () {
-		assert.isTrue(true);
+		[
+			'run out of the box',
+			'should run after restart',
+		].forEach(function(description){
+			it(description, function (done) {
+				var tndr = require(modpath);
+				var server = tndr.listen(3000);
+				assert.isTrue(true);
+				server.close(done);
+			});
+		});
 	});
 });

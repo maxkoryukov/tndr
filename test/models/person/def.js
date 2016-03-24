@@ -4,33 +4,37 @@ var _      = require('lodash');
 
 var models_path     = path.join(process.cwd(), 'models');
 
+/* COMMON MODEL INIT BLOCK */
+var modpath = path.join(process.cwd(), 'tndr');
+var model_init_test = path.join(process.cwd(), 'test', 'models', 'init');
+var mi = require(model_init_test);
+/* COMMON MODEL INIT BLOCK */
+
+
 describe('tndr.models', function() {
-	it('models.person should exist', function () {
-		var models = require(models_path);
+	var models;
+
+	it('person should exist', function () {
+		models = require(models_path);
 		assert.property(models, 'person');
 	});
 
-	var p = null;
-
-	beforeEach(function(next){
-		var models = require(models_path);
-		//models.init().then(done);
-
-		p = models.person.build();
-		next();
-	});
-
 	describe('person', function() {
+		var e = null;
+
+		beforeEach(function(){
+			e = models.person.build();
+		});
 
 		_.each(['person', 'name', 'surname', 'phone', 'note'], function(key){
 			it(`should have property [${key}]`, function () {
-				assert.property(p, key);
+				assert.property(e, key);
 			});
 		});
 
 		_.each(['person1', 'year'], function(key){
 			it(`should NOT have property [${key}]`, function () {
-				assert.notProperty(p, key);
+				assert.notProperty(e, key);
 			});
 		});
 

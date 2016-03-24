@@ -4,34 +4,32 @@ var _      = require('lodash');
 
 var models_path     = path.join(process.cwd(), 'models');
 
+/* COMMON MODEL INIT BLOCK */
+var modpath = path.join(process.cwd(), 'tndr');
+var model_init_test = path.join(process.cwd(), 'test', 'models', 'init');
+var mi = require(model_init_test);
+/* COMMON MODEL INIT BLOCK */
+
+
 describe('tndr.models', function() {
-	it('models.user should exist', function () {
-		var models = require(models_path);
+	var models;
+
+	it('user should exist', function () {
+		models = require(models_path);
 		assert.property(models, 'user');
 	});
 
-	var e = null;
-	var models;
-
-	before(function(next){
-
-		setTimeout(next, 10*1000);
-
-		models = require(models_path);
-		models.init().then(function(){
-			next();
-		});
-	});
-
-	beforeEach(function(){
-		e = models.user.build({
-			person: {}
-		}, {
-			include : [models.person]
-		});
-	});
-
 	describe('user', function() {
+
+		var e = null;
+
+		beforeEach(function(){
+			e = models.user.build({
+				person: {}
+			}, {
+				include : [models.person]
+			});
+		});
 
 		_.each(['user', 'username', 'password', 'person'], function(key){
 
