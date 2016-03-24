@@ -31,6 +31,7 @@ var default_define = {
 
 config.define = _.merge(config.define, default_define);
 config.query = _.merge(config.define, { "raw": true } );
+config.logging = debug;
 
 if (config.use_env_variable) {
 	var sequelize = new Sequelize(process.env[config.use_env_variable]);
@@ -54,11 +55,13 @@ fs
 		db[model.name] = model;
 	});
 
-Object.keys(db).forEach(function(modelName) {
-	if (db[modelName].associate) {
-		db[modelName].associate(db);
-	}
-});
+_(db)
+	.keys()
+	.each(function(model_name) {
+		if (db[model_name].associate) {
+			db[model_name].associate(db);
+		}
+	});
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
@@ -77,17 +80,26 @@ db.init = function init(){
 	}
 
 	return sequelize
-		.sync()
-		.then(function(){
+		.sync({
+			logging: debug
+		}).then(function(){
 			return db.user
 				.count( { where: { username : 'root' } } )
 				.then(function(cnt){
 					if (0 === cnt){
 						debug('INIT: create root');
+
 						return db.user.create({
 								user: 1,
 								username: 'root',
 								password: '123',
+								person: {
+									name: 'root',
+									surname: 'root',
+									note: 'system account',
+								}
+							},{
+								include : [ db.person ],
 							});
 					}
 					// else

@@ -61,28 +61,33 @@ router.post('/users/change_password', function(req, res, next) {
 router.route('/users/create')
 
 	.get(function(req, res, next) {
+		res.locals.__ = function(x){ return x; };
+
 		res.locals.messages = _.concat([], req.flash('message'));
 		res.render('users/create');
 	})
 
 	.post(function(req, res, next) {
-		var u = res.locals.user;
+		let u = res.locals.user;
 
-		var un = req.body.username;
-		var pw = req.body.password;
-		var pw2 = req.body.password2;
+		/* GET VALUES */
+		let password2 = req.body.password2;
+		let user = _(req.body)
+			.pick(['username', 'password'])
+			.value();
 
-		if (pw !== pw2){
+		let person = _(req.body)
+			.pick(['name', 'surname', 'phone'])
+			.value();
+
+		if (user.password !== password2){
 			req.flash('message', 'Passwords do not match!');
 			res.redirect('back');
 			return;
 		}
 
 		// TODO : use model???
-		req.app.models.user.create({
-				username: un,
-				password: pw,
-			})
+		req.app.models.user.create(user)
 			.then(function(){
 				req.flash('message', 'User created!');
 				res.redirect('/users/list');

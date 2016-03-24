@@ -12,6 +12,8 @@
     "password": "12345678",
     "database": "db-tst",
     "dialect": "sqlite",
+    "logging": "debug",
+    "benchmark": true,
     "storage": "data/db/db-tst.sqlite"
   },
   "production": {

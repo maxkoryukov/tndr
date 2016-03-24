@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.0
+
+_07 Mar 2016_
+
+* user related tools
+
 ## 0.1.0
 
 * sqlite integration

@@ -88,6 +88,24 @@ models.init()
 
 	.then(function(){
 
+		let rx = /^(\w\w)([-_](\w\w))?$/;
+		app.use(function(req, res, next){
+			req.lang = { code : 'en' };
+			next();
+			return;
+		});
+
+/*
+		app.param('lang', function(req, res, next, lang){
+			let rx = /^(\w\w)([-_](\w\w))?$/;
+			if (rx.test(lang)){
+				lang = lang.replace(rx, (m, l, i, c) => l );
+				debug(`Change lang to: ${lang}`);
+			}
+			next();
+			return;
+		});
+*/
 	/*
 	====================================
 	ROUTING
