@@ -77,7 +77,7 @@ DB
 */
 models.init()
 
-	// after DB ready, register DB-MW (should be the first MW in chain):
+	// after DB ready, register DB-MW (should be registered before data access):
 
 	.then(function(){
 		app.use(function (req, res, next){
@@ -88,6 +88,7 @@ models.init()
 
 	.then(function(){
 
+/*
 		let rx = /^(\w\w)([-_](\w\w))?$/;
 		app.use(function(req, res, next){
 			req.lang = { code : 'en' };
@@ -95,7 +96,6 @@ models.init()
 			return;
 		});
 
-/*
 		app.param('lang', function(req, res, next, lang){
 			let rx = /^(\w\w)([-_](\w\w))?$/;
 			if (rx.test(lang)){
@@ -106,6 +106,18 @@ models.init()
 			return;
 		});
 */
+	var langmw = require('./mw/lang');
+
+	app.use('/:lang(\\w\\w)?:cult([-_]\\w\\w)?/', function(req, res, next){
+
+		res.lang =
+			req.lang =
+			langmw.parseCulture(req.params.lang, req.params.cult);
+
+		next();
+	}, langmw);
+
+
 	/*
 	====================================
 	ROUTING
@@ -116,12 +128,12 @@ models.init()
 		var users = require('./routes/users');
 		var login = require('./routes/login');
 
-		app.use('/', login);
-		app.use('/', dashboard);
-		app.use('/', users);
+		langmw.use('/', login);
+		langmw.use('/', dashboard);
+		langmw.use('/', users);
 
 		// catch 404 and forward to error handler
-		app.use(function(req, res, next) {
+		langmw.use(function(req, res, next) {
 			// this handler should process all unhandled requests.
 			if (!res.headersSent) {
 				var err = new Error('Not Found');
