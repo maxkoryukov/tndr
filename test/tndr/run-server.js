@@ -1,12 +1,15 @@
 
 var assert = require('chai').assert;
+var path   = require('path');
 
-describe('Run server', function() {
+var mod_path     = path.join(process.cwd(), 'tndr');
+
+describe('tndr', function() {
 
 	var server;
 
 	beforeEach(function () {
-		var tndr = require('../tndr');
+		var tndr = require(mod_path);
 		server = tndr.listen(3000);
 	});
 
