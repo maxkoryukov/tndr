@@ -42,5 +42,7 @@ module.exports = function(sequelize, DataTypes) {
 var classMethods = {
 	associate: function(models) {
 		models.person.hasOne(models.user);
+
+		models.person.belongsToMany(models.builder, {through: 'builder2person'});
 	},
 };

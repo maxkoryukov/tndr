@@ -14,6 +14,9 @@ describe('tndr.models', function() {
 	var models;
 
 	before(function(next){
+
+		setTimeout(next, 10*1000);
+
 		models = require(models_path);
 		models.init().then(function(){
 			next();
