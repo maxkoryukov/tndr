@@ -43,4 +43,4 @@ var classMethods = {
 	associate: function(models) {
 		models.person.hasOne(models.user);
 	},
-}
+};

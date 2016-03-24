@@ -66,7 +66,7 @@ var classMethods = {
 
 		return this.authenticate(username, password)
 			.then(function(id){
-				return user.update(
+				return this.update(
 						{ password : newhash },
 						{ where : { user : { $eq : id } } }
 					);
@@ -97,5 +97,5 @@ var classMethods = {
 
 	allowed: function allowed(perm){
 		return true;
-	}
-}
+	},
+};
