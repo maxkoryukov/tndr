@@ -2,9 +2,11 @@
 var assert = require('chai').assert;
 var path   = require('path');
 
+/* COMMON MODEL INIT BLOCK */
 var modpath = path.join(process.cwd(), 'tndr');
 var model_init_test = path.join(process.cwd(), 'test', 'models', 'init');
 var mi = require(model_init_test);
+/* COMMON MODEL INIT BLOCK */
 
 describe('tndr', function() {
 

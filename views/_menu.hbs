@@ -21,7 +21,7 @@
 
 			{{#if user }}
 			<ul class="nav navbar-nav navbar-right">
-				<li><a href="/users/me" title="{{__ "My profile"}}"><i class="fa fa-user"></i> {{user.username}}</a></li>
+				<li><a href="/person/me" title="{{__ "My profile"}}"><i class="fa fa-user"></i> {{current.user.username}}</a></li>
 				<li role="separator" class="divider"></li>
 				<li><form method="POST" action="/logout"><button class="btn btn-default btn-xs navbar-btn" type="submit">{{__ "Logout"}}</button></form></li>
 			</ul>

@@ -9,7 +9,7 @@ var default_language = 'en';
 var default_culture = 'AU';
 
 router.use(function(req, res, next) {
-	debug('LOCALE SETTINGS:', req.lang);
+	debug('LOCALE SETTINGS:', req.current.lang);
 	next();
 	return;
 });
@@ -30,6 +30,6 @@ router.parseCulture = function parseCulture(lang, cult){
 	}
 
 	return l;
-}
+};
 
 module.exports = router;

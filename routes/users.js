@@ -5,37 +5,66 @@ var router   = express.Router();
 var debug    = require('debug')('tndr:routes.users');
 var _        = require('lodash');
 
-router.get('/users/me', function(req, res, next) {
+var _init_users = function(users){
+	return _.chain(users)
+		.map(x => { return x.get(); })
+		.forEach(x => { x.is_root = x.username==='root'; })
+		.forEach(x => { x.enabled = !x.deleted_at; })
+		.forEach(x => { x.person.phone_link = x.person.getPhoneLink(); })
+		.map(_.partial(_.omit, _, 'deleted_at'))
+		.value();
+};
 
-	res.locals.messages = _.concat([], req.flash('message'));
+router.param('user', function(req, res, next, id){
 
-	res.render('users/me');
+	let db = req.app.models;
+
+	id = _.toNumber(id);
+
+	db.user.findById(id, {
+		raw: false,
+		attributes : ['user', 'username', 'deleted_at'],
+		include: [db.person],
+		order: [['deleted_at', 'ASC'], ['username', 'ASC']],
+	}).then(function(u){
+		if (!u){
+			next('user not found');
+		} else {
+			let users = _init_users([u]);
+			u = users[0];
+			req.user = u;
+			next();
+		}
+	});
 });
 
 /* GET users listing. */
 router.get('/users/list', function(req, res, next) {
 
+	let db = req.app.models;
+
 	// TODO : use model???
-	req.app.models.user.findAll({
+	db.user.findAll({
+		raw: false,
 		attributes : ['user', 'username', 'deleted_at'],
-		order: ['deleted_at', ['username', 'ASC']],
+		include: [db.person],
+		order: [['deleted_at', 'ASC'], ['username', 'ASC']],
 		paranoid: false
-	}).then(function(users){
+	})
+	.then(function(users){
 
-		users = _.chain(users)
-			.forEach(x => { x.is_root = x.username==='root'; })
-			.forEach(x => { x.enabled = !x.deleted_at; })
-			.map(_.partial(_.omit, _, 'deleted_at'))
-			.value();
+		users = _init_users(users);
 
-		debug(users);
-		res.render('users/list', { users : users });
+		return res.render('users/list', { users : users });
 
+	})
+	.catch(err => {
+		next(err);
 	});
 });
 
 router.post('/users/change_password', function(req, res, next) {
-	var u = res.locals.user;
+	var u = req.current.user;
 	var un = u.username;
 
 	var pw = req.body.passwordold;
@@ -55,21 +84,20 @@ router.post('/users/change_password', function(req, res, next) {
 			req.flash('message', 'Unknown user!');
 		}
 		res.redirect('/users/me');
+		return;
 	});
 });
 
 router.route('/users/create')
 
 	.get(function(req, res, next) {
-		res.locals.__ = function(x){ return x; };
 
 		res.locals.messages = _.concat([], req.flash('message'));
 		res.render('users/create');
+		return;
 	})
 
 	.post(function(req, res, next) {
-		let u = res.locals.user;
-
 		/* GET VALUES */
 		let password2 = req.body.password2;
 		let user = _(req.body)
@@ -79,6 +107,7 @@ router.route('/users/create')
 		let person = _(req.body)
 			.pick(['name', 'surname', 'phone'])
 			.value();
+		user.person = person;
 
 		if (user.password !== password2){
 			req.flash('message', 'Passwords do not match!');
@@ -87,23 +116,33 @@ router.route('/users/create')
 		}
 
 		// TODO : use model???
-		req.app.models.user.create(user)
+		req.app.models.user.create(user, {
+			include: [req.app.models.person]
+		})
 			.then(function(){
 				req.flash('message', 'User created!');
 				res.redirect('/users/list');
+				return;
 			})
 			.catch(function(err){
 				res.locals.error = err;
 				res.render('users/create');
+				return;
 			});
 	});
 
+router.route('/users/:user/card')
+	.get(function(req, res, next){
+		var u = req.user;
+		res.locals.user = u;
+
+		res.render('users/card');
+	});
 
 router.route('/users/:user/enabled')
+	// TODO : replace with PATCH
 	.post(function(req, res, next) {
-		var u = res.locals.user;
-
-		var uid = parseInt(req.params.user);
+		var uid = _.toNumber(req.params.user);
 		var state = JSON.parse(req.body.enabled);
 
 		req.app.models.user.setState(uid, state)
@@ -114,6 +153,7 @@ router.route('/users/:user/enabled')
 			})
 			.then(function(){
 				res.redirect('/users/list');
+				return;
 			});
 	});
 

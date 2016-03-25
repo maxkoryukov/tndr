@@ -1,4 +1,4 @@
-version: 0.2.0.{build}-{branch}
+version: 0.2.1.{build}-{branch}
 
 # Fix line endings on Windows
 init:
@@ -10,14 +10,13 @@ hosts:
 # What combinations to test
 environment:
   NODE_ENV: test
-  DEBUG: tndr*
   matrix:
-    - nodejs_version: "4"
+#    - nodejs_version: "4"
     - nodejs_version: "5"
 
 platform:
   - x86
-#  - x64
+  - x64
 
 # Install scripts. (runs after repo cloning)
 install:

@@ -27,16 +27,38 @@ describe('tndr.models', function() {
 		});
 
 		_.each(['person', 'name', 'surname', 'phone', 'note'], function(key){
-			it(`should have property [${key}]`, function () {
+			it(`should exists property [${key}]`, function () {
 				assert.property(e, key);
 			});
 		});
 
 		_.each(['person1', 'year'], function(key){
-			it(`should NOT have property [${key}]`, function () {
+			it(`should NOT exists property [${key}]`, function () {
 				assert.notProperty(e, key);
 			});
 		});
 
+
+		describe('person.getPhoneLink()', function(){
+			it('should exists', function() {
+				assert.property(e, 'getPhoneLink');
+				assert.isFunction(e.getPhoneLink);
+			});
+
+
+			var cases = [
+				['', null],
+				['asdf', null],
+				['79996661166', 'tel:+79996661166'],
+				['+7 (999) 666-11-66', 'tel:+79996661166'],
+			];
+
+			_.each(cases, function(c){
+				it(`should convert ${c}`, function(){
+					e.phone = c[0];
+					assert.equal(e.getPhoneLink(), c[1]);
+				});
+			});
+		});
 	});
 });

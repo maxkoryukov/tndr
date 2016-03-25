@@ -3,19 +3,32 @@
 	<div>
 		<a href="/users/create" class="btn btn-common" title="{{__ "Create new user"}}"><i class="fa fa-user-plus"></i>&nbsp;{{__ "New user"}}</a>
 	</div>
-	<table class="tablesorter table">
+	<table class="tablesorter table table-striped">
 		<thead><tr>
 			<th>{{__ "#"}}</th>
 			<th>{{__ "Username"}}</th>
-			<th>{{__ "Enabled"}}</th>
+			<th>{{__ "Surname"}}</th>
+			<th>{{__ "Name"}}</th>
+			<th>{{__ "Phone"}}</th>
+			<th colspan="3">{{__ "Actions"}}</th>
 		</tr></thead>
 		<tbody>
 			{{#each users}}
-				<tr>
+				<tr class="{{#unless enabled}}text-muted{{/unless}}">
 					<td>{{user}}</td>
 					<td>{{username}}</td>
+					<td>{{person.surname}}</td>
+					<td>{{person.name}}</td>
+					<td>
+						{{#if enabled}}<a class="phone" href="{{person.phone_link}}">{{/if}}
+						{{person.phone}}
+						{{#if enabled}}</a>{{/if}}
+					</td>
+
 					<td>
 						<input type="checkbox" disabled="disabled" {{#if enabled}}checked="checked"{{/if}} value="1" />
+					</td>
+					<td>
 						{{#unless is_root}}
 							{{#if enabled}}
 								<form method="POST" action="/users/{{user}}/enabled"><input type="hidden" name="enabled" value="false"/><button type="submit" class="btn btn-danger btn-xs">{{__ "Disable"}}</button></form>
@@ -24,6 +37,10 @@
 							{{/if}}
 						{{/unless}}
 					</td>
+					<td>
+						{{#if enabled}}<a href="/users/{{user}}/card" title="{{__ "View personal card"}}">{{__ "View"}}</a>{{/if}}
+					</td>
+
 				</tr>
 			{{/each}}
 		</tbody>

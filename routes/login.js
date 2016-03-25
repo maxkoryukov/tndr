@@ -5,6 +5,9 @@ var router   = express.Router();
 var debug    = require('debug')('tndr:routes.login');
 var _        = require('lodash');
 
+// TODO : think and remove
+var envname         = process.env.NODE_ENV || 'production';
+
 router.get('/login', function(req, res) {
 	res.render('login', { r: req.query.r });
 });
@@ -16,7 +19,7 @@ router.post('/login', function(req, res) {
 
 	req.app.models.user.authenticate(un, pw)
 		.then(function done_auth(id) {
-			if (id && id > 0){
+			if (_.isInteger(id) && id > 0){
 				req.session.userId = id;
 				req.session.save();
 
@@ -29,11 +32,8 @@ router.post('/login', function(req, res) {
 						url = '/';
 				}
 				res.redirect(url);
-				// TODO : learn, how to implement
-				//next();
 			} else {
 				res.render('login', { error: { message: 'Unknown user' }, r: req.query.r });
-				//next();
 			}
 		});
 });
@@ -41,29 +41,26 @@ router.post('/login', function(req, res) {
 router.post('/logout', function(req, res) {
 	req.session.destroy();
 	res.redirect('/');
-
-	// TODO : think about next()
 });
 
 /* REQUIRE AUTH for all other requests */
 router.all('*', function (req, res, next){
 
-	// PREAUTH !!
-	req.session.userId = 1;
+	if (req.app.config.security.autologin)
+		req.session.userId = req.app.config.security.autologin;
 
 	if (req.session && req.session.userId){
 
 		req.app.models.user.findById(req.session.userId).then(function(user){
 			user = _.omit(user, ['password', 'hash']);
-			res.locals.user = user;
-			debug(res.locals.user);
+			req.current.user = user;
+			debug(req.current.user);
 			next();
 		});
 	} else {
 		var b = new Buffer(req.originalUrl);
 		var backurl64 = b.toString('base64');
 		res.redirect(`/login?r=${backurl64}`);
-		//res.redirect(`/login`);
 	}
 });
 

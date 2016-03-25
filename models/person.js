@@ -32,7 +32,8 @@ module.exports = function(sequelize, DataTypes) {
 		/* person OPTIONS */
 		{
 			paranoid: true,
-			classMethods: classMethods
+			classMethods: classMethods,
+			instanceMethods : instanceMethods,
 		}
 	);
 
@@ -45,4 +46,17 @@ var classMethods = {
 
 		models.person.belongsToMany(models.builder, {through: 'builder2person'});
 	},
+};
+
+var instanceMethods = {
+	getPhoneLink : function phoneLink() {
+		let p = this.phone;
+		if (!p)
+			return null;
+		p = p.replace(/\D/g, '');
+		if (!p)
+			return null;
+		p = 'tel:+' + p;
+		return p;
+	}
 };

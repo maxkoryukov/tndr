@@ -26,12 +26,12 @@ Time to run the application:
 npm start
 ```
 
-The application will try to open your default browser (if no: open [http://localhost:8080](http://localhost:8080)).
+The application will try to open your default browser (if no: open [http://localhost:3000](http://localhost:3000)).
 By default, the app will create default user:
 
 * Username : **root**
 * Password : **123**
 
-** DO NOT FORGET TO [CHANGE DEFAULT PASSWORD AFTER LOGIN](http://localhost:8080/users/me)**
+** DO NOT FORGET TO [CHANGE DEFAULT PASSWORD AFTER LOGIN](http://localhost:3000/users/me)**
 
 :octocat: :octocat: :octocat:

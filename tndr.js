@@ -3,6 +3,7 @@
 var debug           = require('debug')('tndr:tndr');
 var express         = require('express');
 var path            = require('path');
+var _               = require('lodash');
 var favicon         = require('serve-favicon');
 var logger          = require('morgan');
 var cookieParser    = require('cookie-parser');
@@ -23,7 +24,19 @@ var config          = require('./config/app.json')[envname];
 // ALWAYS: print config, when it is read from ENV:
 debug(`ENV: ${envname}`);
 
+/*
+====================================
+CONFIG
+====================================
+*/
 app.config = config;
+if (!app.config.security) app.config.security = {};
+
+let alid = app.config.security.autologin;
+app.config.security.autologin = null;
+if (_.isInteger(alid)){
+	app.config.security.autologin = alid;
+}
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -70,6 +83,18 @@ var session_config = {
 };
 app.use(session(session_config));
 
+
+/*
+====================================
+CURRENT and running values for each
+QUERY
+====================================
+*/
+app.use(function tndr_app_set_current(req, res, next){
+	req.current = {};
+	next();
+});
+
 /*
 ====================================
 DB
@@ -79,8 +104,8 @@ models.init()
 
 	// after DB ready, register DB-MW (should be registered before data access):
 
-	.then(function(){
-		app.use(function (req, res, next){
+	.then(function db_ready (){
+		app.use(function tndr_app_set_models(req, res, next){
 			app.models = models;
 			next();
 		});
@@ -88,34 +113,22 @@ models.init()
 
 	.then(function(){
 
-/*
-		let rx = /^(\w\w)([-_](\w\w))?$/;
-		app.use(function(req, res, next){
-			req.lang = { code : 'en' };
+	/*
+	====================================
+	LANG
+	====================================
+	*/
+
+		var langmw = require('./mw/lang');
+
+		app.use('/:lang(\\w\\w)?:cult([-_]\\w\\w)?/', function tndr_app_set_lang_pre(req, res, next){
+
+			let lc = langmw.parseCulture(req.params.lang, req.params.cult);
+			res.lang = lc;
+			req.current.lang = lc;
+
 			next();
-			return;
-		});
-
-		app.param('lang', function(req, res, next, lang){
-			let rx = /^(\w\w)([-_](\w\w))?$/;
-			if (rx.test(lang)){
-				lang = lang.replace(rx, (m, l, i, c) => l );
-				debug(`Change lang to: ${lang}`);
-			}
-			next();
-			return;
-		});
-*/
-	var langmw = require('./mw/lang');
-
-	app.use('/:lang(\\w\\w)?:cult([-_]\\w\\w)?/', function(req, res, next){
-
-		res.lang =
-			req.lang =
-			langmw.parseCulture(req.params.lang, req.params.cult);
-
-		next();
-	}, langmw);
+		}, langmw);
 
 
 	/*
@@ -133,7 +146,7 @@ models.init()
 		langmw.use('/', users);
 
 		// catch 404 and forward to error handler
-		langmw.use(function(req, res, next) {
+		app.use(function tndr_handle_not_found(req, res, next) {
 			// this handler should process all unhandled requests.
 			if (!res.headersSent) {
 				var err = new Error('Not Found');
@@ -154,9 +167,9 @@ error handlers
 // development error handler
 // will print stacktrace
 if (envname === 'dev') {
-	app.use(function(err, req, res, next) {
+	app.use(function tndr_global_error_dev(err, req, res, next) {
 		res.status(err.status || 500);
-		res.render('error', {
+		return res.render('error', {
 				message: err.message,
 				error: err
 		});
@@ -165,13 +178,12 @@ if (envname === 'dev') {
 
 // production error handler
 // no stacktraces leaked to user
-app.use(function(err, req, res, next) {
+app.use(function tndr_global_error(err, req, res, next) {
 	res.status(err.status || 500);
-	res.render('error', {
+	return res.render('error', {
 		message: err.message,
 		error: {}
 	});
 });
-
 
 module.exports = app;

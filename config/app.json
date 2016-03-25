@@ -1,6 +1,11 @@
 {
   "dev": {
     "open_browser" : false,
+
+    "security" : {
+      "autologin" : 1
+    },
+
     "cookie": {
       "secret" : "Pkp6jVB3ToKEvfqudrFO",
       "secure" : false
@@ -10,11 +15,12 @@
       "trust_level" : 0
     }
   },
+
   "test": {
     "open_browser" : false,
 
     "cookie": {
-      "secret" : "Pkp6jVB3ToKEvfqudrFO",
+      "secret" : "y3l1ejSg7EGfNdxvwtMA",
       "secure" : true
     },
     "rproxy":
@@ -22,11 +28,12 @@
       "trust_level" : 0
     }
   },
+
   "production": {
     "open_browser" : true,
 
     "cookie": {
-      "secret" : "Pkp6jVB3ToKEvfqudrFO",
+      "secret" : "hYIj^QO+CdT6uJKNZyVXc1ksWMmBs3-VGu<iKy#5",
       "secure" : true
     },
     "rproxy":
