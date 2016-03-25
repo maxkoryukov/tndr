@@ -10,7 +10,7 @@ The models should be registered there!
 */
 
 var fs              = require('fs');
-var mkdirp          = require('mkdirp');
+var mkdirp          = require('mkdirp-bluebird');
 var path            = require('path');
 var Sequelize       = require('sequelize');
 var basename        = path.basename(module.filename);
@@ -18,7 +18,7 @@ var envname         = process.env.NODE_ENV || 'production';
 var config          = require(__dirname + '/../config/db.json')[envname];
 var _               = require('lodash');
 var debug           = require('debug')('tndr:models.index');
-
+var promise         = require('bluebird');
 var db              = {};
 
 // ALWAYS: print config, when it is read from ENV:
@@ -73,16 +73,21 @@ CREATE initial data
 */
 
 db.init = function init(){
-	// sqlite required the path exists. only sqlite
-	if (config.dialect === 'sqlite') {
-		let dbroot = path.dirname(config.storage);
-		mkdirp(dbroot);
-	}
-
-	return sequelize
-		.sync({
+	return (function mkdir(){
+		if (config.dialect === 'sqlite') {
+			let dbroot = path.dirname(config.storage);
+			return mkdirp(dbroot);
+		} else {
+			return new promise(function (resolve, reject){
+				resolve();
+			});
+		}
+	})()
+		.return(sequelize)
+		.call('sync', {
 			logging: debug
-		}).then(function(){
+		})
+		.then(function(){
 			/* CHECK FOR EMPTYNESS */
 			return db.user
 				.count( { where: { username : 'root' } } )
