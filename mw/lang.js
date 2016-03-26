@@ -3,7 +3,7 @@
 var express         = require('express');
 var router          = express.Router();
 
-var debug           = require('debug')('tndr:mw.lang');
+var debug           = require('debug')('tndr:mw:lang');
 
 var default_language = 'en';
 var default_culture = 'AU';

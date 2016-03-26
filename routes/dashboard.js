@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var debug    = require('debug')('tndr:routes:dashboard');
 
 var baseurl = '';
 

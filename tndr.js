@@ -4,7 +4,7 @@
 
  "use strict";
 
-var debug           = require('debug')('tndr:tndr');
+var debug           = require('debug')('tndr');
 var express         = require('express');
 var path            = require('path');
 var _               = require('lodash');
@@ -143,7 +143,7 @@ models.init()
 	====================================
 	*/
 		var msgmw = require('./mw/messages');
-		app.use(msgmw);
+		langmw.use('/', msgmw);
 
 	/*
 	====================================

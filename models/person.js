@@ -1,6 +1,6 @@
 "use strict";
 
-var debug = require('debug')('tndr:model.person');
+var debug = require('debug')('tndr:models:person');
 var _     = require('lodash');
 
 module.exports = function(sequelize, DataTypes) {

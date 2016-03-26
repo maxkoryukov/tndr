@@ -1,6 +1,6 @@
 "use strict";
 
-var debug = require('debug')('tndr:model.builder');
+var debug = require('debug')('tndr:models:builder');
 var _     = require('lodash');
 
 module.exports = function(sequelize, DataTypes) {

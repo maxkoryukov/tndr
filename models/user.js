@@ -1,6 +1,6 @@
 "use strict";
 
-var debug = require('debug')('tndr:model.user');
+var debug = require('debug')('tndr:models:user');
 var _     = require('lodash');
 
 module.exports = function(sequelize, DataTypes) {
@@ -23,7 +23,7 @@ module.exports = function(sequelize, DataTypes) {
 				validate: {
 					len: {
 						args: [2, 100],
-						msg: "The length should be at least 2, and at most 100 chars",
+						msg: "The length of password should be at least 2, and at most 100 chars",
 					}
 				},
 				allowNull: false,
@@ -57,7 +57,9 @@ var classMethods = {
 				limit: 2,
 			}).then(function(result){
 				if (result.count !== 1){
-					return null;
+					let err = new Error('Forbidden');
+					err.status = 403;
+					throw err;
 				} else {
 					return result.rows[0].user;
 				}

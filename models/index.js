@@ -17,7 +17,7 @@ var basename        = path.basename(module.filename);
 var envname         = process.env.NODE_ENV || 'production';
 var config          = require(__dirname + '/../config/db.json')[envname];
 var _               = require('lodash');
-var debug           = require('debug')('tndr:models.index');
+var debug           = require('debug')('tndr:models:index');
 var promise         = require('bluebird');
 var db              = {};
 

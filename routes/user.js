@@ -2,10 +2,11 @@
 
 var express  = require('express');
 var router   = express.Router();
-var debug    = require('debug')('tndr:routes.user');
+var debug    = require('debug')('tndr:routes:user');
 var _        = require('lodash');
 
 var baseurl = '/user';
+var __ = x => x;
 
 var _init_users = function(users){
 	return _.chain(users)
@@ -82,6 +83,8 @@ router.route(`${baseurl}/list`)
 router.route(`${baseurl}/change_password`)
 
 	.post(function(req, res, next) {
+		let db = req.app.models;
+
 		var u = req.current.user;
 		var un = u.username;
 
@@ -95,15 +98,15 @@ router.route(`${baseurl}/change_password`)
 			return;
 		}
 
-		req.app.models.user.changePassword(un, pw, pwn1).then( (result) => {
-			if (result){
-				req.flash('message', 'Password changed!');
-			} else {
-				req.flash('message', 'Unknown user!');
-			}
-			res.redirect(`${baseurl}/me`);
-			return;
-		});
+		db.user.changePassword(un, pw, pwn1)
+			.catch( err => {
+				req.flash('message', __('Old password is incorrect'));
+				res.redirect('back');
+			})
+			.then( (result) => {
+				req.flash('message', __('Password changed!'));
+				res.redirect(`${baseurl}/me`);
+			});
 	});
 
 router.route(`${baseurl}/create`)

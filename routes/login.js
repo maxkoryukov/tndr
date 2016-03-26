@@ -2,7 +2,7 @@
 
 var express  = require('express');
 var router   = express.Router();
-var debug    = require('debug')('tndr:routes.login');
+var debug    = require('debug')('tndr:routes:login');
 var _        = require('lodash');
 
 var baseurl = '';
@@ -10,32 +10,37 @@ var baseurl = '';
 router.route(`${baseurl}/login`)
 
 	.get(function(req, res) {
-		res.render('login', { r: req.query.r });
+		res.render('login', { backurl: req.query.backurl });
 	})
 
 	.post(function(req, res) {
 
-		var un = req.body.username;
-		var pw = req.body.password;
+		let un = req.body.username;
+		let pw = req.body.password;
+		let backurl = req.body.backurl;
 
 		req.app.models.user.authenticate(un, pw)
-			.then(function done_auth(id) {
+			.then(function auth_done(id) {
 				if (_.isInteger(id) && id > 0){
 					req.session.userId = id;
 					req.session.save();
 
-					let r = req.body.r;
 					let url = '/';
-					if (r){
-						let b = new Buffer(r, 'base64');
+					if (backurl){
+						let b = new Buffer(backurl, 'base64');
 						url = b.toString();
 						if (!url.startsWith('/'))
 							url = '/';
 					}
 					res.redirect(url);
 				} else {
-					res.render('login', { error: { message: 'Unknown user' }, r: req.query.r });
+					req.flash('message', 'Unknown user!');
+					res.render('login', { backurl: backurl });
 				}
+			})
+			.catch(function auth_fail(err){
+				req.flash('message', 'Unknown user!');
+				res.render('login', { backurl: backurl });
 			});
 	});
 
@@ -66,7 +71,7 @@ router.route('*')
 		} else {
 			var b = new Buffer(req.originalUrl);
 			var backurl64 = b.toString('base64');
-			res.redirect(`/login?r=${backurl64}`);
+			res.redirect(`/login?backurl=${backurl64}`);
 		}
 	});
 

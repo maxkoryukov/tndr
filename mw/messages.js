@@ -3,10 +3,11 @@
 var express         = require('express');
 var router          = express.Router();
 var _               = require('lodash');
-var debug           = require('debug')('tndr:mw.messages');
+var debug           = require('debug')('tndr:mw:messages');
 
 router.route('*')
-	.get(function(req, res, next) {
+
+	.get(function mw_message_route_get(req, res, next) {
 
 		res.locals.messages = _.concat([], req.flash('message'));
 
