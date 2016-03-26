@@ -5,6 +5,8 @@ var router   = express.Router();
 var debug    = require('debug')('tndr:routes.users');
 var _        = require('lodash');
 
+var baseurl = '/users';
+
 var _init_users = function(users){
 	return _.chain(users)
 		.map(x => { return x.get(); })
@@ -14,6 +16,12 @@ var _init_users = function(users){
 		.map(_.partial(_.omit, _, 'deleted_at'))
 		.value();
 };
+
+/*
+====================================
+PARAM HANDLING
+====================================
+*/
 
 router.param('user', function(req, res, next, id){
 
@@ -26,6 +34,7 @@ router.param('user', function(req, res, next, id){
 		attributes : ['user', 'username', 'deleted_at'],
 		include: [db.person],
 		order: [['deleted_at', 'ASC'], ['username', 'ASC']],
+		paranoid: false
 	}).then(function(u){
 		if (!u){
 			next('user not found');
@@ -38,57 +47,66 @@ router.param('user', function(req, res, next, id){
 	});
 });
 
+/*
+====================================
+ROUTES
+====================================
+*/
+
 /* GET users listing. */
-router.get('/users/list', function(req, res, next) {
+router.route(`${baseurl}/list`)
 
-	let db = req.app.models;
+	.get(function(req, res, next) {
+		let db = req.app.models;
 
-	// TODO : use model???
-	db.user.findAll({
-		raw: false,
-		attributes : ['user', 'username', 'deleted_at'],
-		include: [db.person],
-		order: [['deleted_at', 'ASC'], ['username', 'ASC']],
-		paranoid: false
-	})
-	.then(function(users){
+		// TODO : use model???
+		db.user.findAll({
+			raw: false,
+			attributes : ['user', 'username', 'deleted_at'],
+			include: [db.person],
+			order: [['deleted_at', 'ASC'], ['username', 'ASC']],
+			paranoid: false
+		})
+		.then(function(users){
 
-		users = _init_users(users);
+			users = _init_users(users);
 
-		return res.render('users/list', { users : users });
+			return res.render('users/list', { users : users });
 
-	})
-	.catch(err => {
-		next(err);
+		})
+		.catch(err => {
+			next(err);
+		});
 	});
-});
 
-router.post('/users/change_password', function(req, res, next) {
-	var u = req.current.user;
-	var un = u.username;
+router.route(`${baseurl}/change_password`)
 
-	var pw = req.body.passwordold;
-	var pwn1 = req.body.passwordnew1;
-	var pwn2 = req.body.passwordnew2;
+	.post(function(req, res, next) {
+		var u = req.current.user;
+		var un = u.username;
 
-	if (pwn1 !== pwn2){
-		req.flash('message', 'New passwords do not match!');
-		res.redirect('back');
-		return;
-	}
+		var pw = req.body.passwordold;
+		var pwn1 = req.body.passwordnew1;
+		var pwn2 = req.body.passwordnew2;
 
-	req.app.models.user.changePassword(un, pw, pwn1).then( (result) => {
-		if (result){
-			req.flash('message', 'Password changed!');
-		} else {
-			req.flash('message', 'Unknown user!');
+		if (pwn1 !== pwn2){
+			req.flash('message', 'New passwords do not match!');
+			res.redirect('back');
+			return;
 		}
-		res.redirect('/users/me');
-		return;
-	});
-});
 
-router.route('/users/create')
+		req.app.models.user.changePassword(un, pw, pwn1).then( (result) => {
+			if (result){
+				req.flash('message', 'Password changed!');
+			} else {
+				req.flash('message', 'Unknown user!');
+			}
+			res.redirect('/users/me');
+			return;
+		});
+	});
+
+router.route(`${baseurl}/create`)
 
 	.get(function(req, res, next) {
 
@@ -131,7 +149,7 @@ router.route('/users/create')
 			});
 	});
 
-router.route('/users/:user/card')
+router.route(`${baseurl}/:user`)
 	.get(function(req, res, next){
 		var u = req.user;
 		res.locals.user = u;
@@ -139,13 +157,12 @@ router.route('/users/:user/card')
 		res.render('users/card');
 	});
 
-router.route('/users/:user/enabled')
+router.route(`${baseurl}/:user/enabled`)
 	// TODO : replace with PATCH
 	.post(function(req, res, next) {
-		var uid = _.toNumber(req.params.user);
 		var state = JSON.parse(req.body.enabled);
 
-		req.app.models.user.setState(uid, state)
+		req.app.models.user.setState(req.user.user, state)
 			.catch(function(err){
 				res.error = err;
 

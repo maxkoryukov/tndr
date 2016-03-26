@@ -1,4 +1,8 @@
-"use strict";
+/*
+ * @module tndr
+ */
+
+ "use strict";
 
 var debug           = require('debug')('tndr:tndr');
 var express         = require('express');
@@ -138,13 +142,17 @@ models.init()
 	ROUTING
 	====================================
 	*/
-
-		var dashboard = require('./routes/dashboard');
-		var users = require('./routes/users');
 		var login = require('./routes/login');
-
 		langmw.use('/', login);
+
+		var builder   = require('./routes/builder');
+		var dashboard = require('./routes/dashboard');
+		var person    = require('./routes/person');
+		var users     = require('./routes/users');
+
+		langmw.use('/', builder);
 		langmw.use('/', dashboard);
+		langmw.use('/', person);
 		langmw.use('/', users);
 
 		// catch 404 and forward to error handler

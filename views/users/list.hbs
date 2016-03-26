@@ -10,7 +10,8 @@
 			<th>{{__ "Surname"}}</th>
 			<th>{{__ "Name"}}</th>
 			<th>{{__ "Phone"}}</th>
-			<th colspan="3">{{__ "Actions"}}</th>
+			<th title="{{__ "Enabled, user has access to the TNDR"}}">{{__ "E"}}</th>
+			<th colspan="2">{{__ "Actions"}}</th>
 		</tr></thead>
 		<tbody>
 			{{#each users}}
@@ -38,7 +39,7 @@
 						{{/unless}}
 					</td>
 					<td>
-						{{#if enabled}}<a href="/users/{{user}}/card" title="{{__ "View personal card"}}">{{__ "View"}}</a>{{/if}}
+						{{#if enabled}}<a href="/users/{{user}}" title="{{__ "View personal card"}}">{{__ "View"}}</a>{{/if}}
 					</td>
 
 				</tr>
