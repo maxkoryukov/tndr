@@ -17,6 +17,18 @@ body {
 @bcat4 : #FFC000;
 @bcat5 : #C00000;
 
+
+
+
+.fa.fa-overlay
+{
+	font-size: 70%;
+	margin: 15% 0 0 25%;
+	text-shadow: -0.3em 0 0.3em white;
+}
+
+
+
 .tndr
 {
 
@@ -66,7 +78,56 @@ body {
                 BUILDERS
 =====================================================================
 */
-	.builder-cat
+	.builder
+	{
+		&.list
+		{
+			&>article
+			{
+				&:extend(.panel);
+				.panel;
+				.panel-default;
+				.make-xs-column(12);
+				.make-md-column(4);
+				.make-lg-column(3);
+
+				.-builder-category();
+
+				padding : 0; // fix gaps on both sides of article
+
+				&>header
+				{
+					&:extend(.panel-heading);
+					.panel-heading;
+
+					h1,h2,h3,h4,h5,h6:extend(.panel-title)
+					{
+						.panel-title;
+					}
+				}
+
+				&>section
+				{
+					&:extend(.panel-body);
+					.panel-body;
+				}
+
+				&>ul
+				{
+					&:extend(.list-group);
+					.list-group;
+
+					&>li
+					{
+						&:extend(.list-group-item);
+						.list-group-item;
+					}
+				}
+			}
+		}
+	}
+
+	.-builder-category()
 	{
 		.priority
 		{
