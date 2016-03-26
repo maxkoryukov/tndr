@@ -110,7 +110,6 @@ router.route(`${baseurl}/create`)
 
 	.get(function(req, res, next) {
 
-		res.locals.messages = _.concat([], req.flash('message'));
 		res.render('user/create');
 		return;
 	})
@@ -152,8 +151,6 @@ router.route(`${baseurl}/create`)
 router.route(`${baseurl}/me`)
 
 	.get(function(req, res, next) {
-
-		res.locals.messages = _.concat([], req.flash('message'));
 
 		res.render('user/me');
 	});

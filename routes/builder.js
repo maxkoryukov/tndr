@@ -1,4 +1,8 @@
-"use strict";
+/*
+ * @module tndr.routes.builder
+ */
+
+ "use strict";
 
 var express  = require('express');
 var router   = express.Router();
@@ -7,11 +11,11 @@ var _        = require('lodash');
 
 var baseurl = '/builder';
 
-router.get(`${baseurl}/me`, function(req, res, next) {
+router.route(`${baseurl}/`)
 
-	res.locals.messages = _.concat([], req.flash('message'));
+	.get(function(req, res, next) {
 
-	res.render('person/me');
-});
+		res.render('builder/index');
+	});
 
 module.exports = router;

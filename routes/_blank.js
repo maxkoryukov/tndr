@@ -15,8 +15,6 @@ router.route(`${baseurl}/me`)
 
 	.get(function(req, res, next) {
 
-		res.locals.messages = _.concat([], req.flash('message'));
-
 		res.render('blank/me');
 	});
 
