@@ -2,10 +2,10 @@
 
 var express  = require('express');
 var router   = express.Router();
-var debug    = require('debug')('tndr:routes.users');
+var debug    = require('debug')('tndr:routes.user');
 var _        = require('lodash');
 
-var baseurl = '/users';
+var baseurl = '/user';
 
 var _init_users = function(users){
 	return _.chain(users)
@@ -71,7 +71,7 @@ router.route(`${baseurl}/list`)
 
 			users = _init_users(users);
 
-			return res.render('users/list', { users : users });
+			return res.render('user/list', { users : users });
 
 		})
 		.catch(err => {
@@ -101,7 +101,7 @@ router.route(`${baseurl}/change_password`)
 			} else {
 				req.flash('message', 'Unknown user!');
 			}
-			res.redirect('/users/me');
+			res.redirect(`${baseurl}/me`);
 			return;
 		});
 	});
@@ -111,7 +111,7 @@ router.route(`${baseurl}/create`)
 	.get(function(req, res, next) {
 
 		res.locals.messages = _.concat([], req.flash('message'));
-		res.render('users/create');
+		res.render('user/create');
 		return;
 	})
 
@@ -139,22 +139,30 @@ router.route(`${baseurl}/create`)
 		})
 			.then(function(){
 				req.flash('message', 'User created!');
-				res.redirect('/users/list');
+				res.redirect(`${baseurl}/list`);
 				return;
 			})
 			.catch(function(err){
 				res.locals.error = err;
-				res.render('users/create');
+				res.render('user/create');
 				return;
 			});
 	});
 
+router.route(`${baseurl}/me`)
+
+	.get(function(req, res, next) {
+
+		res.locals.messages = _.concat([], req.flash('message'));
+
+		res.render('user/me');
+	});
+
 router.route(`${baseurl}/:user`)
 	.get(function(req, res, next){
-		var u = req.user;
-		res.locals.user = u;
 
-		res.render('users/card');
+		res.render('user/card', { user: req.user});
+
 	});
 
 router.route(`${baseurl}/:user/enabled`)
@@ -169,7 +177,7 @@ router.route(`${baseurl}/:user/enabled`)
 				// error saved - go to next step
 			})
 			.then(function(){
-				res.redirect('/users/list');
+				res.redirect(`${baseurl}/list`);
 				return;
 			});
 	});

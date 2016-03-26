@@ -147,13 +147,11 @@ models.init()
 
 		var builder   = require('./routes/builder');
 		var dashboard = require('./routes/dashboard');
-		var person    = require('./routes/person');
-		var users     = require('./routes/users');
+		var user      = require('./routes/user');
 
 		langmw.use('/', builder);
 		langmw.use('/', dashboard);
-		langmw.use('/', person);
-		langmw.use('/', users);
+		langmw.use('/', user);
 
 		// catch 404 and forward to error handler
 		app.use(function tndr_handle_not_found(req, res, next) {

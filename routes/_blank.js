@@ -1,11 +1,15 @@
-"use strict";
+/*
+ * @module tndr.routes.blank
+ */
+
+ "use strict";
 
 var express  = require('express');
 var router   = express.Router();
-var debug    = require('debug')('tndr:routes.person');
+var debug    = require('debug')('tndr:routes.blank');
 var _        = require('lodash');
 
-var baseurl = '/person';
+var baseurl = '/blank';
 
 router.route(`${baseurl}/me`)
 
@@ -13,7 +17,7 @@ router.route(`${baseurl}/me`)
 
 		res.locals.messages = _.concat([], req.flash('message'));
 
-		res.render('person/me');
+		res.render('blank/me');
 	});
 
 module.exports = router;

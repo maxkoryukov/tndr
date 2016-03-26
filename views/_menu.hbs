@@ -15,13 +15,13 @@
 			<ul class="nav navbar-nav">
 
 			<!--  class="active" -->
-				<li><a href="/users/list">{{__ "Users management"}}</a></li>
+				<li><a href="/user/list">{{__ "Users management"}}</a></li>
 
 			</ul>
 
 			{{#if current.user }}
 			<ul class="nav navbar-nav navbar-right">
-				<li><a href="/person/me" title="{{__ "My profile"}}"><i class="fa fa-user"></i> {{current.user.username}}</a></li>
+				<li><a href="/user/me" title="{{__ "My profile"}}"><i class="fa fa-user"></i> {{current.user.username}}</a></li>
 				<li role="separator" class="divider"></li>
 				<li><form method="POST" action="/logout"><button class="btn btn-default btn-xs navbar-btn" type="submit">{{__ "Logout"}}</button></form></li>
 			</ul>

@@ -1,7 +1,7 @@
 <section class="container">
 	<h1>{{__ "New user"}}</h1>
 
-	<form method="POST" class="col-md-6" action="/users/create">
+	<form method="POST" class="col-md-6" action="/user/create">
 
 		<fieldset>
 			<legend>{{__ "Login data"}}</legend>
@@ -53,7 +53,7 @@
 		</fieldset>
 
 		<div class="form-group">
-			<a href="/users/list" class="btn btn-cancel" title="{{__ 'Cancel'}}">{{__ "Cancel"}}</a>
+			<a href="/user/list" class="btn btn-cancel" title="{{__ 'Cancel'}}">{{__ "Cancel"}}</a>
 			<button type="submit" class="btn btn-primary" title="{{__ 'Create new user'}}">{{__ "Create"}}</a>
 		</div>
 	</form>

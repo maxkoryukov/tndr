@@ -1,8 +1,11 @@
 <section class="container">
-	<h1>{{__ "Known users"}}</h1>
-	<div>
-		<a href="/users/create" class="btn btn-common" title="{{__ "Create new user"}}"><i class="fa fa-user-plus"></i>&nbsp;{{__ "New user"}}</a>
-	</div>
+	<h1>{{__ "Registerd users"}}</h1>
+	<p>
+		{{__ "List of our user (possibly, employees), who has access to TNDR files"}}
+	</p>
+	<fieldset>
+		<a href="/user/create" class="btn btn-common" title="{{__ "Create new user"}}"><i class="fa fa-user-plus"></i>&nbsp;{{__ "New user"}}</a>
+	</fieldset>
 	<table class="tablesorter table table-striped">
 		<thead><tr>
 			<th>{{__ "#"}}</th>
@@ -32,14 +35,14 @@
 					<td>
 						{{#unless is_root}}
 							{{#if enabled}}
-								<form method="POST" action="/users/{{user}}/enabled"><input type="hidden" name="enabled" value="false"/><button type="submit" class="btn btn-danger btn-xs">{{__ "Disable"}}</button></form>
+								<form method="POST" action="/user/{{user}}/enabled"><input type="hidden" name="enabled" value="false"/><button type="submit" class="btn btn-danger btn-xs">{{__ "Disable"}}</button></form>
 							{{else}}
-								<form method="POST" action="/users/{{user}}/enabled"><input type="hidden" name="enabled" value="true"/><button type="submit" class="btn btn-default btn-xs">{{__ "Enable"}}</button></form>
+								<form method="POST" action="/user/{{user}}/enabled"><input type="hidden" name="enabled" value="true"/><button type="submit" class="btn btn-default btn-xs">{{__ "Enable"}}</button></form>
 							{{/if}}
 						{{/unless}}
 					</td>
 					<td>
-						{{#if enabled}}<a href="/users/{{user}}" title="{{__ "View personal card"}}">{{__ "View"}}</a>{{/if}}
+						{{#if enabled}}<a href="/user/{{user}}" title="{{__ "View personal card"}}">{{__ "View"}}</a>{{/if}}
 					</td>
 
 				</tr>
