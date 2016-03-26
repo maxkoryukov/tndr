@@ -45,16 +45,17 @@ router.post('/logout', function(req, res) {
 
 /* REQUIRE AUTH for all other requests */
 router.all('*', function (req, res, next){
+	let db = req.app.models;
 
 	if (req.app.config.security.autologin)
 		req.session.userId = req.app.config.security.autologin;
 
 	if (req.session && req.session.userId){
 
-		req.app.models.user.findById(req.session.userId).then(function(user){
+		db.user.findById(req.session.userId).then(function(user){
 			user = _.omit(user, ['password', 'hash']);
 			req.current.user = user;
-			debug(req.current.user);
+			debug('CURRENT USER:', req.current.user);
 			next();
 		});
 	} else {

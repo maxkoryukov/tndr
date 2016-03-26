@@ -62,6 +62,7 @@ TODO : move to gulp
 var lessopt = {
 	dest : path.join(__dirname, 'assets'),
 	debug : true,
+	compress: false,
 };
 var lesssrc = path.join(__dirname, 'billets');
 app.use(lessmw(lesssrc, lessopt));
@@ -92,6 +93,7 @@ QUERY
 */
 app.use(function tndr_app_set_current(req, res, next){
 	req.current = {};
+	res.locals.current = req.current;
 	next();
 });
 
