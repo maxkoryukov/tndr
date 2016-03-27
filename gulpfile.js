@@ -15,7 +15,11 @@ var uglify       = require('gulp-uglify');
 var filesize     = require('gulp-size');
 var clean        = require('gulp-clean');
 
-var csslint_reporter = require('gulp-csslint-report');
+// till open bug
+// https://github.com/thirus/gulp-csslint-report/pull/5
+// see thirus/gulp-csslint-report#5
+// see #12
+var csslint_reporter = require('./mods/DEP-gulp-csslint-report'); //require('gulp-csslint-report');
 
 var path         = require('path');
 
@@ -25,9 +29,11 @@ var path         = require('path');
 
 //var del = require('del');
 
-var devdir = path.join('./', 'dev') + path.sep;
-var tmpdir = path.join('./', 'dev', 'tmp')+ path.sep;
+var devdir = path.join('./', 'dev');
+var tmpdir = path.join('./', 'dev', 'tmp');
 
+
+const filesize_opt = {showFiles:true, pretty:false};
 /*
 =======================================
 JS
@@ -35,8 +41,8 @@ JS
 */
 
 gulp.task('js', () => {
-	const size1 = filesize( {showFiles:true, pretty:false} );
-	const size2 = filesize( {showFiles:true, pretty:false} );
+	const size1 = filesize(filesize_opt);
+	const size2 = filesize(filesize_opt);
 
 	return gulp.src([
 			'./billets/js/**/*.js',
@@ -70,20 +76,22 @@ STYLES
 */
 
 gulp.task('less', () => {
-	const size1 = filesize( {showFiles:true, pretty:false} );
-	const size2 = filesize( {showFiles:true, pretty:false} );
+	const size1 = filesize(filesize_opt);
+	const size2 = filesize(filesize_opt);
+
+	const reportdir = path.join(devdir, 'asdf', 'csslint-report') + path.sep;
 
 	return gulp.src([
 			'./billets/css/**/*.less',
 	])
+
 		//.pipe(notify({message : "process file: <%= file.relative %>"}))
 		.pipe(less())
 		.pipe(gulp.dest(tmpdir))
 		.pipe(size1)
 		//.pipe(concat('styles.css'))
-
 		//.pipe(autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
-		//.pipe(autoprefixer('last 2 version'))
+		.pipe(autoprefixer('last 2 version'))
 		.pipe(rename({ suffix: '.min' }))
 		////.pipe(minifycss())
 		//.pipe(csso())
@@ -91,18 +99,19 @@ gulp.task('less', () => {
 		.pipe(csslint())
 		// TODO : remove path.join
 		.pipe(csslint_reporter({
-			directory: path.join(devdir, 'csslint-report/'),
+			directory: reportdir,
+			filename: 'index.txt',
 			createMissingFolders: true,
 		}))
 
 		.pipe(gulp.dest('./assets/css'))
 		.pipe(size2)
-		.on('error', gutil.log)
+		//.on('error', gutil.log)
 		//.pipe(notify({ onLast:true, message: 'CSS task complete' }))
 	;
 });
 
-// Styles
+// Fonts
 gulp.task('fonts', () => {
 	return gulp.src([
 			'./node_modules/font-awesome/fonts/*',
@@ -146,12 +155,11 @@ META TASKS
 
 function _zip(){
 	return gulp.src([
-		'./assets/**/*',
-		tmpdir,
+		'./assets/**/*'
 	])
 		.pipe(zip('release.zip'))
 		.pipe(gulp.dest('./build'))
-		.pipe(filesize( {showFiles:true, pretty:false} ))
+		.pipe(filesize( filesize_opt ))
 		.on('error', gutil.log)
 	;
 }

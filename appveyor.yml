@@ -37,7 +37,7 @@ test_script:
 
 # Don't actually run MSBUILD, there is nothing to build...
 build: off
-after_build:
+before_build:
   - gulp
 
 matrix:
