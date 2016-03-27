@@ -13,7 +13,7 @@ var jshint       = require('gulp-jshint');
 var uglify       = require('gulp-uglify');
 
 var filesize     = require('gulp-size');
-var clean        = require('gulp-clean');
+var del          = require('del');
 
 // till open bug
 // https://github.com/thirus/gulp-csslint-report/pull/5
@@ -79,7 +79,7 @@ gulp.task('less', () => {
 	const size1 = filesize(filesize_opt);
 	const size2 = filesize(filesize_opt);
 
-	const reportdir = path.join(devdir, 'asdf', 'csslint-report') + path.sep;
+	const reportdir = path.join(devdir, 'csslint-report') + path.sep;
 
 	return gulp.src([
 			'./billets/css/**/*.less',
@@ -100,7 +100,7 @@ gulp.task('less', () => {
 		// TODO : remove path.join
 		.pipe(csslint_reporter({
 			directory: reportdir,
-			filename: 'index.txt',
+			filename: 'index.html',
 			createMissingFolders: true,
 		}))
 
@@ -136,15 +136,12 @@ CLEAN
 */
 
 gulp.task('clean', () => {
-	return gulp.src([
+
+	// will return a promise
+	return del([
 		'./assets',
 		tmpdir,
-	],{
-		read: false
-	})
-		.pipe(clean())
-		.on('error', gutil.log)
-	;
+	]);
 });
 
 /*

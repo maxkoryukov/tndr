@@ -50,23 +50,14 @@ body {
 		.make-load();
 	}
 
-	.btn-common
+	.btn-create
 	{
-		.btn;
-		.btn-sm;
-
-		background-color:transparent;
-		border-color: @color-primary;
-		border-width: @button-border;
-		border-style: solid;
-		color:@color-primary;
-		border-radius: @border-radius-large;
+		&:extend(.btn-success);
 	}
 
 	.btn-delete
 	{
 		&:extend(.btn-danger);
-		//.btn-error;
 	}
 
 

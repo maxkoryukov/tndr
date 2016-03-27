@@ -24,16 +24,14 @@ router.route(`${baseurl}/`)
 		})
 			.then(categories => {
 
-				let cs = _.chain(categories)
+				let categories = _.chain(categories)
 					.forEach(x => { if (x.builder) x.builder = x.builder.get(); })
 					.map(_.partial(_.pick, _, ['builder_category', 'name', 'code', 'tip_usage', 'tip_price', 'note', 'builders']))
 					.value();
 
-				res.render('builder/index', {categories : cs});
+				res.render('builder/index', {categories : categories});
 			})
-			.catch(err=> {
-				next(err);
-			});
+			.catch(err=> next(err));
 	});
 
 router.route(`${baseurl}/:builder`)
