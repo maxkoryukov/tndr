@@ -1,7 +1,7 @@
 <section class="container builder list">
 	<h1>{{__ "Builders"}}</h1>
 
-	<section>
+	<fieldset>
 		<button class="btn">
 			<span class="fa-stack">
 				<i class="fa fa-building fa-stack-1x"></i>
@@ -9,29 +9,31 @@
 			</span>
 			{{__ "Create new"}}
 		</button>
+	</fieldset>
+
+	<section>
+		<h2>{{__ "List, by categores"}}</h2>
+
+		{{#each categories}}
+			<article class="builder-category">
+				<header class="{{code}}">
+					<h3>{{name}}</h3>
+				</header>
+				<section class="panel-body">
+					<p>{{tip_usage}}</p>
+					<p>{{tip_price}}</p>
+					<p>{{note}}</p>
+				</section>
+				<ul>
+					{{#each builders}}
+						<li>
+							<a href="/builder/{{id}}" title="{{__ "View builder details"}}"><i class="fa fa-link"></i></a>
+							{{name}}
+						</li>
+					{{/each}}
+				</ul>
+			</article>
+		{{/each}}
 	</section>
-
-	<h2>{{__ "List, by categores"}}</h2>
-
-	{{#each categories}}
-		<article class="builder-category">
-			<header class="{{code}}">
-				<h3>{{name}}</h3>
-			</header>
-			<section class="panel-body">
-				<p>{{tip_usage}}</p>
-				<p>{{tip_price}}</p>
-				<p>{{note}}</p>
-			</section>
-			<ul>
-				{{#each builders}}
-					<li>
-						<a href="/builder/{{builder}}" title="{{__ "View builder details"}}"><i class="fa fa-link"></i></a>
-						{{name}}
-					</li>
-				{{/each}}
-			</ul>
-		</article>
-	{{/each}}
 
 </section>

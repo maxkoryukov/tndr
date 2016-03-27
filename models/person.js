@@ -6,7 +6,7 @@ var _     = require('lodash');
 module.exports = function(sequelize, DataTypes) {
 
 	var person = sequelize.define("person", {
-			person: {
+			id: {
 				type: DataTypes.INTEGER,
 				allowNull: false,
 				primaryKey: true,
@@ -44,7 +44,10 @@ var classMethods = {
 	associate: function(models) {
 		models.person.hasOne(models.user);
 
-		models.person.belongsToMany(models.builder, {through: 'builder2person'});
+		//models.person.belongsToMany(models.builder, {through: 'builder2person'});
+
+
+		models.person.belongsToMany(models.builder, {as: 'employers', through: models.employee});
 	},
 };
 

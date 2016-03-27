@@ -32,7 +32,7 @@ router.param('user', function(req, res, next, id){
 
 	db.user.findById(id, {
 		raw: false,
-		attributes : ['user', 'username', 'deleted_at'],
+		attributes : ['id', 'username', 'deleted_at'],
 		include: [db.person],
 		order: [['deleted_at', 'ASC'], ['username', 'ASC']],
 		paranoid: false
@@ -63,7 +63,7 @@ router.route(`${baseurl}/list`)
 		// TODO : use model???
 		db.user.findAll({
 			raw: false,
-			attributes : ['user', 'username', 'deleted_at'],
+			attributes : ['id', 'username', 'deleted_at'],
 			include: [db.person],
 			order: [['deleted_at', 'ASC'], ['username', 'ASC']],
 			paranoid: false
@@ -170,7 +170,7 @@ router.route(`${baseurl}/:user/enabled`)
 	.post(function(req, res, next) {
 		var state = JSON.parse(req.body.enabled);
 
-		req.app.models.user.setState(req.user.user, state)
+		req.app.models.user.setState(req.user.id, state)
 			.catch(function(err){
 				res.error = err;
 

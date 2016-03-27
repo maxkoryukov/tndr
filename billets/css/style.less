@@ -1,4 +1,5 @@
 @import (once, reference) "../bootstrap-fm/bootstrap-fm.less";
+@import (once, reference) "font-awesome.less";
 
 body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
@@ -17,13 +18,11 @@ body {
 @bcat4 : #FFC000;
 @bcat5 : #C00000;
 
-
-
-
 .fa.fa-overlay
 {
 	font-size: 70%;
-	margin: 15% 0 0 25%;
+	height: 70%;
+	margin: 15% -25% -15% 25%;
 	text-shadow: -0.3em 0 0.3em white;
 }
 
@@ -37,11 +36,25 @@ body {
                 COMMON STUFF
 =====================================================================
 */
+	.make-load()
+	{
+		.fa-spin;
+		.fa-icon();
+
+		margin-left: 0.25em;
+		content: @fa-var-spinner;
+	}
+
+	.tndr-load:after
+	{
+		.make-load();
+	}
 
 	.btn-common
 	{
 		.btn;
 		.btn-sm;
+
 		background-color:transparent;
 		border-color: @color-primary;
 		border-width: @button-border;
@@ -49,6 +62,13 @@ body {
 		color:@color-primary;
 		border-radius: @border-radius-large;
 	}
+
+	.btn-delete
+	{
+		&:extend(.btn-danger);
+		//.btn-error;
+	}
+
 
 /*
 =====================================================================
@@ -82,7 +102,7 @@ body {
 	{
 		&.list
 		{
-			&>article
+			article
 			{
 				&:extend(.panel);
 				.panel;
@@ -100,8 +120,9 @@ body {
 					&:extend(.panel-heading);
 					.panel-heading;
 
-					h1,h2,h3,h4,h5,h6:extend(.panel-title)
+					h1,h2,h3,h4,h5,h6
 					{
+						&:extend(.panel-title);
 						.panel-title;
 					}
 				}

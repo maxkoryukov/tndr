@@ -1,4 +1,4 @@
-version: 0.2.1.{build}-{branch}
+version: 0.3.0.{build}-{branch}
 
 # Fix line endings on Windows
 init:
@@ -25,6 +25,7 @@ install:
   - npm install -g npm
   # install modules
   - npm install
+  - npm install -g gulp
 
 # Post-install test scripts.
 test_script:
@@ -34,8 +35,10 @@ test_script:
   # run tests
   - npm test
 
-# Don't actually build, there is nothing to build...
+# Don't actually run MSBUILD, there is nothing to build...
 build: off
+after_build:
+  - gulp
 
 matrix:
   allow_failures:

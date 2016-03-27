@@ -6,7 +6,7 @@ var _     = require('lodash');
 module.exports = function(sequelize, DataTypes) {
 
 	var user = sequelize.define("user", {
-			user: {
+			id: {
 				type: DataTypes.INTEGER,
 				allowNull: false,
 				primaryKey: true,
@@ -61,7 +61,8 @@ var classMethods = {
 					err.status = 403;
 					throw err;
 				} else {
-					return result.rows[0].user;
+					let id = result.rows[0].id;
+					return id;
 				}
 			});
 	},
@@ -70,10 +71,11 @@ var classMethods = {
 		debug('changePassword', username);
 
 		return this.authenticate(username, password)
+			.bind(this)
 			.then(function(id){
 				return this.update(
 						{ password : newhash },
-						{ where : { user : { $eq : id } } }
+						{ where : { id : { $eq : id } } }
 					);
 			})
 			.get(0)
@@ -87,7 +89,7 @@ var classMethods = {
 			.findById(uid, { paranoid: false, raw: false} )
 			.then(function(u){
 				if (u.username === 'root'){
-					throw new Error('Vorbidden');
+					throw new Error('Forbidden');
 				}
 				return u;
 			})

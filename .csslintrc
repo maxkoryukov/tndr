@@ -1,0 +1,6 @@
+{
+	"ignore": "font-awesome.min.css",
+
+	"qualified-headings" : false,
+	"adjoining-classes" : false
+}

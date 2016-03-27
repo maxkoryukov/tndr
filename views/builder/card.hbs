@@ -1,0 +1,96 @@
+<section class="container builder">
+	<h1>{{builder.name}}</h1>
+
+	<fieldset>
+	</fieldset>
+
+	<section>
+		<h2>{{__ "Employees"}}</h2>
+		<ul>
+			{{#each builder.employees as |employee|}}
+				<li>
+					<a href="/builder/{{@root.builder.id}}/employee/{{employee.id}}" title="{{__ "View employee personal card"}}"><i class="fa fa-link"></i>
+						{{employee.surname}} {{employee.name}} {{employee.job}}
+					</a>
+				</li>
+			{{/each}}
+		</ul>
+	</section>
+
+	<section>
+		<h2>{{__ "Danger zone"}}</h2>
+
+		<section>
+			<h4>{{__ "Delete builder"}}</h4>
+			<span>{{__ "This operation couldn't be rolled back. The minimal set of required data (f.e. name of builder, to show in tenders) will remain."}}</span>
+			<button class="btn btn-delete btn-xs" data-toggle="modal" data-target=".cl-delete-modal">{{__ "Delete"}}</button>
+
+			{{! TODO: remove excessive classes }}
+			<div class="cl-delete-modal modal fade" tabindex="-1" role="dialog" aria-labelledby="delete-modal-header">
+				<div class="modal-dialog" role="document">
+					<section class="modal-content">
+						<header class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="{{__ "Close"}}"><i class="fa fa-times" aria-hidden="true"></i></button>
+							<h4 class="modal-title" id="delete-modal-header">{{__ "Delete builder?"}}</h4>
+						</header>
+						<article class="modal-body">
+							{{__ "This operation couldn't be rolled back. The minimal set of required data (f.e. name of builder, to show in tenders) will remain."}}
+						</article>
+						<footer class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">{{__ "Close"}}</button>
+							<button type="button" class="btn btn-delete cl-delete" data-builder="{{builder.id}}">{{__ "Delete"}}</button>
+						</footer>
+					</section>
+				</div>
+			</div>
+			{{! dialog end }}
+
+		</section>
+	</section>
+</section>
+
+{{#extend "scripts"}}
+
+<script type="text/javascript">
+	$(document).ready(function doc_ready(){
+
+		$('.cl-delete').click(function(){
+			var $this = $(this);
+			$this.addClass('tndr-load');
+			$this.prop("disabled", true);
+
+			var bid = $this.data('builder');
+
+			$.ajax({
+				{{! TODO : url }}
+				url: '/builder/',
+				context: this,
+				dataType: 'json',
+				method: 'DELETE',
+				data: {
+					id: bid,
+				}
+			})
+				.always(function(){
+					$(this).removeClass('tndr-load');
+					$(this).prop("disabled", false);
+				})
+				.done(function(data){
+					console.info('delete success', data);
+
+					// redirect to the index
+					{{! TODO: url }}
+					window.location = '/builder/';
+				})
+				.fail(function(data){
+					console.error('delete fail', data);
+					var $m = $('.cl-delete-modal');
+					$m.modal('hide');
+
+					showMessage(data.message);
+				});
+		});
+	});
+</script>
+
+{{/extend}}

@@ -1,0 +1,8 @@
+// path to root's node_modules (font-awesome exists as a npm-dev-dependecy)
+// we will build custom font-awesome, that is why here is no REFERENCE instruction
+// ... may be it is stupid, but it is so...
+@import (once) "../../node_modules/font-awesome/less/font-awesome.less";
+
+// this path will be used by resulting css, so this is the path for browser
+// fonts from sources (in node_modulles) will be copied using gulp
+@fa-font-path:   "../fonts";

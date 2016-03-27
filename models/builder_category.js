@@ -6,7 +6,7 @@ var _     = require('lodash');
 module.exports = function(sequelize, DataTypes) {
 
 	var builder_category = sequelize.define("builder_category", {
-			builder_category: {
+			id: {
 				type: DataTypes.INTEGER,
 				allowNull: false,
 				primaryKey: true,

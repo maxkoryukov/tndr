@@ -14,13 +14,10 @@ var cookieParser    = require('cookie-parser');
 var bodyParser      = require('body-parser');
 var session         = require('express-session');
 var flash           = require('connect-flash');
-// TODO : move to gulp
-var lessmw          = require('less-middleware');
-
-var models          = require('./models');
-var view_partials   = require('./views/register-partials');
 
 var app             = express();
+
+var models          = require('./models');
 
 var envname         = process.env.NODE_ENV || 'production';
 var config          = require('./config/app.json')[envname];
@@ -45,6 +42,11 @@ if (_.isInteger(alid)){
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
+
+// TODO : think about refactoring:
+require('./mods/hbs-register-partials');
+require('./mods/hbs-register-blocks');
+
 app.set('trust proxy', config.rproxy.trust_level || 0); // trust first (or nth-) proxy
 
 app.use(favicon(path.join(__dirname, 'assets', 'favicon.ico')));
@@ -56,20 +58,6 @@ app.use(cookieParser(config.cookie.secret));
 app.use(express.static(path.join(__dirname, 'assets')));
 
 app.use(flash());
-/*
-====================================
-LESS - DEPRECATED
-TODO : move to gulp
-====================================
-*/
-
-var lessopt = {
-	dest : path.join(__dirname, 'assets'),
-	debug : true,
-	compress: false,
-};
-var lesssrc = path.join(__dirname, 'billets');
-app.use(lessmw(lesssrc, lessopt));
 
 /*
 ====================================

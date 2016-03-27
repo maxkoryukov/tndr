@@ -19,7 +19,7 @@
 		<tbody>
 			{{#each users}}
 				<tr class="{{#unless enabled}}text-muted{{/unless}}">
-					<td>{{user}}</td>
+					<td>{{id}}</td>
 					<td>{{username}}</td>
 					<td>{{person.surname}}</td>
 					<td>{{person.name}}</td>
@@ -35,14 +35,14 @@
 					<td>
 						{{#unless is_root}}
 							{{#if enabled}}
-								<form method="POST" action="/user/{{user}}/enabled"><input type="hidden" name="enabled" value="false"/><button type="submit" class="btn btn-danger btn-xs">{{__ "Disable"}}</button></form>
+								<form method="POST" action="/user/{{id}}/enabled"><input type="hidden" name="enabled" value="false"/><button type="submit" class="btn btn-danger btn-xs">{{__ "Disable"}}</button></form>
 							{{else}}
-								<form method="POST" action="/user/{{user}}/enabled"><input type="hidden" name="enabled" value="true"/><button type="submit" class="btn btn-default btn-xs">{{__ "Enable"}}</button></form>
+								<form method="POST" action="/user/{{id}}/enabled"><input type="hidden" name="enabled" value="true"/><button type="submit" class="btn btn-default btn-xs">{{__ "Enable"}}</button></form>
 							{{/if}}
 						{{/unless}}
 					</td>
 					<td>
-						{{#if enabled}}<a href="/user/{{user}}" title="{{__ "View personal card"}}">{{__ "View"}}</a>{{/if}}
+						{{#if enabled}}<a href="/user/{{id}}" title="{{__ "View personal card"}}">{{__ "View"}}</a>{{/if}}
 					</td>
 
 				</tr>

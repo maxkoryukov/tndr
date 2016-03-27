@@ -1,3 +1,9 @@
+/*
+ * @module mods/hbs-register-partials
+ */
+
+"use strict";
+
 // FROM : https://gist.github.com/benw/3824204#file-load-hbs-partials-js
 
 
@@ -19,11 +25,6 @@ filenames.forEach(function (filename) {
 	var name = matches[1];
 	var template = fs.readFileSync(partialsDir + '/' + filename, 'utf8');
 	return hbs.registerPartial(name, template);
-});
-
-// Register i18n stub
-hbs.registerHelper('__', function(s) {
-	return s;
 });
 
 module.exports = {};
