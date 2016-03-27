@@ -26,7 +26,7 @@ describe('tndr.models', function() {
 			e = models.person.build();
 		});
 
-		_.each(['person', 'name', 'surname', 'phone', 'note'], function(key){
+		_.each(['id', 'name', 'surname', 'phone', 'note'], function(key){
 			it(`should exists property [${key}]`, function () {
 				assert.property(e, key);
 			});

@@ -31,7 +31,7 @@ describe('tndr.models', function() {
 			});
 		});
 
-		_.each(['user', 'username', 'password', 'person'], function(key){
+		_.each(['id', 'username', 'password', 'person'], function(key){
 
 			it(`should have property [${key}]`, function () {
 				assert.property(e, key);
