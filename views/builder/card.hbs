@@ -1,22 +1,63 @@
+<style>
+	form.cl-ro input,
+	form.cl-ro select
+	{
+
+	}
+
+</style>
+
 <section class="container builder">
 	<h1>{{builder.name}}</h1>
 
-	<fieldset>
-	</fieldset>
+	{{! TODO: remove excessive classes }}
+
+	<form method="POST" class="cl-builder-edit-main cl-ro">
+
+		<fieldset>
+			<legend><h2>{{__ "Builder basic"}}</h2></legend>
+
+			<input type="hidden" value="{{builder.id}}" name="id" />
+
+			<div class="form-group">
+				<label>
+					{{__ "Name"}}
+					<input type="text" class="form-control" id="name" name="name" value="{{builder.name}}"/>
+				</label>
+			</div>
+
+			<div class="form-group">
+				<label>
+					{{__ "Category"}}
+					<select name="builder_category" class="form-control">
+						<option value="1">cat 1</option>
+						<option value="2">cat 2</option>
+					</select>
+				</label>
+			</div>
+
+			<div class="form-group">
+				{{! TODO : url }}
+				<button type="button" class="btn btn-cancel cl-cancel" title="{{__ 'Cancel'}}">{{__ "Cancel"}}</button>
+				<button type="button" class="btn btn-create cl-create" title="{{__ 'Create new user'}}">{{__ "Create"}}</a>
+			</div>
+		</fieldset>
+	</form>
 
 	<section>
 		<h2>{{__ "Employees"}}</h2>
 		<ul>
-			{{#each builder.employees as |employee|}}
+			{{~#each builder.employees as |employee|~}}
 				<li>
 					<a href="/builder/{{@root.builder.id}}/employee/{{employee.id}}" title="{{__ "View employee personal card"}}"><i class="fa fa-link"></i>
 						{{employee.surname}} {{employee.name}} {{employee.job}}
 					</a>
 				</li>
-			{{/each}}
+			{{~/each~}}
 		</ul>
 	</section>
 
+	{{~#if builder.id~}}
 	<section>
 		<h2>{{__ "Danger zone"}}</h2>
 
@@ -26,6 +67,7 @@
 			<button class="btn btn-delete btn-xs" data-toggle="modal" data-target=".cl-delete-modal">{{__ "Delete"}}</button>
 
 			{{! TODO: remove excessive classes }}
+
 			<div class="cl-delete-modal modal fade" tabindex="-1" role="dialog" aria-labelledby="delete-modal-header">
 				<div class="modal-dialog" role="document">
 					<section class="modal-content">
@@ -37,7 +79,7 @@
 							{{__ "This operation couldn't be rolled back. The minimal set of required data (f.e. name of builder, to show in tenders) will remain."}}
 						</article>
 						<footer class="modal-footer">
-							<button type="button" class="btn btn-default" data-dismiss="modal">{{__ "Close"}}</button>
+							<button type="button" class="btn btn-cancel" data-dismiss="modal">{{__ "Close"}}</button>
 							<button type="button" class="btn btn-delete cl-delete" data-builder="{{builder.id}}">{{__ "Delete"}}</button>
 						</footer>
 					</section>
@@ -47,6 +89,8 @@
 
 		</section>
 	</section>
+	{{~/if}}
+
 </section>
 
 {{#extend "scripts"}}
@@ -63,16 +107,16 @@
 
 			$.ajax({
 				{{! TODO : url }}
-				url: '/builder/',
+				url: "/builder/",
 				context: this,
-				dataType: 'json',
+				dataType: "json",
 				method: 'DELETE',
 				data: {
 					id: bid,
 				}
 			})
 				.always(function(){
-					$(this).removeClass('tndr-load');
+					$(this).removeClass("tndr-load");
 					$(this).prop("disabled", false);
 				})
 				.done(function(data){
@@ -87,8 +131,13 @@
 					var $m = $('.cl-delete-modal');
 					$m.modal('hide');
 
-					showMessage(data.message);
+					var resp = data.responseJSON;
+
+					showMessage(resp.error);
 				});
+		});
+
+		$('.cl-create').click(function()
 		});
 	});
 </script>

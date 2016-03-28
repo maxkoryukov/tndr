@@ -1,7 +1,7 @@
+"use strict";
+
 var gulp   = require('gulp');
 var gutil  = require('gulp-util');
-
-var zip    = require('gulp-zip');
 
 // plugins
 var less         = require('gulp-less');
@@ -11,9 +11,12 @@ var csso         = require('gulp-csso');
 var csslint      = require('gulp-csslint');
 var jshint       = require('gulp-jshint');
 var uglify       = require('gulp-uglify');
-
+var zip          = require('gulp-zip');
 var filesize     = require('gulp-size');
-var del          = require('del');
+var gulpif       = require('gulp-if');
+// var notify    = require('gulp-notify'),
+// var minifycss = require('gulp-minify-css');
+// var concat    = require('gulp-concat'),
 
 // till open bug
 // https://github.com/thirus/gulp-csslint-report/pull/5
@@ -21,19 +24,57 @@ var del          = require('del');
 // see #12
 var csslint_reporter = require('./mods/DEP-gulp-csslint-report'); //require('gulp-csslint-report');
 
+var del          = require('del');
 var path         = require('path');
+var debug        = require('debug')('tndr:gulpfile');
 
-// var notify    = require('gulp-notify'),
-// var minifycss = require('gulp-minify-css');
-// var concat    = require('gulp-concat'),
+var _            = require('lodash');
 
-//var del = require('del');
+/*
+==============================================================================
+ENV settings
+==============================================================================
+*/
 
-var devdir = path.join('./', 'dev');
-var tmpdir = path.join('./', 'dev', 'tmp');
 
+var paths = {
+	client:{
+		style:[
+			'billets/css/**/*.less',
+		],
+		script:[
+			'billets/js/**/*.js'
+		],
+		favicon: [
+			'billets/favicon.ico',
+		],
+		base : 'billets',
+	},
+	server:{
+	},
+
+	build:{
+		dev: './dev',
+		tmp: './dev/tmp/',
+		assets: './assets',
+		jshint: 'dev/jshint-report/index.html',
+		csslint: './dev/csslint-report/',
+	}
+};
 
 const filesize_opt = {showFiles:true, pretty:false};
+
+var envname = process.env.NODE_ENV || 'production';
+debug(`ENV: ${envname}`);
+
+var isdevenv = _.toLower(envname) === 'dev';
+
+/*
+==============================================================================
+TASKS
+==============================================================================
+*/
+
 /*
 =======================================
 JS
@@ -44,25 +85,23 @@ gulp.task('js', () => {
 	const size1 = filesize(filesize_opt);
 	const size2 = filesize(filesize_opt);
 
-	return gulp.src([
-			'./billets/js/**/*.js',
-	])
+	return gulp.src(paths.client.script, {base: paths.client.base})
 		//.pipe(notify({message : "process file: <%= file.relative %>"}))
-		.pipe(gulp.dest(tmpdir))
+		.pipe(gulp.dest(paths.build.tmp))
 		.pipe(size1)
 
 		.pipe(rename({ suffix: '.min' }))
-		.pipe(uglify())
+		.pipe(gulpif(!isdevenv, uglify()))
 
 		.pipe(jshint())
 		// TODO : remove path.join
 		.pipe(jshint.reporter('gulp-jshint-html-reporter', {
-			filename: path.join(devdir, 'jshint-report', 'index.html'),
+			filename: paths.build.jshint,
 			createMissingFolders: true,
 		}))
 
 
-		.pipe(gulp.dest('./assets/js'))
+		.pipe(gulp.dest(paths.build.assets))
 		.pipe(size2)
 		.on('error', gutil.log)
 		//.pipe(notify({ onLast:true, message: 'CSS task complete' }))
@@ -79,32 +118,28 @@ gulp.task('less', () => {
 	const size1 = filesize(filesize_opt);
 	const size2 = filesize(filesize_opt);
 
-	const reportdir = path.join(devdir, 'csslint-report') + path.sep;
-
-	return gulp.src([
-			'./billets/css/**/*.less',
-	])
+	return gulp.src(paths.client.style, {base: paths.client.base})
 
 		//.pipe(notify({message : "process file: <%= file.relative %>"}))
 		.pipe(less())
-		.pipe(gulp.dest(tmpdir))
+		.pipe(gulp.dest(paths.build.tmp))
 		.pipe(size1)
 		//.pipe(concat('styles.css'))
 		//.pipe(autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
 		.pipe(autoprefixer('last 2 version'))
 		.pipe(rename({ suffix: '.min' }))
 		////.pipe(minifycss())
-		//.pipe(csso())
+		.pipe(gulpif(!isdevenv, csso()))
 
 		.pipe(csslint())
 		// TODO : remove path.join
 		.pipe(csslint_reporter({
-			directory: reportdir,
+			directory: paths.build.csslint,
 			filename: 'index.html',
 			createMissingFolders: true,
 		}))
 
-		.pipe(gulp.dest('./assets/css'))
+		.pipe(gulp.dest(paths.build.assets))
 		.pipe(size2)
 		//.on('error', gutil.log)
 		//.pipe(notify({ onLast:true, message: 'CSS task complete' }))
@@ -115,16 +150,14 @@ gulp.task('less', () => {
 gulp.task('fonts', () => {
 	return gulp.src([
 			'./node_modules/font-awesome/fonts/*',
-	])
-		.pipe(gulp.dest('./assets/fonts'))
+	], {base: 'node_modules/font-awesome'})
+		.pipe(gulp.dest(paths.build.assets))
 	;
 });
 
 gulp.task('favicon', () => {
-	return gulp.src([
-			'./billets/favicon.ico',
-	])
-		.pipe(gulp.dest('./assets/'))
+	return gulp.src(paths.client.favicon, {base: paths.client.base})
+		.pipe(gulp.dest(paths.build.assets))
 		.on('error', gutil.log)
 	;
 });
@@ -139,15 +172,15 @@ gulp.task('clean', () => {
 
 	// will return a promise
 	return del([
-		'./assets',
-		tmpdir,
+		paths.build.assets,
+		paths.build.tmp,
 	]);
 });
 
 /*
-=======================================
+==============================================================================
 META TASKS
-=======================================
+==============================================================================
 */
 
 function _zip(){
@@ -166,3 +199,14 @@ gulp.task('build', ['less', 'fonts', 'favicon', 'js']);
 gulp.task('zip', ['build'], _zip);
 
 gulp.task('default', ['build']);
+
+gulp.task('start', () => {
+	let cb = function(event) {
+		debug('File ' + event.path + ' was ' + event.type + ', running tasks...');
+	};
+
+	gulp.watch(paths.client.script, ['js'], cb);
+	gulp.watch(paths.client.style, ['less'], cb);
+
+	let app = require('./bin/www');
+});

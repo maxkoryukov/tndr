@@ -1,4 +1,4 @@
-﻿"use strict";
+﻿/* jshint ignore:start */
 
 var through = require('through');
 var path = require('path');
@@ -190,3 +190,5 @@ module.exports = function (opt) {
 
     return through(start, end);
 };
+
+/* jshint ignore:end */
