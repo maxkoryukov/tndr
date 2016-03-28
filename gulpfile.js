@@ -14,15 +14,10 @@ var uglify       = require('gulp-uglify');
 var zip          = require('gulp-zip');
 var filesize     = require('gulp-size');
 var gulpif       = require('gulp-if');
+var csslint_rep  = require('gulp-csslint-report');
 // var notify    = require('gulp-notify'),
 // var minifycss = require('gulp-minify-css');
 // var concat    = require('gulp-concat'),
-
-// till open bug
-// https://github.com/thirus/gulp-csslint-report/pull/5
-// see thirus/gulp-csslint-report#5
-// see #12
-var csslint_reporter = require('./mods/DEP-gulp-csslint-report'); //require('gulp-csslint-report');
 
 var del          = require('del');
 var path         = require('path');
@@ -133,7 +128,7 @@ gulp.task('less', () => {
 
 		.pipe(csslint())
 		// TODO : remove path.join
-		.pipe(csslint_reporter({
+		.pipe(csslint_rep({
 			directory: paths.build.csslint,
 			filename: 'index.html',
 			createMissingFolders: true,
