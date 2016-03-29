@@ -34,12 +34,12 @@ router.route(`${baseurl}/login`)
 					}
 					res.redirect(url);
 				} else {
-					req.flash('message', 'Unknown user!');
+					req.addMessage('warn', 'Unknown user!');
 					res.render('login', { backurl: backurl });
 				}
 			})
 			.catch(function auth_fail(err){
-				req.flash('message', 'Unknown user!');
+				req.addMessage('warn', 'Unknown user!');
 				res.render('login', { backurl: backurl });
 			});
 	});

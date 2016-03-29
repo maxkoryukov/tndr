@@ -76,7 +76,20 @@ JS
 =======================================
 */
 
-gulp.task('js', () => {
+gulp.task('js:client:pre', () => {
+	return gulp
+		.src([
+			'./node_modules/jquery/dist/jquery.min.js',
+			'./node_modules/lodash/lodash.min.js',
+			'./node_modules/handlebars/dist/handlebars.min.js',
+		])
+		// TODO : fix path
+		.pipe(gulp.dest(path.join(paths.build.assets,'js')))
+		.pipe(filesize(filesize_opt))
+	;
+});
+
+gulp.task('js:client:my', () => {
 	const size1 = filesize(filesize_opt);
 	const size2 = filesize(filesize_opt);
 
@@ -102,6 +115,10 @@ gulp.task('js', () => {
 		//.pipe(notify({ onLast:true, message: 'CSS task complete' }))
 	;
 });
+
+gulp.task('js:client', ['js:client:pre', 'js:client:my']);
+
+gulp.task('js', ['js:client']);
 
 /*
 =======================================
@@ -195,12 +212,12 @@ gulp.task('zip', ['build'], _zip);
 
 gulp.task('default', ['build']);
 
-gulp.task('start', () => {
+gulp.task('start', ['build'], () => {
 	let cb = function(event) {
 		debug('File ' + event.path + ' was ' + event.type + ', running tasks...');
 	};
 
-	gulp.watch(paths.client.script, ['js'], cb);
+	gulp.watch(paths.client.script, ['js:client:my'], cb);
 	gulp.watch(paths.client.style, ['less'], cb);
 
 	let app = require('./bin/www');

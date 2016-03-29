@@ -1,2 +1,29 @@
+{{{{raw-helper}}}}
+<script id="messages-template-hbs" type="text/x-handlebars-template">
+	<div class="alert alert-dismissible {{cssclass}} fade in" role="alert">
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+		 	<i aria-hidden="true" class="fa fa-times"></i>
+		</button>
+		<p>
+		{{#if title~}}
+			<strong>{{title}}</strong>
+		{{~/if}}
+			{{body}}
+		</p>
+	</div>
+</script>
+{{{{/raw-helper}}}}
 
-<!-- just a placeholder currently... -->
+<section class="container tndr-messages">
+</section>
+
+{{#extend "scripts"}}
+<script type="text/javascript">
+	$(document).ready(function(){
+		{{#each messages}}
+			showMessage(MSG.{{level}}, '{{body}}' );
+		{{/each}}
+	});
+
+</script>
+{{/extend}}

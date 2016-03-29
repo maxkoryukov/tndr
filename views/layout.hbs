@@ -26,31 +26,20 @@
 	</header>
 
 	<main class="tndr">
+
 	{{> _messages }}
-
-	{{#if error}}
-		<div class="alert alert-error alert-dismissible" role="alert">
-			<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-
-			<p>{{error.message}}</p>
-		</div>
-	{{/if}}
-
-	{{#each messages }}
-		<div class="panel default">
-			{{this}}
-		</div>
-	{{/each}}
 
 	{{{body}}}
 	</main>
 
-	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="/js/jquery.min.js"></script>
+	<script src="/js/lodash.min.js" type="text/javascript"></script>
+	<script src="/js/handlebars.min.js" type="text/javascript"></script>
+
 	<!-- Latest compiled and minified JavaScript -->
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 
-	<script src="/js/messages.min.js"></script>
+	<script src="/js/messages.min.js" type="text/javascript"></script>
 
 	{{{block "scripts"}}}
 

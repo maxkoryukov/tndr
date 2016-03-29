@@ -13,16 +13,22 @@ module.exports = function(sequelize, DataTypes) {
 				autoIncrement: true
 			},
 			username: {
-				type: DataTypes.STRING(100),
+				type: DataTypes.STRING(256),
 				allowNull: false,
-				unique: true
+				unique: true,
+				validate: {
+					len: {
+						args: [1, 256],
+						msg: "The length of username should be at least 1, and at most 100 chars",
+					}
+				},
 			},
 			password: {
-				type: DataTypes.STRING(100),
+				type: DataTypes.STRING(256),
 				collate: 'BINARY',
 				validate: {
 					len: {
-						args: [2, 100],
+						args: [2, 250],
 						msg: "The length of password should be at least 2, and at most 100 chars",
 					}
 				},

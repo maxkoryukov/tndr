@@ -29,7 +29,7 @@ module.exports = function(sequelize, DataTypes) {
 
 var classMethods = {
 	associate: function(models) {
-		models.builder.belongsTo(models.builder_category);
+		models.builder.belongsTo(models.builder_category, {foreignKey : 'builder_category_id'});
 
 		//models.builder.belongsToMany(models.person, {through: 'builder2person'});
 

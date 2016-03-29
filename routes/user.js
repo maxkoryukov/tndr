@@ -93,18 +93,18 @@ router.route(`${baseurl}/change_password`)
 		var pwn2 = req.body.passwordnew2;
 
 		if (pwn1 !== pwn2){
-			req.flash('message', 'New passwords do not match!');
+			req.addMessage('warn', 'New passwords do not match!');
 			res.redirect('back');
 			return;
 		}
 
 		db.user.changePassword(un, pw, pwn1)
 			.catch( err => {
-				req.flash('message', __('Old password is incorrect'));
+				req.addMessage('warn', __('Old password is incorrect'));
 				res.redirect('back');
 			})
 			.then( (result) => {
-				req.flash('message', __('Password changed!'));
+				req.addMessage('success', __('Password changed!'));
 				res.redirect(`${baseurl}/me`);
 			});
 	});
@@ -130,7 +130,7 @@ router.route(`${baseurl}/create`)
 		user.person = person;
 
 		if (user.password !== password2){
-			req.flash('message', 'Passwords do not match!');
+			req.addMessage('error', 'Passwords do not match!');
 			res.redirect('back');
 			return;
 		}
@@ -140,12 +140,12 @@ router.route(`${baseurl}/create`)
 			include: [req.app.models.person]
 		})
 			.then(function(){
-				req.flash('message', 'User created!');
+				req.addMessage('success', 'User created!');
 				res.redirect(`${baseurl}/list`);
 				return;
 			})
 			.catch(function(err){
-				res.locals.error = err;
+				res.addMessage('error', err);
 				res.render('user/create');
 				return;
 			});
@@ -171,8 +171,8 @@ router.route(`${baseurl}/:user/enabled`)
 		var state = JSON.parse(req.body.enabled);
 
 		req.app.models.user.setState(req.user.id, state)
-			.catch(function(err){
-				res.error = err;
+			.catch(err => {
+				res.addMessage('error', err);
 
 				// error saved - go to next step
 			})

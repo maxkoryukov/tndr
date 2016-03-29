@@ -60,21 +60,21 @@ var classMethods = {
 			})
 		).then(
 			bc.create({
-				code: 'considerable',
-				name: 'Considerable Builders',
-				tip_usage: 'Price If We Have Time',
-				tip_price: 'Price With Some Attention',
-				note: 'If we are at the least bit too busy or have other commitments, we need to decline',
-				sort: 30,
-			})
-		).then(
-			bc.create({
 				code: 'tentative',
 				name: 'Tentative Builders',
 				tip_usage: 'Price Only If Other Builders On It',
 				tip_price: 'Price With Additional Margins',
 				note: 'We will not consider these Builders unless we have a true opportunity or others are on it.',
 				sort: 40,
+			})
+		).then(
+			bc.create({
+				code: 'considerable',
+				name: 'Considerable Builders',
+				tip_usage: 'Price If We Have Time',
+				tip_price: 'Price With Some Attention',
+				note: 'If we are at the least bit too busy or have other commitments, we need to decline',
+				sort: 30,
 			})
 		).then(
 			bc.create({
