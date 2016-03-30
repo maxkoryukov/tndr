@@ -133,11 +133,4 @@ $(document).ready(function doc_ready(){
 
 	});
 
-	// ======================================================
-	// Employee stuff
-
-	$('.cl-employee-add').click(function(){
-console.debug('addfd');
-	});
-
 });

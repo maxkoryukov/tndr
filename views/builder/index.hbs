@@ -20,7 +20,7 @@
 				<header class="{{code}}">
 					<h3>{{name}}</h3>
 				</header>
-				<section class="panel-body">
+				<section>
 					<p class="lead">{{tip_usage}}</p>
 					<p>{{tip_price}}</p>
 					<p>{{note}}</p>
@@ -28,8 +28,7 @@
 				<ul>
 					{{#each builders}}
 						<li>
-							<a href="/builder/{{id}}" title="{{__ "View builder details"}}"><i class="fa fa-link"></i></a>
-							{{name}}
+							<a href="/builder/{{id}}" title="{{__ "View builder details"}}">{{name}}</a>
 						</li>
 					{{/each}}
 				</ul>

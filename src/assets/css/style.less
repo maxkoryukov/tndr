@@ -49,6 +49,15 @@ body {
 		.make-load();
 	}
 
+	.tndr-bookmark
+	{
+		&:before
+		{
+			.fa-icon();
+			content: @fa-var-link;
+		}
+	}
+
 	// buttons
 	.btn-create
 	{
@@ -60,6 +69,7 @@ body {
 		&:extend(.btn-danger);
 	}
 
+	.btn-edit,
 	.btn-save
 	{
 		&:extend(.btn-primary);
@@ -167,6 +177,44 @@ body {
 						&:extend(.list-group-item);
 						.list-group-item;
 					}
+				}
+			}
+		}
+
+		.employee-list
+		{
+			article
+			{
+				&:extend(.panel);
+				.panel;
+				.panel-default;
+				.make-xs-column(12);
+				.make-lg-column(12/2);
+
+				padding : 0; // fix gaps on both sides of article
+
+				&>header
+				{
+					&:extend(.panel-heading);
+					.panel-heading;
+
+					h1,h2,h3,h4,h5,h6
+					{
+						&:extend(.panel-title);
+						.panel-title;
+					}
+				}
+
+				&>section
+				{
+					&:extend(.panel-body);
+					.panel-body;
+				}
+
+				&>footer
+				{
+					&:extend(.panel-footer);
+					.panel-footer;
 				}
 			}
 		}

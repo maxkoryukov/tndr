@@ -11,7 +11,6 @@ var _        = require('lodash');
 var promise  = require('bluebird');
 
 var baseurl = '/builder';
-
 let __ = x => x;
 
 // -----------------------------------------------
@@ -36,14 +35,13 @@ router.route(`${baseurl}/`)
 
 	.delete(function(req, res, next) {
 
-		let id = JSON.parse(req.body.id);
-		if (!_.isInteger(id))
+		let bid = JSON.parse(req.body.id);
+		if (!_.isInteger(bid))
 			next( new Error('Type error'));
-
 		let db = req.app.models;
 		let name = '<builder>';
 
-		return db.builder.findById(id, { raw: false} )
+		return db.builder.findById(bid, { raw: false} )
 			.then(b => {
 				name = b.name;
 				return b.destroy();
@@ -125,6 +123,96 @@ router.route(`${baseurl}/`)
 		;
 	})
 ;
+
+// -----------------------------------------------
+// TODO : refactor section
+// -----------------------------------------------
+var _init_employees = function(emps){
+	return _.chain(emps)
+		.forEach( x=> { x.job = x.employee.job;} )
+		.forEach( x=> {x.phone_link = x.getPhoneLink();} )
+		.map( _.partial(_.pick, _, 'id', 'name', 'surname', 'phone', 'phone_link', 'note', 'job'))
+		.value()
+	;
+}
+
+var _api_load_builder_with_employees_promise = function(db, bid){
+	return db.builder.findById(bid, {
+		raw: false,
+		include: [{
+			model: db.person,
+			as: 'employees',
+		}],
+		order: [
+			[{model: db.person, as: 'employees'}, 'surname', 'ASC'],
+			[{model: db.person, as: 'employees'}, 'name', 'ASC']
+		]
+	})
+}
+
+router.route(`${baseurl}/employees`)
+	.get(function(req, res, next){
+
+		let bid = JSON.parse(req.query.builder);
+		if (!_.isInteger(bid))
+			next( new Error('Type error'));
+
+		let db = req.app.models;
+
+		return _api_load_builder_with_employees_promise(db, bid)
+			.then(b =>{
+				let emps = _init_employees(b.employees);
+
+				res.json({
+					message: null,
+					data: emps
+				});
+				return;
+			})
+			.catch(err=>{
+				next(err);
+			})
+	})
+
+	.unlink(function(req, res, next){
+
+		let bid = JSON.parse(req.body.builder);
+		if (!_.isInteger(bid))
+			next( new Error('builder.id: Type error'));
+		let eid = JSON.parse(req.body.employee);
+		if (!_.isInteger(eid))
+			next( new Error('employee.id: Type error'));
+
+		let db = req.app.models;
+
+		let bname = '<builder>';
+		let ename = '<employee>';
+
+		promise.all([
+			_api_load_builder_with_employees_promise(db, bid),
+			db.person.findById(eid)
+		])
+			.spread( (b, p) => {
+
+				bname = b.name;
+				ename = _.join([p.surname, p.name], ' ');
+				return [b, b.removeEmployee(eid)];
+			})
+			.then((b, count) => {
+				let emps = _init_employees(b.employees);
+
+				res.json({
+					message: __(`${ename} deleted from ${bname}`),
+					data: emps
+				});
+				return;
+			})
+			.catch(err=>next(err))
+	})
+;
+
+
+// --------------------------------------------------------------------
 
 router.route(`${baseurl}/index`)
 	.get(function(req, res, next) {

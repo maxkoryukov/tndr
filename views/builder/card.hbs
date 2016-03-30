@@ -33,7 +33,7 @@
 				{{#if create}}
 					<button type="button" class="btn btn-create cl-create cl-state-create" title="{{__ 'Save data related to new builder'}}">{{__ "Create"}}</button>
 				{{else}}
-					<button type="button" class="btn btn-save cl-edit cl-state-read" title="{{__ 'Edit data'}}">{{__ "Edit"}}</button>
+					<button type="button" class="btn btn-edit cl-edit cl-state-read" title="{{__ 'Edit data'}}">{{__ "Edit"}}</button>
 					<button style="display:none" type="button" class="btn btn-save cl-save cl-state-edit" title="{{__ 'Save changes'}}">{{__ "Save"}}</a>
 				{{/if}}
 			</div>
@@ -48,19 +48,31 @@
 	</form>
 
 	{{~#if builder.id~}}
-		<section class="employee-list">
+		<section class="employees cl-employees" data-builder="{{builder.id}}">
 			<h2>{{__ "Employees"}}</h2>
 				<fieldset>
-					<button class="btn btn-create cl-employee-add" title="{{__ "Add employee"}}"><i class="fa fa-user-plus"></i>&nbsp;{{__ "New user"}}</button>
+					<button class="btn btn-create cl-employee-add" title="{{__ "Add information about another one employee"}}"><i class="fa fa-user-plus"></i>&nbsp;{{__ "Add employee"}}</button>
 				</fieldset>
 
-					{{~#each builder.employees as |employee|~}}
-					<article>
-						<a href="/builder/{{@root.builder.id}}/employee/{{employee.id}}" title="{{__ "View employee personal card"}}"><i class="fa fa-link"></i>
-							{{employee.surname}} {{employee.name}} {{employee.job}}
-						</a>
+				<hr />
+				<section class="employee-list" data-bind="foreach: employees">
+					<article data-bind="attr: {id : 'employee-' + id()}">
+						<header>
+							<h3><a class="tndr-bookmark" data-bind="attr: {href: '#employee-' + id() }"></a> <!-- ko text: surname() + ' ' + name() --> <!-- /ko --></h3>
+						</header>
+						<section>
+							<p>
+								<strong data-bind="text: job"></strong> <a data-bind="text: phone, attr: { href: phone_link }"></a>
+							</p>
+							<p class="text-muted" data-bind="visible: note, text: note">
+							</p>
+						</section>
+						<footer>
+							<button type="button" class="btn btn-edit" title="{{__ "Edit"}}">{{__ "Edit"}}</button>
+							<button type="button" class="btn btn-xs btn-delete" data-builder="{{builder.id}}" data-bind="attr: {'data-employee': id }" data-toggle="modal" data-target=".cl-delete-employee-modal" >{{__ "Delete"}}</button>
+						</footer>
 					</article>
-				{{~/each~}}
+				</section>
 			</ul>
 		</section>
 
@@ -92,7 +104,7 @@
 				<section class="modal-content">
 					<header class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-label="{{__ "Close"}}"><i class="fa fa-times" aria-hidden="true"></i></button>
-						<h4 class="modal-title" id="cl-delete-employee-modal-header">{{__ "Remove employee data?"}}</h4>
+						<h4 class="modal-title" id="cl-delete-employee-modal-header">{{__ "Remove employee data"}}</h4>
 					</header>
 					<article class="modal-body">
 						{{__ "This operation couldn't be rolled back, only minimal set of data will remain. Are you sure?"}}
@@ -123,5 +135,105 @@
 <script type="text/javascript" src="/js/builder/card.min.js">
 </script>
 
+<script type="text/javascript">
+
+
+	$(document).ready(function(){
+		var $esec = $('.cl-employees');
+		var bid = $esec.data('builder');
+
+		{{! HACK: this is very weak point, viewModel is binded to the window... }}
+		var viewModel = {};
+		window.viewModel = viewModel;
+
+		viewModel.employees = ko.mapping.fromJS([]);
+		ko.applyBindings(viewModel);
+
+		$.ajax({
+			{{! TODO : url }}
+			url: '/builder/employees',
+			method: 'GET',
+			data : {
+				builder: bid,
+			},
+			dataType: 'json'
+		})
+			.always(function(data){
+				// hide loader
+			})
+			.done(function(data){
+
+console.debug(data.data);
+				ko.mapping.fromJS(data.data, viewModel.employees);
+
+			})
+			.fail(function(data){
+				console.error('employee get fail', data);
+
+				$('.modal').modal('hide');
+
+				var resp = data.responseJSON;
+				showMessage(MSG.error, resp && resp.error || 'Error');
+			})
+		;
+
+
+
+		// ======================================================
+		// Employee stuff
+
+		$('.cl-employee-add').click(function(){
+console.debug('addfd');
+		});
+
+		$('.cl-delete-employee-modal').on('show.bs.modal', function (event) {
+			var $button = $(event.relatedTarget); // Button that triggered the modal
+
+			var $delbtn = $(this).find('.cl-delete-employee');
+			$delbtn.data('builder', $button.data('builder'));
+			$delbtn.data('employee', $button.data('employee'));
+		});
+
+		$('.cl-delete-employee').click(function(){
+			var $this = $(this);
+			$this.addClass('tndr-load');
+			$this.prop('disabled', true);
+
+			var bid = $this.data('builder');
+			var eid = $this.data('employee');
+
+			$.ajax({
+				//{{! TODO : url }}
+				url: '/builder/employees',
+				context: this,
+				method: 'UNLINK',
+				data : {
+					builder: bid,
+					employee: eid,
+				},
+				dataType: 'json',
+			})
+				.always(function(){
+					$(this).removeClass('tndr-load');
+					$(this).prop('disabled', false);
+				})
+				.done(function(data){
+					$('.modal').modal('hide');
+
+					showMessage(MSG.success, data.message);
+					ko.mapping.fromJS(data.data, viewModel.employees);
+				})
+				.fail(function(data){
+					console.error('delete fail', data);
+
+					$('.modal').modal('hide');
+
+					var resp = data.responseJSON;
+					showMessage(MSG.error, resp && resp.error || data.statusText);
+				})
+			;
+		});
+	});
+</script>
 
 {{/extend}}
