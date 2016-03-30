@@ -35,6 +35,7 @@ body {
                 COMMON STUFF
 =====================================================================
 */
+	// Loader for buttons (and for other stuff)
 	.make-load()
 	{
 		.fa-spin;
@@ -43,12 +44,12 @@ body {
 		margin-left: 0.25em;
 		content: @fa-var-spinner;
 	}
-
 	.tndr-load:after
 	{
 		.make-load();
 	}
 
+	// buttons
 	.btn-create
 	{
 		&:extend(.btn-success);

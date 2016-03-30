@@ -6,6 +6,8 @@
 
 /src/assets/bootstrap-fm
 
+# TEMPORARY
+/docs/assets
 
 .idea/*
 

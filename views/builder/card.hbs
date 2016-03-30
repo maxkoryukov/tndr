@@ -47,51 +47,64 @@
 		</fieldset>
 	</form>
 
-	<section class="employee-list">
-		<h2>{{__ "Employees"}}</h2>
-
-			{{~#each builder.employees as |employee|~}}
-				<article>
-					<a href="/builder/{{@root.builder.id}}/employee/{{employee.id}}" title="{{__ "View employee personal card"}}"><i class="fa fa-link"></i>
-						{{employee.surname}} {{employee.name}} {{employee.job}}
-					</a>
-				</article>
-			{{~/each~}}
-		</ul>
-	</section>
-
 	{{~#if builder.id~}}
-	<!--
-	<section>
-		<h2>{{__ "Danger zone"}}</h2>
+		<section class="employee-list">
+			<h2>{{__ "Employees"}}</h2>
+				<fieldset>
+					<button class="btn btn-create cl-employee-add" title="{{__ "Add employee"}}"><i class="fa fa-user-plus"></i>&nbsp;{{__ "New user"}}</button>
+				</fieldset>
 
-		<section>
-			<h4>{{__ "Delete builder"}}</h4>
-			<span>{{__ "This operation couldn't be rolled back. The minimal set of required data (f.e. name of builder, to show in tenders) will remain."}}</span>
-			<button class="btn btn-delete btn-xs" data-toggle="modal" data-target=".cl-delete-modal">{{__ "Delete"}}</button>
+					{{~#each builder.employees as |employee|~}}
+					<article>
+						<a href="/builder/{{@root.builder.id}}/employee/{{employee.id}}" title="{{__ "View employee personal card"}}"><i class="fa fa-link"></i>
+							{{employee.surname}} {{employee.name}} {{employee.job}}
+						</a>
+					</article>
+				{{~/each~}}
+			</ul>
 		</section>
-	</section>
-	-->
-	{{! TODO: remove excessive classes }}
 
-	<div class="cl-delete-modal modal fade" tabindex="-1" role="dialog" aria-labelledby="delete-modal-header">
-		<div class="modal-dialog" role="document">
-			<section class="modal-content">
-				<header class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-label="{{__ "Close"}}"><i class="fa fa-times" aria-hidden="true"></i></button>
-					<h4 class="modal-title" id="delete-modal-header">{{__ "Delete builder?"}}</h4>
-				</header>
-				<article class="modal-body">
-					{{__ "This operation couldn't be rolled back. The minimal set of required data (f.e. name of builder, to show in tenders) will remain."}}
-				</article>
-				<footer class="modal-footer">
-					<button type="button" class="btn btn-cancel" data-dismiss="modal">{{__ "Cancel"}}</button>
-					<button type="button" class="btn btn-delete cl-delete" data-builder="{{builder.id}}">{{__ "Delete"}}</button>
-				</footer>
-			</section>
+		{{! DELETE builder dialog }}
+		{{! TODO: remove excessive classes }}
+		<div class="cl-delete-modal modal fade" tabindex="-1" role="dialog" aria-labelledby="cl-delete-modal-header">
+			<div class="modal-dialog" role="document">
+				<section class="modal-content">
+					<header class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="{{__ "Close"}}"><i class="fa fa-times" aria-hidden="true"></i></button>
+						<h4 class="modal-title" id="cl-delete-modal-header">{{__ "Delete builder?"}}</h4>
+					</header>
+					<article class="modal-body">
+						{{__ "This operation couldn't be rolled back. The minimal set of required data (f.e. name of builder, to show in tenders) will remain."}}
+					</article>
+					<footer class="modal-footer">
+						<button type="button" class="btn btn-cancel" data-dismiss="modal">{{__ "Cancel"}}</button>
+						<button type="button" class="btn btn-delete cl-delete" data-builder="{{builder.id}}">{{__ "Delete"}}</button>
+					</footer>
+				</section>
+			</div>
 		</div>
-	</div>
-	{{! dialog end }}
+		{{! dialog end }}
+
+		{{! DELETE employee dialog }}
+		{{! TODO: remove excessive classes }}
+		<div class="cl-delete-employee-modal modal fade" tabindex="-1" role="dialog" aria-labelledby="cl-delete-employee-modal-header">
+			<div class="modal-dialog" role="document">
+				<section class="modal-content">
+					<header class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="{{__ "Close"}}"><i class="fa fa-times" aria-hidden="true"></i></button>
+						<h4 class="modal-title" id="cl-delete-employee-modal-header">{{__ "Remove employee data?"}}</h4>
+					</header>
+					<article class="modal-body">
+						{{__ "This operation couldn't be rolled back, only minimal set of data will remain. Are you sure?"}}
+					</article>
+					<footer class="modal-footer">
+						<button type="button" class="btn btn-cancel" data-dismiss="modal">{{__ "Cancel"}}</button>
+						<button type="button" class="btn btn-delete cl-delete-employee">{{__ "Delete"}}</button>
+					</footer>
+				</section>
+			</div>
+		</div>
+		{{! dialog end }}
 	{{~/if}}
 
 </section>
