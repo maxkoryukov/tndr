@@ -49,13 +49,13 @@ require('./mods/hbs-register-blocks');
 
 app.set('trust proxy', config.rproxy.trust_level || 0); // trust first (or nth-) proxy
 
-app.use(favicon(path.join(__dirname, 'assets', 'favicon.ico')));
+app.use(favicon(path.join(__dirname, 'build', 'assets', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser(config.cookie.secret));
 
-app.use(express.static(path.join(__dirname, 'assets')));
+app.use(express.static(path.join(__dirname, 'build', 'assets')));
 
 app.use(flash());
 

@@ -47,15 +47,15 @@
 		</fieldset>
 	</form>
 
-	<section>
+	<section class="employee-list">
 		<h2>{{__ "Employees"}}</h2>
-		<ul>
+
 			{{~#each builder.employees as |employee|~}}
-				<li>
+				<article>
 					<a href="/builder/{{@root.builder.id}}/employee/{{employee.id}}" title="{{__ "View employee personal card"}}"><i class="fa fa-link"></i>
 						{{employee.surname}} {{employee.name}} {{employee.job}}
 					</a>
-				</li>
+				</article>
 			{{~/each~}}
 		</ul>
 	</section>

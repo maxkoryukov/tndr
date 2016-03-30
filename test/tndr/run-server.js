@@ -12,6 +12,8 @@ describe('tndr', function() {
 
 	describe('run and re-run', function(){
 
+		this.slow(800);
+
 		[
 			'run out of the box',
 			'should run after restart',

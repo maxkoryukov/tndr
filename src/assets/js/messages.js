@@ -24,10 +24,9 @@ function showMessage(loglevel, message){
 	}
 
 	var msghtml = template({
-		title: 'Info',
 		body: message,
 		cssclass: cssclass,
 	});
 
 	$('.tndr-messages').append(msghtml);
-};
+}

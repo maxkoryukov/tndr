@@ -5,7 +5,6 @@ var _      = require('lodash');
 var models_path     = path.join(process.cwd(), 'models');
 
 /* COMMON MODEL INIT BLOCK */
-var modpath = path.join(process.cwd(), 'tndr');
 var model_init_test = path.join(process.cwd(), 'test', 'models', 'init');
 var mi = require(model_init_test);
 /* COMMON MODEL INIT BLOCK */

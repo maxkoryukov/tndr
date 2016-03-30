@@ -31,27 +31,30 @@ ENV settings
 ==============================================================================
 */
 
-
 var paths = {
 	client:{
 		style:[
-			'billets/css/**/*.less',
+			'src/assets/css/**/*.less',
 		],
 		script:[
-			'billets/js/**/*.js'
+			'src/assets/js/**/*.js'
 		],
 		favicon: [
-			'billets/favicon.ico',
+			'src/assets/favicon.ico',
 		],
-		base : 'billets',
+		base : 'src/assets',
 	},
 	server:{
+		script: [
+		],
 	},
 
 	build:{
 		dev: './dev',
 		tmp: './dev/tmp/',
-		assets: './assets',
+		assets: 'build/assets',
+
+		root: './build',
 		jshint: 'dev/jshint-report/index.html',
 		csslint: './dev/csslint-report/',
 	}
@@ -102,7 +105,7 @@ gulp.task('js:client:my', () => {
 		.pipe(gulpif(!isdevenv, uglify()))
 
 		.pipe(jshint())
-		// TODO : remove path.join
+		// DONE : remove path.join
 		.pipe(jshint.reporter('gulp-jshint-html-reporter', {
 			filename: paths.build.jshint,
 			createMissingFolders: true,
@@ -117,6 +120,33 @@ gulp.task('js:client:my', () => {
 });
 
 gulp.task('js:client', ['js:client:pre', 'js:client:my']);
+
+gulp.task('js:server', () => {
+	const size1 = filesize(filesize_opt);
+	const size2 = filesize(filesize_opt);
+
+	return gulp.src(paths.client.script, {base: paths.client.base})
+		//.pipe(notify({message : "process file: <%= file.relative %>"}))
+		.pipe(gulp.dest(paths.build.tmp))
+		.pipe(size1)
+
+		.pipe(rename({ suffix: '.min' }))
+		.pipe(gulpif(!isdevenv, uglify()))
+
+		.pipe(jshint())
+		// DONE : remove path.join
+		.pipe(jshint.reporter('gulp-jshint-html-reporter', {
+			filename: paths.build.jshint,
+			createMissingFolders: true,
+		}))
+
+
+		.pipe(gulp.dest(paths.build.assets))
+		.pipe(size2)
+		.on('error', gutil.log)
+		//.pipe(notify({ onLast:true, message: 'CSS task complete' }))
+	;
+});
 
 gulp.task('js', ['js:client']);
 
@@ -144,7 +174,7 @@ gulp.task('less', () => {
 		.pipe(gulpif(!isdevenv, csso()))
 
 		.pipe(csslint())
-		// TODO : remove path.join
+		// DONE : remove path.join
 		.pipe(csslint_rep({
 			directory: paths.build.csslint,
 			filename: 'index.html',

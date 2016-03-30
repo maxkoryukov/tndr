@@ -13,35 +13,30 @@ var mi = require(model_init_test);
 describe('tndr.models', function() {
 	var models;
 
-	it('user should exist', function () {
+	it('builder should exist', function () {
 		models = require(models_path);
-		assert.property(models, 'user');
+		assert.property(models, 'builder');
 	});
 
-	describe('user', function() {
-
+	describe('builder', function() {
 		var e = null;
 
 		beforeEach(function(){
-			e = models.user.build({
-				person: {}
-			}, {
-				include : [models.person]
+			e = models.builder.build({
+				builder_category: {
+					id : 1,
+				}
+			},{
+				include: [models.builder_category]
 			});
 		});
 
-		_.each(['id', 'username', 'password', 'person'], function(key){
-
-			it(`should have property [${key}]`, function () {
+		_.each(['id', 'name', 'builder_category', 'builder_category_id'], function(key){
+			it(`should exists property [${key}]`, function () {
 				assert.property(e, key);
 			});
 		});
 
-		_.each(['person1', 'year'], function(key){
-			it(`should NOT have property [${key}]`, function () {
-				assert.notProperty(e, key);
-			});
-		});
 
 	});
 });
