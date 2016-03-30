@@ -134,7 +134,7 @@ var _init_employees = function(emps){
 		.map( _.partial(_.pick, _, 'id', 'name', 'surname', 'phone', 'phone_link', 'note', 'job'))
 		.value()
 	;
-}
+};
 
 var _api_load_builder_with_employees_promise = function(db, bid){
 	return db.builder.findById(bid, {
@@ -147,8 +147,8 @@ var _api_load_builder_with_employees_promise = function(db, bid){
 			[{model: db.person, as: 'employees'}, 'surname', 'ASC'],
 			[{model: db.person, as: 'employees'}, 'name', 'ASC']
 		]
-	})
-}
+	});
+};
 
 router.route(`${baseurl}/employees`)
 	.get(function(req, res, next){
@@ -171,7 +171,88 @@ router.route(`${baseurl}/employees`)
 			})
 			.catch(err=>{
 				next(err);
+			});
+	})
+
+	// add new
+	.post(function(req, res, next){
+
+		let bid = JSON.parse(req.body.builder);
+		if (!_.isInteger(bid))
+			next( new Error('Type error'));
+
+		let data = _.pick(req.body, [
+			'name', 'surname', 'phone', 'note', 'job'
+		]);
+
+		let db = req.app.models;
+
+		promise.all([
+			_api_load_builder_with_employees_promise(db, bid),
+			db.person.create(data),
+		])
+			.catch(err=>next(err))
+			.spread((b,p) => {
+				// link:
+				let name = (_.join([p.surname, p.name], ' ')) || '<employee>';
+				return [b.addEmployee(p, {job: data.job}), b, name];
 			})
+			.catch(err=>next(err))
+			.spread((x, b, name) => {
+
+				let emps = _init_employees(b.employees);
+
+				res.json({
+					message: __(`${name} added`),
+					data: emps
+				});
+				return;
+			})
+			.catch(err=>next(err))
+		;
+	})
+
+	// edit
+	.put(function(req, res, next){
+
+		let bid = JSON.parse(req.body.builder);
+		if (!_.isInteger(bid))
+			next( new Error('builder.id: Type error'));
+		let eid = JSON.parse(req.body.employee);
+		if (!_.isInteger(eid))
+			next( new Error('employee.id: Type error'));
+
+		let data = _.pick(req.body, [
+			'name', 'surname', 'phone', 'note', 'job'
+		]);
+
+		let db = req.app.models;
+
+		promise.all([
+			_api_load_builder_with_employees_promise(db, bid),
+			db.person.update(data, {
+				fields: ['name', 'surname', 'phone', 'note'],
+				where: { id : eid },
+			}),
+
+			db.employee.update(data, {
+				fields: ['job'],
+				where: { builder_id: bid, 'person_id': eid },
+			})
+		])
+			.catch(err=>next(err))
+			.spread((b, p, e) => {
+
+				let emps = _init_employees(b.employees);
+
+				res.json({
+					message: __('Saved!'),
+					data: emps
+				});
+				return;
+			})
+			.catch(err=>next(err))
+		;
 	})
 
 	.unlink(function(req, res, next){
@@ -198,7 +279,7 @@ router.route(`${baseurl}/employees`)
 				ename = _.join([p.surname, p.name], ' ');
 				return [b, b.removeEmployee(eid)];
 			})
-			.then((b, count) => {
+			.spread((b, count) => {
 				let emps = _init_employees(b.employees);
 
 				res.json({
@@ -208,6 +289,7 @@ router.route(`${baseurl}/employees`)
 				return;
 			})
 			.catch(err=>next(err))
+		;
 	})
 ;
 

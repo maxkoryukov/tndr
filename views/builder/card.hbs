@@ -56,11 +56,11 @@
 
 				<hr />
 				<section class="employee-list" data-bind="foreach: employees">
-					<article data-bind="attr: {id : 'employee-' + id()}">
+					<article class="employee-item" data-bind="attr: {id : 'employee-' + id()}">
 						<header>
 							<h3><a class="tndr-bookmark" data-bind="attr: {href: '#employee-' + id() }"></a> <!-- ko text: surname() + ' ' + name() --> <!-- /ko --></h3>
 						</header>
-						<section>
+						<section class="cl-read">
 							<p>
 								<strong data-bind="text: job"></strong> <a data-bind="text: phone, attr: { href: phone_link }"></a>
 							</p>
@@ -162,10 +162,7 @@
 				// hide loader
 			})
 			.done(function(data){
-
-console.debug(data.data);
 				ko.mapping.fromJS(data.data, viewModel.employees);
-
 			})
 			.fail(function(data){
 				console.error('employee get fail', data);
