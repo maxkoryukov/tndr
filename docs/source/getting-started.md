@@ -6,11 +6,11 @@ Currently, there is just one dependency: **nodejs**. Download and install an app
 
 ## Deploy
 
-Go to the [Releases page on github](https://github.com/maxkoryukov/tndr/releases) and download sources. Then unzip them (or un-tar-gzip) to the preffered installation folder.
+Go to the [Releases page on github](https://github.com/maxkoryukov/tndr/releases) and download the appropriate **zip**-release (in most cases - the latest release). Then unzip it to the preffered installation folder.
 
 You are on the right way!
 
-Now, we going to download all required packages: open a terminal application for your OS, and run the following command:
+Now, we going to install required NPM-packages: open a terminal application for your OS, and run the following command:
 
 ```
 npm install

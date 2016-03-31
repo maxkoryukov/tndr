@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.0
+
+_31 Mar 2016_
+
+* Builders and Employess
+
 ## 0.2.0
 
 _07 Mar 2016_
