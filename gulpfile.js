@@ -101,6 +101,13 @@ gulp.task('js:client:my', () => {
 
 	return gulp.src(paths.client.script, {base: paths.client.base})
 		//.pipe(notify({message : "process file: <%= file.relative %>"}))
+		.pipe(jshint())
+		// DONE : remove path.join
+		.pipe(jshint.reporter('gulp-jshint-html-reporter', {
+			filename: paths.build.jshint,
+			createMissingFolders: true,
+		}))
+
 		.pipe(gulp.dest(paths.build.tmp))
 		.pipe(size1)
 
