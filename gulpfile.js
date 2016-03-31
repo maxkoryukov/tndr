@@ -87,6 +87,7 @@ gulp.task('js:client:pre', () => {
 			'./node_modules/handlebars/dist/handlebars.min.js',
 			'./node_modules/knockout/build/output/knockout-latest.js',
 			'./node_modules/knockout-mapping/dist/knockout.mapping.min.js',
+			'./node_modules/knockout-mapping/dist/knockout.mapping.min.js.map',
 		])
 		// TODO : fix path
 		.pipe(gulp.dest(path.join(paths.build.assets,'js')))

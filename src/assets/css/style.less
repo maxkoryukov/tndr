@@ -27,16 +27,28 @@ body {
 }
 
 
-.tndr
-{
 
 /*
 =====================================================================
                 COMMON STUFF
 =====================================================================
 */
+	.tndr-phone
+	{
+		a&
+		{
+			&:before
+			{
+				.fa-icon();
+
+				margin-right: 0.25em;
+				content: @fa-var-phone-square;
+			}
+		}
+	}
+
 	// Loader for buttons (and for other stuff)
-	.make-load()
+	.tndr-load:after
 	{
 		.fa-spin;
 		.fa-icon();
@@ -44,10 +56,35 @@ body {
 		margin-left: 0.25em;
 		content: @fa-var-spinner;
 	}
-	.tndr-load:after
+
+	.tndr-load-block
 	{
-		.make-load();
+		position:relative;
+
+		&:before
+		{
+			/*
+			.center-block();
+
+			//.fa-spin;
+			.fa-icon();
+			content: @fa-var-spinner;
+			*/
+			.opacity(0.85);
+
+			display:table-cell;
+			position: absolute;
+			text-align: center;
+			vertical-align: middle;
+			z-index:1000;
+			top:0;
+			left:0;
+			width:100%;
+			height:100%;
+			background-color: Gray;
+		}
 	}
+
 
 	.tndr-bookmark
 	{
@@ -219,4 +256,3 @@ body {
 			}
 		}
 	}
-}

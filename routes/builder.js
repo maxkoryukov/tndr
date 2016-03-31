@@ -127,15 +127,6 @@ router.route(`${baseurl}/`)
 // -----------------------------------------------
 // TODO : refactor section
 // -----------------------------------------------
-var _init_employees = function(emps){
-	return _.chain(emps)
-		.forEach( x=> { x.job = x.employee.job;} )
-		.forEach( x=> {x.phone_link = x.getPhoneLink();} )
-		.map( _.partial(_.pick, _, 'id', 'name', 'surname', 'phone', 'phone_link', 'note', 'job'))
-		.value()
-	;
-};
-
 var _api_load_builder_with_employees_promise = function(db, bid){
 	return db.builder.findById(bid, {
 		raw: false,
@@ -148,6 +139,15 @@ var _api_load_builder_with_employees_promise = function(db, bid){
 			[{model: db.person, as: 'employees'}, 'name', 'ASC']
 		]
 	});
+};
+
+var _init_employees = function(emps){
+	return _.chain(emps)
+		.forEach( x=> { x.job = x.employee.job;} )
+		.forEach( x=> {x.phone_link = x.getPhoneLink();} )
+		.map( _.partial(_.pick, _, 'id', 'name', 'surname', 'phone', 'phone_link', 'note', 'job'))
+		.value()
+	;
 };
 
 router.route(`${baseurl}/employees`)
@@ -195,11 +195,22 @@ router.route(`${baseurl}/employees`)
 			.spread((b,p) => {
 				// link:
 				let name = (_.join([p.surname, p.name], ' ')) || '<employee>';
-				return [b.addEmployee(p, {job: data.job}), b, name];
+				return [
+					b.addEmployee(p, {job: data.job}),
+					b,
+					name
+				];
 			})
 			.catch(err=>next(err))
-			.spread((x, b, name) => {
+			.spread((em, b, name) => {
+				return [
+					b.reload({raw:false}),
+					name
+				];
+			})
 
+			.catch(err=>next(err))
+			.spread((b, name) => {
 				let emps = _init_employees(b.employees);
 
 				res.json({
@@ -280,6 +291,9 @@ router.route(`${baseurl}/employees`)
 				return [b, b.removeEmployee(eid)];
 			})
 			.spread((b, count) => {
+				return b.reload({raw:false});
+			})
+			.then((b) => {
 				let emps = _init_employees(b.employees);
 
 				res.json({
