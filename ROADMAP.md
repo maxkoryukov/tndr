@@ -26,28 +26,31 @@ Start date: **2016-02-29**
 
 ## Milestone 2
 
-* [ ] persons ( #4 )
-    * [ ] data structures
-    * [ ] link with `user`
-    * [ ] list persons
-    * [ ] create person
-    * [ ] edit person
-    * [ ] delete person
-* [ ] builders ( #5 )
-    * [ ] C builder
-    * [ ] R builder
-    * [ ] U builder
-    * [ ] D builder
-    * [ ] link persons with builder
-* [ ] builder's priorities ( #6 )
-    * [ ] data-field
-    * [ ] description
-    * [ ] style
+* [x] persons ( #4 )
+    * [x] data structures
+    * [x] link with `user`
+    * [x] list persons
+    * [x] create person
+    * [x] edit person
+    * [x] delete person
+* [x] builders ( #5 )
+    * [x] C builder
+    * [x] R builder
+    * [x] U builder
+    * [x] D builder
+    * [x] link persons with builder
+* [x] builder's priorities ( #6 )
+    * [x] data-field
+    * [x] description
+    * [x] style
 
 ## Milestone 3
 
 * [ ] tenders PART1
-    * [ ] TODO: break apart
+    * [x] break ticket apart
+    * [ ] data structure
+    * [ ] wizard
+    * [ ] tender view page
 * [ ] authorization
     * [ ] data structure for `roles`
     * [ ] link `user` and `roles`
@@ -56,5 +59,9 @@ Start date: **2016-02-29**
 ## Milestone 4
 
 * [ ] tenders PART2
-    * [ ] TODO: break apart // another one great ticket
-* [ ] more style and CSS
+    * [ ] tender's index page (with division by statuses)
+    * [ ] project's file management
+    * [ ] link with users
+    * [ ] tender's workflow
+    * [ ] TODO : finish decomposition...
+* [x] **SOLVED** (milestone 2) more style and CSS
