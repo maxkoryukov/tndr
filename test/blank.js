@@ -1,3 +1,6 @@
+"use strict";
+
+/*eslint-disable */
 var path   = require('path');
 var assert = require('chai').assert;
 
@@ -9,3 +12,4 @@ describe('tndr.models.xxx.namespace', function() {
 		assert.isTrue(true);
 	});
 });
+/*eslint-enable */

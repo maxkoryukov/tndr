@@ -1,7 +1,6 @@
 "use strict";
 
 var gulp   = require('gulp');
-var gutil  = require('gulp-util');
 
 // plugins
 var less         = require('gulp-less');
@@ -9,16 +8,19 @@ var rename       = require('gulp-rename');
 var autoprefixer = require('gulp-autoprefixer');
 var csso         = require('gulp-csso');
 var csslint      = require('gulp-csslint');
-var jshint       = require('gulp-jshint');
+var csslint_rep  = require('gulp-csslint-report');
+
+var jslint       = require('gulp-eslint');
+var jslint_rep   = require('eslint-html-reporter');
 var uglify       = require('gulp-uglify');
 var zip          = require('gulp-zip');
 var filesize     = require('gulp-size');
 var gulpif       = require('gulp-if');
-var csslint_rep  = require('gulp-csslint-report');
 // var notify    = require('gulp-notify'),
 // var minifycss = require('gulp-minify-css');
 // var concat    = require('gulp-concat'),
 
+var fs           = require('fs');
 var del          = require('del');
 var path         = require('path');
 var debug        = require('debug')('tndr:gulpfile');
@@ -55,7 +57,7 @@ var paths = {
 		assets: 'build/assets',
 
 		root: './build',
-		jshint: 'dev/jshint-report/index.html',
+		jslint: 'dev/jslint-report/index.html',
 		csslint: './dev/csslint-report/',
 	}
 };
@@ -100,13 +102,14 @@ gulp.task('js:client:my', () => {
 	const size2 = filesize(filesize_opt);
 
 	return gulp.src(paths.client.script, {base: paths.client.base})
+
 		//.pipe(notify({message : "process file: <%= file.relative %>"}))
-		.pipe(jshint())
+		.pipe(jslint())
 		// DONE : remove path.join
-		.pipe(jshint.reporter('gulp-jshint-html-reporter', {
-			filename: paths.build.jshint,
-			createMissingFolders: true,
-		}))
+		.pipe(jslint.format(
+			jslint_rep,
+			results => fs.writeFileSync(paths.build.jslint, results)
+		))
 
 		.pipe(gulp.dest(paths.build.tmp))
 		.pipe(size1)
@@ -114,16 +117,16 @@ gulp.task('js:client:my', () => {
 		.pipe(rename({ suffix: '.min' }))
 		.pipe(gulpif(!isdevenv, uglify()))
 
-		.pipe(jshint())
+		.pipe(jslint())
 		// DONE : remove path.join
-		.pipe(jshint.reporter('gulp-jshint-html-reporter', {
-			filename: paths.build.jshint,
-			createMissingFolders: true,
-		}))
+		.pipe(jslint.format(
+			jslint_rep,
+			results => fs.writeFileSync(paths.build.jslint, results)
+		))
 
 		.pipe(gulp.dest(paths.build.assets))
 		.pipe(size2)
-		.on('error', gutil.log)
+		.on('error', debug)
 		//.pipe(notify({ onLast:true, message: 'CSS task complete' }))
 	;
 });
@@ -142,17 +145,16 @@ gulp.task('js:server', () => {
 		.pipe(rename({ suffix: '.min' }))
 		.pipe(gulpif(!isdevenv, uglify()))
 
-		.pipe(jshint())
+		.pipe(jslint())
 		// DONE : remove path.join
-		.pipe(jshint.reporter('gulp-jshint-html-reporter', {
-			filename: paths.build.jshint,
-			createMissingFolders: true,
-		}))
-
+		.pipe(jslint.format(
+			jslint_rep,
+			results => fs.writeFileSync(paths.build.jslint, results)
+		))
 
 		.pipe(gulp.dest(paths.build.assets))
 		.pipe(size2)
-		.on('error', gutil.log)
+		.on('error', debug)
 		//.pipe(notify({ onLast:true, message: 'CSS task complete' }))
 	;
 });
@@ -192,7 +194,7 @@ gulp.task('less', () => {
 
 		.pipe(gulp.dest(paths.build.assets))
 		.pipe(size2)
-		//.on('error', gutil.log)
+		//.on('error', debug)
 		//.pipe(notify({ onLast:true, message: 'CSS task complete' }))
 	;
 });
@@ -209,7 +211,7 @@ gulp.task('fonts', () => {
 gulp.task('favicon', () => {
 	return gulp.src(paths.client.favicon, {base: paths.client.base})
 		.pipe(gulp.dest(paths.build.assets))
-		.on('error', gutil.log)
+		.on('error', debug)
 	;
 });
 
@@ -241,7 +243,7 @@ function _zip(){
 		.pipe(zip('release.zip'))
 		.pipe(gulp.dest('./build'))
 		.pipe(filesize( filesize_opt ))
-		.on('error', gutil.log)
+		.on('error', debug)
 	;
 }
 
@@ -259,5 +261,6 @@ gulp.task('start', ['build'], () => {
 	gulp.watch(paths.client.script, ['js:client:my'], cb);
 	gulp.watch(paths.client.style, ['less'], cb);
 
-	let app = require('./bin/www');
+	//let app = 
+	require('./bin/www');
 });

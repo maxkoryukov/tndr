@@ -5,6 +5,7 @@ var path   = require('path');
 /* COMMON MODEL INIT BLOCK */
 var modpath = path.join(process.cwd(), 'tndr');
 var model_init_test = path.join(process.cwd(), 'test', 'models', 'init');
+/*eslint quotes: ["off", "double"], curly: 2*/
 var mi = require(model_init_test);
 /* COMMON MODEL INIT BLOCK */
 

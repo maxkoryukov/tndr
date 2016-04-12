@@ -1,6 +1,4 @@
-var assert = require('chai').assert;
 var path   = require('path');
-var _      = require('lodash');
 
 var models_path = path.join(process.cwd(), 'models');
 

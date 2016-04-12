@@ -33,10 +33,12 @@ config.define = _.merge(config.define, default_define);
 config.query = _.merge(config.define, { "raw": true } );
 config.logging = debug;
 
+var sequelize = null;
+
 if (config.use_env_variable) {
-	var sequelize = new Sequelize(process.env[config.use_env_variable]);
+	sequelize = new Sequelize(process.env[config.use_env_variable]);
 } else {
-	var sequelize = new Sequelize(config.database, config.username, config.password, config);
+	sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
 
 /*

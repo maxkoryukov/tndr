@@ -4,6 +4,9 @@
 
  "use strict";
 
+// HACK : play with env (for dev)
+try { require('dotenv').config(); } catch (e) {} // eslint-disable-line
+
 var debug           = require('debug')('tndr');
 var express         = require('express');
 var path            = require('path');
@@ -44,8 +47,8 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
 // TODO : think about refactoring:
-require('./mods/hbs-register-partials');
-require('./mods/hbs-register-blocks');
+require('./lib/hbs-register-partials');
+require('./lib/hbs-register-blocks');
 
 app.set('trust proxy', config.rproxy.trust_level || 0); // trust first (or nth-) proxy
 
@@ -112,7 +115,7 @@ models.init()
 	USER MESSAGES
 	====================================
 	*/
-		var msgmw = require('./mw/messages');
+		var msgmw = require('./lib/mw/messages');
 		app.use('/', msgmw);
 
 	/*
@@ -121,7 +124,7 @@ models.init()
 	====================================
 	*/
 
-		var langmw = require('./mw/lang');
+		var langmw = require('./lib/mw/lang');
 
 		app.use('/:lang(\\w\\w)?:cult([-_]\\w\\w)?/', function tndr_app_set_lang_pre(req, res, next){
 
@@ -141,12 +144,18 @@ models.init()
 		var login = require('./routes/login');
 		langmw.use('/', login);
 
+		var api       = require('./routes/api');
+
 		var builder   = require('./routes/builder');
 		var dashboard = require('./routes/dashboard');
+		var tender    = require('./routes/tender');
 		var user      = require('./routes/user');
+
+		langmw.use('/', api);
 
 		langmw.use('/', builder);
 		langmw.use('/', dashboard);
+		langmw.use('/', tender);
 		langmw.use('/', user);
 
 		// catch 404 and forward to error handler
