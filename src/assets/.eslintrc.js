@@ -9,9 +9,16 @@ exports = module.exports = {
 
 	"globals": {
 		"ko" : true,
-		"MSG" : true,
 		"Handlebars" : true,
 		"_" : true,
+
+		// TODO : remove this rules
+		"MSG" : true,
+		"mode_create" : true,
 		"showMessage" : true,
-	}
+	},
+
+	"rules": {
+		"no-console" : ["warn"],
+	},
 }

@@ -1,7 +1,6 @@
 "use strict";
 
 var debug = require('debug')('tndr:models:employee');
-var _     = require('lodash');
 
 module.exports = function(sequelize, DataTypes) {
 
@@ -26,10 +25,11 @@ module.exports = function(sequelize, DataTypes) {
 		}
 	);
 
+	debug('registered');
 	return employee;
 };
 
 var classMethods = {
-	associate: function(models) {
-	},
+	//associate: function(models) {
+	//},
 };

@@ -1,5 +1,8 @@
 "use strict";
 
+// HACK : play with env (for dev)
+try { require('dotenv').config(); } catch (e) {} // eslint-disable-line
+
 var gulp   = require('gulp');
 
 // plugins
@@ -24,6 +27,7 @@ var fs           = require('fs');
 var del          = require('del');
 var path         = require('path');
 var debug        = require('debug')('tndr:gulpfile');
+var mkdirp       = require('mkdirp-bluebird');
 
 var _            = require('lodash');
 
@@ -57,7 +61,7 @@ var paths = {
 		assets: 'build/assets',
 
 		root: './build',
-		jslint: 'dev/jslint-report/index.html',
+		jslint: 'dev/jslint-report/',
 		csslint: './dev/csslint-report/',
 	}
 };
@@ -90,6 +94,7 @@ gulp.task('js:client:pre', () => {
 			'./node_modules/knockout/build/output/knockout-latest.js',
 			'./node_modules/knockout-mapping/dist/knockout.mapping.min.js',
 			'./node_modules/knockout-mapping/dist/knockout.mapping.min.js.map',
+			'./node_modules/form-serializer/dist/jquery.serialize-object.min.js',
 		])
 		// TODO : fix path
 		.pipe(gulp.dest(path.join(paths.build.assets,'js')))
@@ -101,34 +106,35 @@ gulp.task('js:client:my', () => {
 	const size1 = filesize(filesize_opt);
 	const size2 = filesize(filesize_opt);
 
-	return gulp.src(paths.client.script, {base: paths.client.base})
+	return mkdirp(path.dirname(paths.build.jslint)).then( () => {
+		return gulp.src(paths.client.script, {base: paths.client.base})
 
-		//.pipe(notify({message : "process file: <%= file.relative %>"}))
-		.pipe(jslint())
-		// DONE : remove path.join
-		.pipe(jslint.format(
-			jslint_rep,
-			results => fs.writeFileSync(paths.build.jslint, results)
-		))
+			//.pipe(notify({message : "process file: <%= file.relative %>"}))
+			.pipe(jslint())
+			// TODO : remove path.join
+			.pipe(jslint.format(
+				jslint_rep,
+				results => fs.writeFileSync(path.join(paths.build.jslint, 'client.html'), results)
+			))
 
-		.pipe(gulp.dest(paths.build.tmp))
-		.pipe(size1)
+			.pipe(gulp.dest(paths.build.tmp))
+			.pipe(size1)
 
-		.pipe(rename({ suffix: '.min' }))
-		.pipe(gulpif(!isdevenv, uglify()))
+			.pipe(rename({ suffix: '.min' }))
+			.pipe(gulpif(!isdevenv, uglify()))
 
-		.pipe(jslint())
-		// DONE : remove path.join
-		.pipe(jslint.format(
-			jslint_rep,
-			results => fs.writeFileSync(paths.build.jslint, results)
-		))
+			.pipe(jslint())
+			// TODO : remove path.join
+			.pipe(jslint.format(
+				jslint_rep,
+				results => fs.writeFileSync(path.join(paths.build.jslint, 'client.min.html'), results)
+			))
 
-		.pipe(gulp.dest(paths.build.assets))
-		.pipe(size2)
-		.on('error', debug)
-		//.pipe(notify({ onLast:true, message: 'CSS task complete' }))
-	;
+			.pipe(gulp.dest(paths.build.assets))
+			.pipe(size2)
+			.on('error', debug)
+			//.pipe(notify({ onLast:true, message: 'CSS task complete' }))
+	});
 });
 
 gulp.task('js:client', ['js:client:pre', 'js:client:my']);
@@ -137,26 +143,27 @@ gulp.task('js:server', () => {
 	const size1 = filesize(filesize_opt);
 	const size2 = filesize(filesize_opt);
 
-	return gulp.src(paths.client.script, {base: paths.client.base})
-		//.pipe(notify({message : "process file: <%= file.relative %>"}))
-		.pipe(gulp.dest(paths.build.tmp))
-		.pipe(size1)
+	return mkdirp(path.dirname(paths.build.jslint)).then( () => {
+		return gulp.src(paths.client.script, {base: paths.client.base})
+			//.pipe(notify({message : "process file: <%= file.relative %>"}))
+			.pipe(gulp.dest(paths.build.tmp))
+			.pipe(size1)
 
-		.pipe(rename({ suffix: '.min' }))
-		.pipe(gulpif(!isdevenv, uglify()))
+			.pipe(rename({ suffix: '.min' }))
+			.pipe(gulpif(!isdevenv, uglify()))
 
-		.pipe(jslint())
-		// DONE : remove path.join
-		.pipe(jslint.format(
-			jslint_rep,
-			results => fs.writeFileSync(paths.build.jslint, results)
-		))
+			.pipe(jslint())
+			// TODO : remove path.join
+			.pipe(jslint.format(
+				jslint_rep,
+				results => fs.writeFileSync(path.join(paths.build.jslint, 'server.html'), results)
+			))
 
-		.pipe(gulp.dest(paths.build.assets))
-		.pipe(size2)
-		.on('error', debug)
-		//.pipe(notify({ onLast:true, message: 'CSS task complete' }))
-	;
+			.pipe(gulp.dest(paths.build.assets))
+			.pipe(size2)
+			.on('error', debug)
+			//.pipe(notify({ onLast:true, message: 'CSS task complete' }))
+	});
 });
 
 gulp.task('js', ['js:client']);

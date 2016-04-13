@@ -168,17 +168,6 @@ $(document).ready(function doc_ready(){
 		;
 	};
 
-	var $esec = $('.cl-employees');
-	var bid = $esec.data('builder');
-
-	//{{! HACK: this is very weak point, viewModel is binded to the window... }}
-	var viewModel = {};
-	window.viewModel = viewModel;
-
-	viewModel.employees = ko.mapping.fromJS([]);
-	ko.applyBindings(viewModel);
-	load_employees();
-
 	// ======================================================
 	// Employee stuff
 	$('.cl-employee-add').click(function(){
@@ -370,4 +359,19 @@ $(document).ready(function doc_ready(){
 		;
 	});
 	// EMPLOYEE STUFF
+
+
+	var $esec = $('.cl-employees');
+	var bid = $esec.data('builder');
+
+	//{{! HACK: this is very weak point, viewModel is binded to the window... }}
+	var viewModel = {};
+	window.viewModel = viewModel;
+
+	viewModel.employees = ko.mapping.fromJS([]);
+	ko.applyBindings(viewModel);
+
+	if (!mode_create){
+		load_employees();
+	}
 });

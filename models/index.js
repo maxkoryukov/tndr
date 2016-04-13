@@ -80,7 +80,7 @@ db.init = function init(){
 			let dbroot = path.dirname(config.storage);
 			return mkdirp(dbroot);
 		} else {
-			return new promise(function (resolve, reject){
+			return new promise(function (resolve){
 				resolve();
 			});
 		}

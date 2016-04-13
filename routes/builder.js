@@ -69,16 +69,15 @@ router.route(`${baseurl}/`)
 			include : [db.builder_category]
 		});
 
-		b.save().then(b => {
-
+		b.save()
+			.catch(err=>next(err))
+			.then(builder => {
 				res.json({
 					message: __('Successfully created'),
-					data: b
+					data: builder
 				});
 				return;
 			})
-
-			.catch(err=>next(err))
 		;
 	})
 
@@ -252,7 +251,7 @@ router.route(`${baseurl}/employees`)
 			})
 		])
 			.catch(err=>next(err))
-			.spread((b, p, e) => {
+			.spread((b, employee) => {
 
 				let emps = _init_employees(b.employees);
 

@@ -1,10 +1,11 @@
 <section class="container tender-wizard">
-	<form class="main">
+	<form class="main tndr-form">
 		<article class="step-1">
+			<h1>{{__ "Tender wizard"}}</h1>
 
 			<fieldset>
 				<legend>
-					<h2>{{__ "Main data"}}</h2>
+					<h3>{{__ "Main data"}}</h3>
 				</legend>
 				<div>
 					<label class="required">
@@ -16,7 +17,7 @@
 				<div>
 					<label>
 						<span>{{__ "Simpro Quote"}}</span>
-						<input type="text" name="simproQuoteNumber" />
+						<input type="text" name="simpro_quote_number" />
 					</label>
 				</div>
 
@@ -24,22 +25,34 @@
 
 			<fieldset>
 				<legend>
-					<h2>{{__ "Dates"}}</h2>
+					<h3>{{__ "Dates"}}</h3>
 				</legend>
 				<div>
 					<label>
 						<span>{{__ "Opening date"}}</span>
-						<input type="datetime" name="openingDate" />
+						<input type="datetime" name="opening_date" />
 					</label>
 				</div>
 				<div>
 					<label>
-						<span>{{__ "Opening date"}}</span>
-						<input type="datetime" name="closingDate" />
+						<span>{{__ "Closing date"}}</span>
+						<input type="datetime" name="closing_date" />
 					</label>
 				</div>
 			</fieldset>
 
+			<div class="buttons-block">
+				<a href="/" class="btn btn-cancel">{{__ "Cancel"}}</a>
+				<button type="button" class="btn btn-create cl-create">{{__ "Create"}}</a>
+			</div>
+
 		</article>
 	</form>
 </section>
+
+{{#extend "scripts"}}
+
+<script type="text/javascript" src="/js/tender/wizard.min.js">
+</script>
+
+{{/extend}}

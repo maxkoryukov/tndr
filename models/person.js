@@ -1,7 +1,6 @@
 "use strict";
 
 var debug = require('debug')('tndr:models:person');
-var _     = require('lodash');
 
 module.exports = function(sequelize, DataTypes) {
 
@@ -37,6 +36,7 @@ module.exports = function(sequelize, DataTypes) {
 		}
 	);
 
+	debug('registered');
 	return person;
 };
 

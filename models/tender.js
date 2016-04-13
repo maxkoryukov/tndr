@@ -1,7 +1,6 @@
 "use strict";
 
 var debug = require('debug')('tndr:models:tender');
-var _     = require('lodash');
 
 exports = module.exports = function(sequelize, DataTypes) {
 
@@ -14,17 +13,16 @@ exports = module.exports = function(sequelize, DataTypes) {
 			},
 			name: {
 				type: DataTypes.STRING(1000),
-				allowNull: false,
-				unique: true
+				allowNull: false
 			},
-			simproQuoteNumber: {
+			simpro_quote_number: {
 				type: DataTypes.STRING(1000),
 			},
 
-			openingDate: {
+			opening_date: {
 				type: DataTypes.DATE,
 			},
-			closingDate: {
+			closing_date: {
 				type: DataTypes.DATE,
 			},
 		},
@@ -34,12 +32,18 @@ exports = module.exports = function(sequelize, DataTypes) {
 		}
 	);
 
+	tender.hook('beforeBulkCreate', function(records, fields) {
+		throw new Error('Unable to create tenders in bulk');
+	});
+
+	debug('registered');
 	return tender;
 };
 
 var classMethods = {
 	associate: function(models) {
-		//models.tender.belongsTo(models.builder_category, {foreignKey : 'builder_category_id'});
+		let creator = models.tender.belongsTo(models.user, { as: 'created_by'});
+		models.tender.reflist = [creator];
 	},
 
 };
