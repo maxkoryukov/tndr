@@ -48,13 +48,15 @@ Start date: **2016-02-29**
 
 * [ ] tenders PART1
     * [x] break ticket apart
-    * [ ] data structure
-    * [ ] wizard
+    * [x] data structure
+    * [x] wizard
     * [ ] tender view page
 * [ ] authorization
     * [ ] data structure for `roles`
     * [ ] link `user` and `roles`
     * [ ] add tests for user's priveleges in code
+* [x] *unplanned* dashboard
+    * [x] Basic statistics on dashboard
 
 ## Milestone 4
 
