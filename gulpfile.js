@@ -61,7 +61,7 @@ var paths = {
 		assets: 'build/assets',
 
 		root: './build',
-		jslint: 'dev/jslint-report/',
+		jslint: './dev/jslint-report/',
 		csslint: './dev/csslint-report/',
 	}
 };
@@ -106,7 +106,7 @@ gulp.task('js:client:my', () => {
 	const size1 = filesize(filesize_opt);
 	const size2 = filesize(filesize_opt);
 
-	return mkdirp(path.dirname(paths.build.jslint)).then( () => {
+	return mkdirp(paths.build.jslint).then( () => {
 		return gulp.src(paths.client.script, {base: paths.client.base})
 
 			//.pipe(notify({message : "process file: <%= file.relative %>"}))
@@ -143,7 +143,7 @@ gulp.task('js:server', () => {
 	const size1 = filesize(filesize_opt);
 	const size2 = filesize(filesize_opt);
 
-	return mkdirp(path.dirname(paths.build.jslint)).then( () => {
+	return mkdirp(paths.build.jslint).then( () => {
 		return gulp.src(paths.client.script, {base: paths.client.base})
 			//.pipe(notify({message : "process file: <%= file.relative %>"}))
 			.pipe(gulp.dest(paths.build.tmp))
