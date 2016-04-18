@@ -29,8 +29,9 @@ router.route(`${baseurl}/login`)
 					if (backurl){
 						let b = new Buffer(backurl, 'base64');
 						url = b.toString();
-						if (!url.startsWith('/'))
+						if (!url.startsWith('/')){
 							url = '/';
+						}
 					}
 					res.redirect(url);
 				} else {
@@ -38,7 +39,7 @@ router.route(`${baseurl}/login`)
 					res.render('login', { backurl: backurl });
 				}
 			})
-			.catch(function auth_fail(err){
+			.catch(function auth_fail(){
 				req.addMessage('warn', 'Unknown user!');
 				res.render('login', { backurl: backurl });
 			});
@@ -57,8 +58,9 @@ router.route('*')
 	.all(function (req, res, next){
 		let db = req.app.models;
 
-		if (req.app.config.security.autologin)
+		if (req.app.config.security.autologin){
 			req.session.userId = req.app.config.security.autologin;
+		}
 
 		if (req.session && req.session.userId){
 

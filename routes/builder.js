@@ -17,7 +17,7 @@ let __ = x => x;
 // TODO : refactor section
 // -----------------------------------------------
 
-function _extend_model_for_card(db, ext, builder){
+function _extend_model_for_card(db, ext){
 	ext = ext || {};
 
 	return db.builder_category.findAll({
@@ -34,10 +34,11 @@ function _extend_model_for_card(db, ext, builder){
 router.route(`${baseurl}/`)
 
 	.delete(function(req, res, next) {
-
 		let bid = JSON.parse(req.body.id);
-		if (!_.isInteger(bid))
+		debug('builder', 'delete', bid);
+		if (!_.isInteger(bid)){
 			next( new Error('Type error'));
+		}
 		let db = req.app.models;
 		let name = '<builder>';
 
@@ -153,9 +154,9 @@ router.route(`${baseurl}/employees`)
 	.get(function(req, res, next){
 
 		let bid = JSON.parse(req.query.builder);
-		if (!_.isInteger(bid))
+		if (!_.isInteger(bid)){
 			next( new Error('Type error'));
-
+		}
 		let db = req.app.models;
 
 		return _api_load_builder_with_employees_promise(db, bid)
@@ -177,8 +178,9 @@ router.route(`${baseurl}/employees`)
 	.post(function(req, res, next){
 
 		let bid = JSON.parse(req.body.builder);
-		if (!_.isInteger(bid))
+		if (!_.isInteger(bid)){
 			next( new Error('Type error'));
+		}
 
 		let data = _.pick(req.body, [
 			'name', 'surname', 'phone', 'note', 'job'
@@ -226,11 +228,13 @@ router.route(`${baseurl}/employees`)
 	.put(function(req, res, next){
 
 		let bid = JSON.parse(req.body.builder);
-		if (!_.isInteger(bid))
+		if (!_.isInteger(bid)){
 			next( new Error('builder.id: Type error'));
+		}
 		let eid = JSON.parse(req.body.employee);
-		if (!_.isInteger(eid))
+		if (!_.isInteger(eid)){
 			next( new Error('employee.id: Type error'));
+		}
 
 		let data = _.pick(req.body, [
 			'name', 'surname', 'phone', 'note', 'job'
@@ -251,7 +255,7 @@ router.route(`${baseurl}/employees`)
 			})
 		])
 			.catch(err=>next(err))
-			.spread((b, employee) => {
+			.spread((b) => {
 
 				let emps = _init_employees(b.employees);
 
@@ -268,11 +272,13 @@ router.route(`${baseurl}/employees`)
 	.unlink(function(req, res, next){
 
 		let bid = JSON.parse(req.body.builder);
-		if (!_.isInteger(bid))
+		if (!_.isInteger(bid)){
 			next( new Error('builder.id: Type error'));
+		}
 		let eid = JSON.parse(req.body.employee);
-		if (!_.isInteger(eid))
+		if (!_.isInteger(eid)){
 			next( new Error('employee.id: Type error'));
+		}
 
 		let db = req.app.models;
 
@@ -290,6 +296,7 @@ router.route(`${baseurl}/employees`)
 				return [b, b.removeEmployee(eid)];
 			})
 			.spread((b, count) => {
+				debug(`${count} employees unlinked`);
 				return b.reload({raw:false});
 			})
 			.then((b) => {
@@ -322,7 +329,7 @@ router.route(`${baseurl}/index`)
 			.then(categories => {
 
 				categories = _.chain(categories)
-					.forEach(x => { if (x.builder) x.builder = x.builder.get(); })
+					.forEach(x => { if (x.builder) { x.builder = x.builder.get(); } })
 					.map(_.partial(_.pick, _, ['builder_category', 'name', 'code', 'tip_usage', 'tip_price', 'note', 'builders']))
 					.value();
 

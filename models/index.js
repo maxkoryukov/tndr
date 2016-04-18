@@ -15,7 +15,6 @@ var path            = require('path');
 var mkdirp          = require('mkdirp-bluebird');
 var Sequelize       = require('sequelize');
 var _               = require('lodash');
-var promise         = require('bluebird');
 
 var basename        = path.basename(module.filename);
 
@@ -72,16 +71,15 @@ function __init_mod(config){
 	*/
 
 	db.init = function init(){
-		return (function mkdir(){
-			if (dbconfig.dialect === 'sqlite') {
-				let dbroot = path.dirname(dbconfig.storage);
-				return mkdirp(dbroot);
-			} else {
-				return new promise(function (resolve){
-					resolve();
-				});
-			}
-		})()
+		return mkdirp(stconfig.path)
+			.then(() => {
+				if (dbconfig.dialect === 'sqlite') {
+					let dbroot = path.dirname(dbconfig.storage);
+					return mkdirp(dbroot);
+				}
+
+				return;
+			})
 			.return(sequelize)
 			.call('sync', {
 				logging: debug
@@ -119,6 +117,6 @@ function __init_mod(config){
 	};
 
 	return db;
-};
+}
 
 exports = module.exports = __init_mod;

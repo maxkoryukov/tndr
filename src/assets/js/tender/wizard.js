@@ -7,9 +7,9 @@ $(document).ready(function doc_ready(){
 		$this.addClass('tndr-load');
 		$this.prop('disabled', true);
 
-		var data = $form.serializeObject();
+		var fdata = $form.serializeObject();
 
-		console.log(data);
+		console.log(fdata);
 
 		$.ajax({
 			//{{! TODO : url }}
@@ -18,7 +18,7 @@ $(document).ready(function doc_ready(){
 			dataType: 'json',
 			contentType: 'application/json; charset=UTF-8',
 			method: 'POST',
-			data: JSON.stringify({ "item": data }),
+			data: JSON.stringify({ "item": fdata }),
 		})
 			.always(function(){
 				$(this).removeClass('tndr-load');

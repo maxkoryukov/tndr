@@ -33,7 +33,7 @@ CONFIG
 ====================================
 */
 app.config = config;
-if (!app.config.security) app.config.security = {};
+if (!app.config.security) { app.config.security = {}; }
 
 let alid = app.config.security.autologin;
 app.config.security.autologin = null;

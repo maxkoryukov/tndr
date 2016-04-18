@@ -17,7 +17,7 @@ exports = module.exports = {
 		// Override any settings from the "parent" configuration
 		"comma-dangle" : ["error", "only-multiline"],
 		"no-unused-vars" : ["warn", { "argsIgnorePattern": "next" }],
-		"no-shadow": ["warn"],
+		"curly" : ["error"],
 	},
 
 	"quiet": true,

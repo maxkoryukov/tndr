@@ -48,7 +48,7 @@ exports = module.exports = function(sequelize, DataTypes) {
 		}
 	);
 
-	tender.hook('beforeBulkCreate', function(records, fields) {
+	tender.hook('beforeBulkCreate', function() {
 		throw new Error('Unable to create tenders in bulk');
 	});
 
@@ -65,8 +65,8 @@ exports = module.exports = function(sequelize, DataTypes) {
 
 var classMethods = {
 	associate: function(db) {
-		let created_by = db.tender.belongsTo(db.user, { as: 'created_by'});
-		let last_updated_by = db.tender.belongsTo(db.user, { as: 'last_updated_by'});
+		db.tender.belongsTo(db.user, { as: 'created_by'});
+		db.tender.belongsTo(db.user, { as: 'last_updated_by'});
 
 		let estimator = db.tender.belongsTo(db.person, {as: 'estimator'});
 

@@ -54,11 +54,13 @@ var classMethods = {
 var instanceMethods = {
 	getPhoneLink : function phoneLink() {
 		let p = this.phone;
-		if (!p)
+		if (!p) {
 			return null;
+		}
 		p = p.replace(/\D/g, '');
-		if (!p)
+		if (!p){
 			return null;
+		}
 		p = 'tel:+' + p;
 		return p;
 	}

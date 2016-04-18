@@ -3,6 +3,7 @@
 /build/
 /dev/
 /data/db/*
+/data/storage/*
 
 /src/assets/bootstrap-fm
 

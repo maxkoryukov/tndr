@@ -11,6 +11,7 @@ var baseurl = '';
 /* GET home page - dashboard */
 router.route(`${baseurl}/`)
 	.get(function(req, res, next) {
+		debug('dashboard requested');
 
 		let db = req.app.models;
 

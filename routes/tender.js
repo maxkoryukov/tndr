@@ -34,7 +34,7 @@ router.route(`${baseurl}/`)
 
 router.route(`${baseurl}/wizard`)
 	.get(function(req, res, next){
-		let db = req.app.models;
+		//let db = req.app.models;
 
 		return res.render('tender/wizard');
 	})
