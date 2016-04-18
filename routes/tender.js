@@ -8,6 +8,7 @@ var express  = require('express');
 var router   = express.Router();
 var debug    = require('debug')('tndr:routes:tender');
 var _        = require('lodash');
+var path     = require('path');
 
 var baseurl = '/tender';
 
@@ -51,16 +52,36 @@ router.route(`${baseurl}/:id`)
 		debug('tender by id: ', id);
 
 		db.tender.findById(id, {
-			raw: false
+			raw: false,
+			include: db.tender.reflist
 		})
 		.catch(err => next(err))
-		.then( tender => {
-			tender = tender.get();
+		.then(tender => {
+			// TODO : handle not found
+			if (! tender){
+				return next('not found');
+			}
 
-			// TODO : load files:
-			tender.files = [{ fullname : 'readme.txt'}];
+			return [tender, tender.files_list()];
+		})
+		.catch(err => next(err))
+		.spread((tender, files) => {
+			let storage_cfg = req.app.config.models.storage;
+			let path_drop_levels = storage_cfg.path.split(path.sep).length;
+
+			tender = tender.get();
+			tender.files = _(files)
+				.forEach(f => {
+					f.uifullname = f.uipath.join('/');
+					f.uihref = storage_cfg.url_prefix + '/' + f.path.slice(path_drop_levels).join('/');
+				})
+				//.value();
+			tender.state = db.tender.tender_states[tender.state_code];
+
 			return res.render('tender/card', { tender : tender });
-		});
+		})
+		.catch(err => next(err))
+		;
 	})
 
 router.route(`${baseurl}/:state`)

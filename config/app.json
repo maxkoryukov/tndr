@@ -26,6 +26,7 @@
         "storage": "data/db/db-dev.sqlite"
       },
       "storage": {
+        "url_prefix": "/downloads",
         "path": "./data/storage"
       }
     }
@@ -54,6 +55,7 @@
         "storage": "data/db/db-tst.sqlite"
       },
       "storage": {
+        "url_prefix": "/downloads",
         "path": "./data/storage"
       }
     }
@@ -81,6 +83,7 @@
         "storage": "data/db/db.sqlite"
       },
       "storage": {
+        "url_prefix": "/downloads",
         "path": "./data/storage"
       }
     }

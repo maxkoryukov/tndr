@@ -1,32 +1,65 @@
 <article class="container tender">
-	<h1>{{__ "Tender:"}} {{tender.name}}</h1>
+	<h1><small>{{__ "Tender:"}} </small>{{tender.name}}</h1>
 
 	<p>
-		{{__ "Opening date:"}} <time datetime="{{! TODO : dt }}" title="{{date tender.opening_date format="LLLL"}}">{{date tender.opening_date format="ll"}}</time>
+		{{__ "Current state"}} <strong>{{tender.state.name}}</strong>
 	</p>
 
 	<p>
-		{{__ "Closing date:"}} <time datetime="{{! TODO : dt }}" title="{{date tender.closing_date format="LLLL"}}">{{date tender.closing_date format="ll"}}</time>
+		{{__ "Opening date"}} {{>timetag tender.opening_date}}
+	</p>
+
+	<p>
+		{{__ "Closing date"}} {{>timetag tender.closing_date}}
 	</p>
 
 	<section class="files">
 		<header>
-			<h2>{{__ "Files of the tender"}}</h2>
+			<h2>{{__ "Attached files"}}</h2>
 		</header>
 		<div>
 			{{#> _files tender.files }}
 			{{/_files }}
 		</div>
 	</section>
+
+	<section class="meta">
+		<header><h2>{{__ "Meta data"}}</h2>
+		</header>
+
+		<p class="text-muted">
+			{{__ "Created by"}} {{#if tender.created_by ~}}
+				{{~! TODO : url ~}}
+				<a href="{{lang.href}}/user/{{tender.created_by.id}}">{{ tender.created_by.person.surname }} {{tender.created_by.person.name}}</a>
+			{{~^~}}
+				<span>{{__ "<unknown>"}}</span>
+			{{~/if}} {{__ "at"~}}
+			{{>timetag tender.created_at}}
+		</p>
+		<p class="text-muted">
+			{{__ "Last update by"}} {{#if tender.last_updated_by ~}}
+				{{~! TODO : url ~}}
+				<a href="{{lang.href}}/user/{{tender.last_updated_by.id}}">{{ tender.last_updated_by.person.surname }} {{tender.last_updated_by.person.name}}</a>
+			{{~^~}}
+				<span>{{__ "<unknown>"}}</span>
+			{{~/if}} {{__ "at"~}}
+			{{>timetag tender.updated_at}}
+		</p>
+	</section>
 </article>
 
 {{#*inline "_files"}}
 	<ul class="files">
 		{{#each this}}
-		<li>{{fullname}}</li>
+		<li><a href="{{uihref}}" title="{{__ "Download "}}">{{uifullname}}</a></li>
 
 		{{^}}
 		<li class="empty">{{__ "Empty"}}</li>
 		{{/each}}
 	</ul>
+{{/inline}}
+
+
+{{#*inline "timetag"}}
+	<time datetime="{{date this format="iso"}}" title="{{date this format="LLLL"}}">{{date this format="ll"}}</time>
 {{/inline}}

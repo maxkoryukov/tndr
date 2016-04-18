@@ -41,7 +41,16 @@ if (_.isInteger(alid)){
 	app.config.security.autologin = alid;
 }
 
-// view engine setup
+let stpath = _.get(app.config, 'models.storage.path');
+if (stpath){
+	app.config.models.storage.path = _.spread(path.join)( stpath.split(path.sep) );
+}
+
+/*
+====================================
+view engine setup
+====================================
+*/
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
@@ -57,9 +66,20 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser(config.cookie.secret));
 
+app.use(flash());
+
+/*
+====================================
+STATIC
+====================================
+*/
 app.use(express.static(path.join(__dirname, 'build', 'assets')));
 
-app.use(flash());
+// File storage
+app.use(
+	app.config.models.storage.url_prefix,
+	express.static(path.join(__dirname, app.config.models.storage.path))
+);
 
 /*
 ====================================

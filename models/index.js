@@ -45,7 +45,7 @@ function __init_mod(config){
 	fs
 		.readdirSync(__dirname)
 		.filter(function(file) {
-			return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
+			return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-7) === '.seq.js');
 		})
 		.forEach(function(file) {
 			var model = sequelize['import'](path.join(__dirname, file));
@@ -62,6 +62,8 @@ function __init_mod(config){
 
 	db.sequelize = sequelize;
 	db.Sequelize = Sequelize;
+
+	db.tender.config = config;
 
 	/*
 	==================================
