@@ -9,22 +9,24 @@
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" href="/">{{__ "Tenders Flowchart"}}</a>
+			<a class="navbar-brand" href="{{current.lang.href}}/">{{__ "Tenders Flowchart"}}</a>
 		</div>
 		<div id="navbar" class="navbar-collapse collapse">
 			<ul class="nav navbar-nav">
 
 			<!--  class="active" -->
-				<li><a href="/builder/index">{{__ "Builders"}}</a></li>
-				<li><a href="/user/list">{{__ "Users"}}</a></li>
+			{{! TODO: url }}
+				<li><a href="{{current.lang.href}}/tender/">{{__ "Tenders"}}</a></li>
+				<li><a href="{{current.lang.href}}/builder/index/">{{__ "Builders"}}</a></li>
+				<li><a href="{{current.lang.href}}/user/list/">{{__ "Users"}}</a></li>
 
 			</ul>
 
 			{{#if current.user }}
 			<ul class="nav navbar-nav navbar-right">
-				<li><a href="/user/me" title="{{__ "My profile"}}"><i class="fa fa-user"></i> {{current.user.username}}</a></li>
+				<li><a href="{{current.lang.href}}/user/me" title="{{__ "My profile"}}"><i class="fa fa-user"></i> {{current.user.username}}</a></li>
 				<li role="separator" class="divider"></li>
-				<li><form method="POST" action="/logout"><button class="btn btn-default btn-xs navbar-btn" type="submit">{{__ "Logout"}}</button></form></li>
+				<li><form method="POST" action="{{current.lang.href}}/logout"><button class="btn btn-default btn-xs navbar-btn" type="submit">{{__ "Logout"}}</button></form></li>
 			</ul>
 			{{/if}}
 		</div><!--/.nav-collapse -->

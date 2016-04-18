@@ -1,4 +1,4 @@
-<section class="container builder list">
+<section class="container builder-index">
 	<h1>{{__ "Builders"}}</h1>
 
 	<fieldset>
@@ -28,6 +28,7 @@
 				<ul>
 					{{#each builders}}
 						<li>
+							{{! TODO: url }}
 							<a href="/builder/{{id}}" title="{{__ "View builder details"}}">{{name}}</a>
 						</li>
 					{{/each}}

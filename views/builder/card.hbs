@@ -1,25 +1,25 @@
 <section class="container builder">
-	<h1>{{builder.name}}</h1>
+	<h1>{{__ "Builder:"}} {{builder.name}}</h1>
 
 	{{! TODO: remove excessive classes }}
 
 	<form class="cl-builder-edit-main">
 
 		<fieldset>
-			<legend><h2>{{__ "Builder common info"}}</h2></legend>
+			<legend><h2>{{__ "Common info"}}</h2></legend>
 
 			<input type="hidden" value="{{builder.id}}" name="id" />
 
 			<div class="form-group">
 				<label>
-					{{~__ "Name"~}}
+					<span>{{~__ "Name"~}}</span>
 					<input {{#unless create}}disabled="disabled"{{/unless}} type="text" class="form-control cl-editable cl-creatable" name="name" value="{{builder.name}}"/>
 				</label>
 			</div>
 
 			<div class="form-group">
 				<label>
-					{{~__ "Category"~}}
+					<span>{{~__ "Category"~}}</span>
 					<select {{#unless create}}disabled="disabled"{{/unless}} name="builder_category" class="form-control cl-editable cl-creatable">
 						{{~#each builder_category ~}}
 							<option value="{{id}}" class="{{code}}" {{selected this.id ../builder.builder_category.id }}>{{name}}</option>

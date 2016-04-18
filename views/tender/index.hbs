@@ -1,4 +1,24 @@
-<article class="container tender-index">
-	<h1>Tenders</h1>
+<section class="container tender-index">
+	<h1>{{__ "Tenders"}}</h1>
 
-</article>
+	<fieldset>
+		{{! TODO : url }}
+		<a class="btn btn-create" href="{{current.lang.href}}/tender/wizard">
+			<span class="fa-stack">
+				<i class="fa fa-cubes fa-stack-1x"></i>
+				<i class="fa fa-plus fa-stack-1x fa-overlay"></i>
+			</span>
+			{{__ "Create new"}}
+		</a>
+	</fieldset>
+
+	<section>
+		<h2>{{__ "List, by states"}}</h2>
+
+		{{#each states}}
+			{{! TODO: url }}
+			<a class="button button-default" href="{{current.lang.href}}/tender/{{code}}/">{{name}}</a>
+		{{/each}}
+	</section>
+
+</section>

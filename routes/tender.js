@@ -11,6 +11,26 @@ var _        = require('lodash');
 
 var baseurl = '/tender';
 
+router.route(`${baseurl}/`)
+
+	.get(function(req, res, next) {
+		let db = req.app.models;
+
+		debug('tender get index');
+
+		db.tender.findAll({
+			raw: false,
+			where: {
+			},
+		})
+			.catch(err => next(err))
+			.then(tenders => {
+				tenders = _.map(x => x.get());
+				return res.render('tender/index', tenders);
+			})
+		;
+	})
+
 router.route(`${baseurl}/wizard`)
 	.get(function(req, res, next){
 		let db = req.app.models;
@@ -20,19 +40,30 @@ router.route(`${baseurl}/wizard`)
 
 router.route(`${baseurl}/:id`)
 	.get(function(req, res, next){
+		let db = req.app.models;
 
 		if (! req.params.id.match( /\d+/ )) {
 			return next();
 		}
 
-		let id = _.toInteger(req.params.id);
+		let id = _.toLength(req.params.id);
 
 		debug('tender by id: ', id);
 
-		next('not implemented');
+		db.tender.findById(id, {
+			raw: false
+		})
+		.catch(err => next(err))
+		.then( tender => {
+			tender = tender.get();
+
+			// TODO : load files:
+			tender.files = [{ fullname : 'readme.txt'}];
+			return res.render('tender/card', { tender : tender });
+		});
 	})
 
-router.route(`${baseurl}/:state?`)
+router.route(`${baseurl}/:state`)
 
 	.get(function(req, res, next) {
 		let db = req.app.models;
@@ -56,7 +87,7 @@ router.route(`${baseurl}/:state?`)
 			.catch(err => next(err))
 			.then(tenders => {
 				tenders = _.map(x => x.get());
-				return res.render('tender/index', tenders);
+				return res.render('tender/state', tenders);
 			})
 		;
 	})

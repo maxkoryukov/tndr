@@ -11,7 +11,7 @@
 
 # PRIVATE
 /.env
-
+/.jshintignore
 
 .idea/*
 

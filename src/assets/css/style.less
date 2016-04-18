@@ -151,15 +151,15 @@ body {
 =====================================================================
 */
 
-	.dashboard
+.dashboard
+{
+	article
 	{
-		article
-		{
-			.panel;
-			.make-md-column(6);
-			.border-radius(@border-radius-base);
-		}
+		.panel;
+		.make-md-column(6);
+		.border-radius(@border-radius-base);
 	}
+}
 
 /*
 =====================================================================
@@ -173,114 +173,121 @@ body {
                 BUILDERS
 =====================================================================
 */
-	.-builder-category()
+
+.-builder-category()
+{
+	.priority
 	{
-		.priority
-		{
-			background-color: @bcat1;
-		}
-		.decent
-		{
-			background-color: @bcat2;
-		}
-		.considerable
-		{
-			background-color: @bcat3;
-		}
-		.tentative
-		{
-			background-color: @bcat4;
-		}
-		.unfavourable
-		{
-			background-color: @bcat5;
-		}
+		background-color: @bcat1;
 	}
-
-	.builder
+	.decent
 	{
-		&.list
+		background-color: @bcat2;
+	}
+	.considerable
+	{
+		background-color: @bcat3;
+	}
+	.tentative
+	{
+		background-color: @bcat4;
+	}
+	.unfavourable
+	{
+		background-color: @bcat5;
+	}
+}
+
+.builder
+{
+	.employee-list
+	{
+		article
 		{
-			article
+			&:extend(.panel);
+			.panel;
+			.panel-default;
+			.make-xs-column(12);
+			.make-lg-column(12/2);
+
+			padding : 0; // fix gaps on both sides of article
+
+			&>header
 			{
-				&:extend(.panel);
-				.panel;
-				.panel-default;
-				.make-xs-column(12);
-				.make-md-column(4);
-				.make-lg-column(12/5);
+				&:extend(.panel-heading);
+				.panel-heading;
 
-				.-builder-category();
-
-				padding : 0; // fix gaps on both sides of article
-
-				&>header
+				h1,h2,h3,h4,h5,h6
 				{
-					&:extend(.panel-heading);
-					.panel-heading;
-
-					h1,h2,h3,h4,h5,h6
-					{
-						&:extend(.panel-title);
-						.panel-title;
-					}
-				}
-
-				&>section
-				{
-					&:extend(.panel-body);
-					.panel-body;
-				}
-
-				&>ul
-				{
-					&:extend(.list-group);
-					.list-group;
-
-					&>li
-					{
-						&:extend(.list-group-item);
-						.list-group-item;
-					}
+					&:extend(.panel-title);
+					.panel-title;
 				}
 			}
-		}
 
-		.employee-list
-		{
-			article
+			&>section
 			{
-				&:extend(.panel);
-				.panel;
-				.panel-default;
-				.make-xs-column(12);
-				.make-lg-column(12/2);
+				&:extend(.panel-body);
+				.panel-body;
+			}
 
-				padding : 0; // fix gaps on both sides of article
-
-				&>header
-				{
-					&:extend(.panel-heading);
-					.panel-heading;
-
-					h1,h2,h3,h4,h5,h6
-					{
-						&:extend(.panel-title);
-						.panel-title;
-					}
-				}
-
-				&>section
-				{
-					&:extend(.panel-body);
-					.panel-body;
-				}
-
-				&>footer
-				{
-					&:extend(.panel-footer);
-					.panel-footer;
-				}
+			&>footer
+			{
+				&:extend(.panel-footer);
+				.panel-footer;
 			}
 		}
 	}
+}
+
+.builder-index
+{
+	article
+	{
+		&:extend(.panel);
+		.panel;
+		.panel-default;
+		.make-xs-column(12);
+		.make-md-column(4);
+		.make-lg-column(12/5);
+
+		.-builder-category();
+
+		padding : 0; // fix gaps on both sides of article
+
+		&>header
+		{
+			&:extend(.panel-heading);
+			.panel-heading;
+
+			h1,h2,h3,h4,h5,h6
+			{
+				&:extend(.panel-title);
+				.panel-title;
+			}
+		}
+
+		&>section
+		{
+			&:extend(.panel-body);
+			.panel-body;
+		}
+
+		&>ul
+		{
+			&:extend(.list-group);
+			.list-group;
+
+			&>li
+			{
+				&:extend(.list-group-item);
+				.list-group-item;
+			}
+		}
+	}
+}
+
+/*
+=====================================================================
+                BUILDERS
+=====================================================================
+*/

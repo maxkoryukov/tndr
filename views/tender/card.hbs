@@ -1,6 +1,32 @@
 <article class="container tender">
-	<h1>{{tender.name}}</h1>
+	<h1>{{__ "Tender:"}} {{tender.name}}</h1>
 
-	{{! TODO: remove excessive classes }}
+	<p>
+		{{__ "Opening date:"}} <time datetime="{{! TODO : dt }}" title="{{date tender.opening_date format="LLLL"}}">{{date tender.opening_date format="ll"}}</time>
+	</p>
 
+	<p>
+		{{__ "Closing date:"}} <time datetime="{{! TODO : dt }}" title="{{date tender.closing_date format="LLLL"}}">{{date tender.closing_date format="ll"}}</time>
+	</p>
+
+	<section class="files">
+		<header>
+			<h2>{{__ "Files of the tender"}}</h2>
+		</header>
+		<div>
+			{{#> _files tender.files }}
+			{{/_files }}
+		</div>
+	</section>
 </article>
+
+{{#*inline "_files"}}
+	<ul class="files">
+		{{#each this}}
+		<li>{{fullname}}</li>
+
+		{{^}}
+		<li class="empty">{{__ "Empty"}}</li>
+		{{/each}}
+	</ul>
+{{/inline}}

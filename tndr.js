@@ -48,7 +48,7 @@ app.set('view engine', 'hbs');
 
 // TODO : think about refactoring:
 require('./lib/hbs-register-partials');
-require('./lib/hbs-register-blocks');
+require('./lib/hbs-helpers');
 
 app.set('trust proxy', config.rproxy.trust_level || 0); // trust first (or nth-) proxy
 
