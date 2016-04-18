@@ -20,10 +20,9 @@ var flash           = require('connect-flash');
 
 var app             = express();
 
-var models          = require('./models');
-
 var envname         = process.env.NODE_ENV || 'production';
-var config          = require('./config/app.json')[envname];
+var config_path     = path.join(__dirname, 'config', 'app.json');
+var config          = require(config_path)[envname];
 
 // ALWAYS: print config, when it is read from ENV:
 debug(`ENV: ${envname}`);
@@ -94,9 +93,11 @@ app.use(function tndr_app_set_current(req, res, next){
 
 /*
 ====================================
-DB
+DB and models
 ====================================
 */
+var models = require('./models')(config.models);
+
 models.init()
 
 	// after DB ready, register DB-MW (should be registered before data access):

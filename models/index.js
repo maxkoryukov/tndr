@@ -9,117 +9,114 @@ The models should be registered there!
 
 */
 
-var fs              = require('fs');
-var mkdirp          = require('mkdirp-bluebird');
-var path            = require('path');
-var Sequelize       = require('sequelize');
-var basename        = path.basename(module.filename);
-var envname         = process.env.NODE_ENV || 'production';
-var config          = require(__dirname + '/../config/db.json')[envname];
-var _               = require('lodash');
 var debug           = require('debug')('tndr:models:index');
+var fs              = require('fs');
+var path            = require('path');
+var mkdirp          = require('mkdirp-bluebird');
+var Sequelize       = require('sequelize');
+var _               = require('lodash');
 var promise         = require('bluebird');
-var db              = {};
 
-// ALWAYS: print config, when it is read from ENV:
-debug(`ENV: ${envname}`);
+var basename        = path.basename(module.filename);
 
-var default_define = {
-	"underscored": true,
-	"freezeTableName": true
-};
+function __init_mod(config){
 
-config.define = _.merge(config.define, default_define);
-config.query = _.merge(config.define, { "raw": true } );
-config.logging = debug;
+	let db = {};
+	let dbconfig = config.db;
+	let stconfig = config.storage;
 
-var sequelize = null;
+	var default_define = {
+		"underscored": true,
+		"freezeTableName": true
+	};
 
-if (config.use_env_variable) {
-	sequelize = new Sequelize(process.env[config.use_env_variable]);
-} else {
-	sequelize = new Sequelize(config.database, config.username, config.password, config);
-}
+	dbconfig.define = _.merge(dbconfig.define, default_define);
+	dbconfig.query = _.merge(dbconfig.define, { "raw": true } );
+	dbconfig.logging = debug;
 
-/*
-==================================
-LOAD all models
-==================================
-*/
+	var sequelize = new Sequelize(dbconfig.database, dbconfig.username, dbconfig.password, dbconfig);
 
-fs
-	.readdirSync(__dirname)
-	.filter(function(file) {
-		return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
-	})
-	.forEach(function(file) {
-		var model = sequelize['import'](path.join(__dirname, file));
-		db[model.name] = model;
-	});
+	/*
+	==================================
+	LOAD all models
+	==================================
+	*/
 
-_(db)
-	.keys()
-	.each(function(model_name) {
-		if (db[model_name].associate) {
-			db[model_name].associate(db);
-		}
-	});
-
-db.sequelize = sequelize;
-db.Sequelize = Sequelize;
-
-/*
-==================================
-CREATE initial data
-==================================
-*/
-
-db.init = function init(){
-	return (function mkdir(){
-		if (config.dialect === 'sqlite') {
-			let dbroot = path.dirname(config.storage);
-			return mkdirp(dbroot);
-		} else {
-			return new promise(function (resolve){
-				resolve();
-			});
-		}
-	})()
-		.return(sequelize)
-		.call('sync', {
-			logging: debug
+	fs
+		.readdirSync(__dirname)
+		.filter(function(file) {
+			return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
 		})
-		.then(function(){
-			/* CHECK FOR EMPTYNESS */
-			return db.user
-				.count( { where: { username : 'root' } } )
-				.then(function(cnt){
-					if (0 === cnt){
-						debug('INIT DATA');
+		.forEach(function(file) {
+			var model = sequelize['import'](path.join(__dirname, file));
+			db[model.name] = model;
+		});
 
+	_(db)
+		.keys()
+		.each(function(model_name) {
+			if (db[model_name].associate) {
+				db[model_name].associate(db);
+			}
+		});
 
-						return db.user.create({
-								user: 1,
-								username: 'root',
-								password: '123',
-								person: {
-									name: 'root',
-									surname: 'root',
-									note: 'System account',
-								}
-							},{
-								include : [ db.person ],
-							})
+	db.sequelize = sequelize;
+	db.Sequelize = Sequelize;
 
-							.then(db.builder_category.initialFill(db));
-					}
-					// else
-					return;
+	/*
+	==================================
+	CREATE initial data
+	==================================
+	*/
+
+	db.init = function init(){
+		return (function mkdir(){
+			if (dbconfig.dialect === 'sqlite') {
+				let dbroot = path.dirname(dbconfig.storage);
+				return mkdirp(dbroot);
+			} else {
+				return new promise(function (resolve){
+					resolve();
 				});
-		})
+			}
+		})()
+			.return(sequelize)
+			.call('sync', {
+				logging: debug
+			})
+			.then(function(){
+				/* CHECK FOR EMPTYNESS */
+				return db.user
+					.count( { where: { username : 'root' } } )
+					.then(function(cnt){
+						if (0 === cnt){
+							debug('INIT DATA');
 
-		.return(db);
+
+							return db.user.create({
+									user: 1,
+									username: 'root',
+									password: '123',
+									person: {
+										name: 'root',
+										surname: 'root',
+										note: 'System account',
+									}
+								},{
+									include : [ db.person ],
+								})
+
+								.then(db.builder_category.initialFill(db));
+						}
+						// else
+						return;
+					});
+			})
+
+			.return(db);
+	};
+
+	return db;
 };
 
-
-module.exports = db;
+exports = module.exports = __init_mod;
