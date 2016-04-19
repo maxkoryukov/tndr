@@ -8,6 +8,8 @@ var app           = require('../tndr');
 var debug         = require('debug')('tndr:www');
 var http          = require('http');
 var opener        = require('opener');
+var _             = require('lodash');
+
 /**
  * Get port from environment and store in Express.
  */
@@ -89,8 +91,10 @@ function onListening() {
 			var host = addr.address;
 			if (host === '::') host = 'localhost';
 
-			var browser = opener(`http://${host}:${port}`);
-			browser.unref();
+			_.delay(()=>{
+				var browser = opener(`http://${host}:${port}/`);
+				browser.unref();
+			}, 1000);
 		}
 	}
 }
