@@ -18,6 +18,11 @@ exports = module.exports = {
 		"comma-dangle" : ["error", "only-multiline"],
 		"no-unused-vars" : ["warn", { "argsIgnorePattern": "next" }],
 		"curly" : ["error"],
+		"eqeqeq": ["error"],
+		"no-process-exit": ["error"],
+		"no-path-concat": ["error"],
+		"no-extra-parens": ["error", "all", { "nestedBinaryExpressions": false }],
+		"no-cond-assign": ["error"],
 	},
 
 	"quiet": true,

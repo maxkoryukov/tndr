@@ -61,8 +61,6 @@ $(document).ready(function doc_ready(){
 			.done(function(data){
 				$('.modal').modal('hide');
 
-				var b = data.data;
-
 				showMessage(MSG.info, data.message);
 				$eform.find('.cl-cancel').click();
 			})
@@ -128,7 +126,7 @@ $(document).ready(function doc_ready(){
 
 
 				var resp = data.responseJSON;
-				showMessage(MSG.error, (resp && resp.error));
+				showMessage(MSG.error, resp && resp.error);
 			});
 
 	});
@@ -150,7 +148,7 @@ $(document).ready(function doc_ready(){
 			},
 			dataType: 'json'
 		})
-			.always(function(data){
+			.always(function(){
 				// hide loader
 				$sec.removeClass('tndr-load-block');
 			})
@@ -225,12 +223,9 @@ $(document).ready(function doc_ready(){
 	$('.employee-list').on('click', '.cl-employee-save', function(){
 		var $itemroot = $(this).parents('.employee-item');
 		var currentsel = $itemroot.data('current-state-sel') || '.cl-state-read';
-		var newsel = '.cl-state-read';
+
 		$itemroot.find(currentsel).hide();
-		/*
-		$itemroot.find(newsel).show();
-		$itemroot.data('current-state-sel', newsel);
-		*/
+
 		var $f = $itemroot.find('form.cl-employee-edit-form');
 		var fdata = $f.serialize();
 
@@ -245,7 +240,7 @@ $(document).ready(function doc_ready(){
 			data : fdata,
 			dataType: 'json'
 		})
-			.always(function(data){
+			.always(function(){
 				// hide loader
 				$sec.removeClass('tndr-load-block');
 			})
@@ -265,13 +260,9 @@ $(document).ready(function doc_ready(){
 	$('.employee-list').on('click', '.cl-employee-create', function(){
 		var $itemroot = $(this).parents('.employee-item');
 		var currentsel = $itemroot.data('current-state-sel') || '.cl-state-read';
-		var newsel = '.cl-state-read';
 
 		$itemroot.find(currentsel).hide();
-		/*
-		$itemroot.find(newsel).show();
-		$itemroot.data('current-state-sel', newsel);
-		*/
+
 		var $f = $itemroot.find('form.cl-employee-edit-form');
 		var fdata = $f.serialize();
 
@@ -286,7 +277,7 @@ $(document).ready(function doc_ready(){
 			data : fdata,
 			dataType: 'json'
 		})
-			.always(function(data){
+			.always(function(){
 				// hide loader
 				$sec.removeClass('tndr-load-block');
 				$('button.cl-employee-add').prop('disabled', false);
