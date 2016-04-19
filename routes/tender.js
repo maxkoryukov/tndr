@@ -21,13 +21,15 @@ router.route(`${baseurl}/`)
 
 		db.tender.findAll({
 			raw: false,
-			where: {
-			},
+			where: {},
 		})
 			.catch(err => next(err))
 			.then(tenders => {
-				tenders = _.map(x => x.get());
-				return res.render('tender/index', tenders);
+				tenders = _(tenders)
+					.map(x => x.get())
+					.value();
+
+				return res.render('tender/index', {tenders: tenders});
 			})
 		;
 	})

@@ -113,7 +113,20 @@ var instanceMethods = {
 			});
 
 			w.on('errors', function(root, stats, next){
-				rej(new Error(stats));
+				debug('unhandled file ls error', root, stats);
+				if (false) {
+					rej(new Error(stats));
+					/*
+						[ { name: '3',
+						error:
+						 { [Error: ENOENT: no such file or directory, lstat 'data/storage/tender/3']
+						   errno: -2,
+						   code: 'ENOENT',
+						   syscall: 'lstat',
+						   path: 'data/storage/tender/3' } }
+						]
+       					*/
+				}
 				next();
 			});
 		});

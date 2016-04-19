@@ -2,19 +2,14 @@ var assert = require('chai').assert;
 var path   = require('path');
 var _      = require('lodash');
 
-var models_path     = path.join(process.cwd(), 'models');
-
 /* COMMON MODEL INIT BLOCK */
-var model_init_test = path.join(process.cwd(), 'test', 'models', 'init');
-var mi = require(model_init_test);
+var models = require(path.join(process.cwd(), 'test', 'models', 'init'));
 /* COMMON MODEL INIT BLOCK */
 
 
 describe('tndr.models', function() {
-	var models;
 
 	it('tender should exist', function () {
-		models = require(models_path);
 		assert.property(models, 'tender');
 	});
 
@@ -22,15 +17,25 @@ describe('tndr.models', function() {
 		var e = null;
 
 		beforeEach(function(){
-			e = models.tender.build();
+			e = models.tender.build({
+				estimator: null,
+				fake_123: 1000,
+			}, {
+				include: models.tender.reflist
+			});
 		});
 
-		_.each(['id', 'name', 'simpro_quote_number', 'opening_date', 'closing_date'], function(key){
+		_.each(['id', 'name', 'simpro_quote_number',
+				'opening_date', 'closing_date', 'state_code',
+				'estimator',
+			], function(key){
 			it(`should exists property [${key}]`, function () {
 				assert.property(e, key);
 			});
 		});
 
-
+		it('should not have field, not defined in model, but defined in build', () => {
+			assert.notProperty(e, 'fake_123');
+		});
 	});
 });

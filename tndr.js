@@ -20,31 +20,12 @@ var flash           = require('connect-flash');
 
 var app             = express();
 
-var envname         = process.env.NODE_ENV || 'production';
-var config_path     = path.join(__dirname, 'config', 'app.json');
-var config          = require(config_path)[envname];
-
-// ALWAYS: print config, when it is read from ENV:
-debug(`ENV: ${envname}`);
-
 /*
 ====================================
 CONFIG
 ====================================
 */
-app.config = config;
-if (!app.config.security) { app.config.security = {}; }
-
-let alid = app.config.security.autologin;
-app.config.security.autologin = null;
-if (_.isInteger(alid)){
-	app.config.security.autologin = alid;
-}
-
-let stpath = _.get(app.config, 'models.storage.path');
-if (stpath){
-	app.config.models.storage.path = _.spread(path.join)( stpath.split(path.sep) );
-}
+app.config = require('./config');;
 
 /*
 ====================================
@@ -58,13 +39,13 @@ app.set('view engine', 'hbs');
 require('./lib/hbs-register-partials');
 require('./lib/hbs-helpers');
 
-app.set('trust proxy', config.rproxy.trust_level || 0); // trust first (or nth-) proxy
+app.set('trust proxy', app.config.rproxy.trust_level || 0); // trust first (or nth-) proxy
 
 app.use(favicon(path.join(__dirname, 'build', 'assets', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser(config.cookie.secret));
+app.use(cookieParser(app.config.cookie.secret));
 
 app.use(flash());
 
@@ -88,11 +69,11 @@ SESSIONS
 */
 
 var session_config = {
-	secret: config.cookie.secret,
+	secret: app.config.cookie.secret,
 	resave: false,
 	saveUninitialized: false,
 	cookie: {
-		secure : config.cookie.secure
+		secure : app.config.cookie.secure
 	},
 
 };
@@ -116,7 +97,7 @@ app.use(function tndr_app_set_current(req, res, next){
 DB and models
 ====================================
 */
-var models = require('./models')(config.models);
+var models = require('./models')(app.config.models);
 
 models.init()
 
@@ -150,7 +131,6 @@ models.init()
 		app.use('/:lang(\\w\\w)?:cult([-_]\\w\\w)?/', function tndr_app_set_lang_pre(req, res, next){
 
 			let lc = langmw.parseCulture(req.params.lang, req.params.cult);
-			res.lang = lc;
 			req.current.lang = lc;
 
 			next();
@@ -200,7 +180,7 @@ error handlers
 
 // development error handler
 // will print stacktrace
-if (envname === 'dev') {
+if (_.get(app.config, 'debug.render_stack')) {
 	app.use(function tndr_global_error_dev(err, req, res, next) {
 		res.status(err.status || 500);
 		return res.render('error', {

@@ -1,5 +1,8 @@
 {
   "dev": {
+    "debug": {
+      "render_stack": true
+    },
     "open_browser" : false,
 
     "security" : {

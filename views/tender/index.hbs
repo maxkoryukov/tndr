@@ -3,7 +3,7 @@
 
 	<fieldset>
 		{{! TODO : url }}
-		<a class="btn btn-create" href="{{current.lang.href}}/tender/wizard">
+		<a class="btn btn-create" href="{{@root.lang.href}}/tender/wizard">
 			<span class="fa-stack">
 				<i class="fa fa-cubes fa-stack-1x"></i>
 				<i class="fa fa-plus fa-stack-1x fa-overlay"></i>
@@ -17,8 +17,18 @@
 
 		{{#each states}}
 			{{! TODO: url }}
-			<a class="button button-default" href="{{current.lang.href}}/tender/{{code}}/">{{name}}</a>
+			<a class="button button-default" href="{{@root.lang.href}}/tender/{{code}}/">{{name}}</a>
 		{{/each}}
 	</section>
 
+	<section>
+		<h2>{{__ "All tenders"}}</h2>
+
+		<ul>
+			{{#each tenders}}
+				{{!TODO: url}}
+				<li><a href="{{@root.lang.href}}/tender/{{id}}">{{name}}</a></li>
+			{{/each}}
+		</ul>
+	</section>
 </section>
