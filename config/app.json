@@ -30,7 +30,7 @@
       },
       "storage": {
         "url_prefix": "/downloads",
-        "path": "./data/storage"
+        "path": "./data/storage/dev"
       }
     }
   },
@@ -59,7 +59,7 @@
       },
       "storage": {
         "url_prefix": "/downloads",
-        "path": "./data/storage"
+        "path": "./data/storage/test"
       }
     }
   },
