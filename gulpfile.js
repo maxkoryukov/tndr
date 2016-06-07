@@ -3,7 +3,7 @@
 // HACK : play with env (for dev)
 try { require('dotenv').config(); } catch (e) {} // eslint-disable-line
 
-var gulp   = require('gulp');
+var gulp         = require('gulp');
 
 // plugins
 var less         = require('gulp-less');
@@ -40,7 +40,7 @@ ENV settings
 var paths = {
 	client:{
 		style:[
-			'src/assets/css/**/*.less',
+			'src/assets/css/*.less',
 		],
 		script:[
 			'src/assets/js/**/*.js'
@@ -95,9 +95,12 @@ gulp.task('js:client:pre', () => {
 			'./node_modules/knockout-mapping/dist/knockout.mapping.min.js',
 			'./node_modules/knockout-mapping/dist/knockout.mapping.min.js.map',
 			'./node_modules/form-serializer/dist/jquery.serialize-object.min.js',
+			'./node_modules/html5shiv/dist/html5shiv.min.js',
+			'./node_modules/Respond.js/dest/respond.min.js',
+			'./node_modules/bootstrap/dist/js/bootstrap.min.js',
 		])
 		// TODO : fix path
-		.pipe(gulp.dest(path.join(paths.build.assets,'js')))
+		.pipe(gulp.dest(path.join(paths.build.assets, 'js3')))
 		.pipe(filesize(filesize_opt))
 	;
 });
@@ -268,6 +271,6 @@ gulp.task('start', ['build'], () => {
 	gulp.watch(paths.client.script, ['js:client:my'], cb);
 	gulp.watch(paths.client.style, ['less'], cb);
 
-	//let app = 
+	//let app =
 	require('./bin/www');
 });
