@@ -67,3 +67,8 @@ Start date: **2016-02-29**
     * [ ] tender's workflow
     * [ ] TODO : finish decomposition...
 * [x] **SOLVED** (milestone 2) more style and CSS
+
+## Milestone 5: final submission
+
+* [ ] break apart!
+* [ ] test toggl
