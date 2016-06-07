@@ -17,27 +17,33 @@ var cookieParser    = require('cookie-parser');
 var bodyParser      = require('body-parser');
 var session         = require('express-session');
 var flash           = require('connect-flash');
+var handlebars      = require('express-handlebars');
 
 var app             = express();
+
+debug('initializing');
 
 /*
 ====================================
 CONFIG
 ====================================
 */
-app.config = require('./config');;
+app.config = require('./config');
 
 /*
 ====================================
 view engine setup
 ====================================
 */
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'hbs');
+app.engine('hbs', handlebars.create({
+		layoutsDir: 'views/layouts/',
+		partialsDir: 'views/partials/',
+		defaultLayout: 'main',
+		helpers: require('./lib/hbs-helpers'),
+		extname: '.hbs'
+	}).engine);
 
-// TODO : think about refactoring:
-require('./lib/hbs-register-partials');
-require('./lib/hbs-helpers');
+app.set('view engine', 'hbs');
 
 app.set('trust proxy', app.config.rproxy.trust_level || 0); // trust first (or nth-) proxy
 

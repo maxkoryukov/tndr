@@ -1,3 +1,5 @@
+"use strict";
+
 var path   = require('path');
 
 var models_path = path.join(process.cwd(), 'models');

@@ -111,7 +111,7 @@ var classMethods = {
 };
 
 var instanceMethods = {
-	allowed: function allowed(perm){
-		return true;
+	isInRole: function user_isInRole(role){
+		throw new Error('not implemented');
 	},
 };

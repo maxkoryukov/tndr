@@ -23,6 +23,7 @@ exports = module.exports = {
 		"no-path-concat": ["error"],
 		"no-extra-parens": ["error", "all", { "nestedBinaryExpressions": false }],
 		"no-cond-assign": ["error"],
+		"strict": ["error", "global"],
 	},
 
 	"quiet": true,
