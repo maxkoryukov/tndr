@@ -21,6 +21,9 @@ var handlebars      = require('express-handlebars');
 
 var app             = express();
 
+var promises        = require('bluebird');
+promises.longStackTraces();
+
 debug('initializing');
 
 /*
@@ -35,14 +38,16 @@ app.config = require('./config');
 view engine setup
 ====================================
 */
-app.engine('hbs', handlebars.create({
-		layoutsDir: 'views/layouts/',
-		partialsDir: 'views/partials/',
-		defaultLayout: 'main',
-		helpers: require('./lib/hbs-helpers'),
-		extname: '.hbs'
-	}).engine);
+let hbs  = handlebars.create({
+	layoutsDir: 'views/layouts/',
+	partialsDir: 'views/partials/',
+	defaultLayout: 'main',
+	helpers: require('./lib/hbs-helpers'),
+	extname: '.hbs'
+});
+app.locals.hbs = hbs;
 
+app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
 
 app.set('trust proxy', app.config.rproxy.trust_level || 0); // trust first (or nth-) proxy

@@ -112,6 +112,9 @@ var classMethods = {
 
 var instanceMethods = {
 	isInRole: function user_isInRole(role){
-		throw new Error('not implemented');
+		debug('isInRole', role);
+
+		let r = this.sequelize.models.role;
+		return r.isInRole(this.username, role);
 	},
 };

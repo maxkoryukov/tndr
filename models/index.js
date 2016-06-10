@@ -30,7 +30,7 @@ function __init_mod(config){
 	};
 
 	dbconfig.define = _.merge(dbconfig.define, default_define);
-	dbconfig.query = _.merge(dbconfig.define, { "raw": true } );
+	dbconfig.query = _.merge(dbconfig.define, { "raw": false } );
 	dbconfig.logging = debug;
 
 	var sequelize = new Sequelize(dbconfig.database, dbconfig.username, dbconfig.password, dbconfig);
@@ -85,35 +85,58 @@ function __init_mod(config){
 				logging: debug
 			})
 			.then(function(){
-				/* CHECK FOR EMPTYNESS */
-				return db.user
-					.count( { where: { username : 'root' } } )
-					.then(function(cnt){
-						if (0 === cnt){
-							debug('INIT DATA');
-
-
-							return db.user.create({
-									user: 1,
-									username: 'root',
-									password: '123',
-									person: {
-										name: 'root',
-										surname: 'root',
-										note: 'System account',
-									}
-								},{
-									include : [ db.person ],
-								})
-
-								.then(db.builder_category.initialFill(db));
-						}
-						// else
-						return;
-					});
+				return db.user.count( { where: { username : 'root' } } )
+			})
+			.then(function(cnt){
+				if (0 === cnt){
+					// initial fill:
+					return db.__initialFill();
+				} else {
+					return;
+				}
 			})
 
-			.return(db);
+			.return(db)
+		;
+	};
+
+	db.__initialFill = function(){
+
+		debug('INIT DATA');
+
+		let user_root = null;
+
+		return db.user.create({
+					user: 1,
+					username: 'root',
+					password: '123',
+					person: {
+						name: 'root',
+						surname: 'root',
+						note: 'System account',
+					}
+				},{
+					include : [ db.person ],
+				}
+			)
+			.then(u => user_root = u)
+			.return([
+				db.role,
+				db.builder_category,
+			])
+			.map(m => m.initialFill(db))
+			.spread((roles) => {
+				return db.role.findOne({
+					where: {code: 'root'},
+					raw: false
+				});
+			})
+			.then( root_role => {
+				return user_root.addRole([root_role]);
+			})
+
+			.return(db)
+		;
 	};
 
 	return db;

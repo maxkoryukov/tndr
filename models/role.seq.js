@@ -2,6 +2,7 @@
 
 var debug   = require('debug')('tndr:models:role');
 var _       = require('lodash');
+var promise = require('bluebird');
 
 module.exports = function(sequelize, DataTypes) {
 
@@ -21,17 +22,23 @@ module.exports = function(sequelize, DataTypes) {
 			name: {
 				type: DataTypes.STRING(256),
 				allowNull: false,
-				unique: true,
 			},
 			note: {
 				type: DataTypes.STRING(4096),
 				allowNull: true,
 			},
+
+			// permissions: {
+			// 	type: DataTypes.VIRTUAL,
+			// 	get: function() {
+			// 		return ['user.create'];
+			// 	}
+			// }
 		},
 		{
 			paranoid: true,
 			classMethods: classMethods,
-			//instanceMethods : instanceMethods,
+			instanceMethods : instanceMethods,
 		}
 	);
 
@@ -39,12 +46,30 @@ module.exports = function(sequelize, DataTypes) {
 	return role;
 };
 
-var classMethods = {
+let classMethods = {
 	associate: function(models) {
 		models.role.belongsToMany(models.user, { as: 'users', through: 'role2user'});
 		// AND back reference
 		// for USER table:
 		models.user.belongsToMany(models.role, { as: 'roles', through: 'role2user'});
+	},
+
+	initialFill: function(models) {
+		let roles = [
+			{
+				code: 'root',
+				name: 'SuperAdministrator',
+				note: 'The main administrator of the application. All operations are allowed'
+			},
+
+			{
+				code: 'manager',
+				name: 'Manager',
+				note: 'Manager, common user of TNDR without administrtive priveleges',
+			}
+		];
+
+		return promise.map(roles, newrole => models.role.create(newrole));
 	},
 
 	isInRole: function role__isInRole(username, rolecode){
@@ -55,11 +80,11 @@ var classMethods = {
 			throw new Error('Invalid argument');
 		}
 
-		debug(`isInRole ( ${username} , ${rolecode}`);
+		debug(`isInRole ( [${username}], [${rolecode}] )`);
 
-		let s = this.sequelize();
+		let s = this.sequelize;
 
-		return s.models.role.findOne({
+		return s.models.role.count({
 				where: { code: rolecode },
 				include:[{
 					model: s.models.user,
@@ -67,10 +92,38 @@ var classMethods = {
 					as: 'users',
 					where: { username : username }
 				}]
-			}).then(function(role){
-debug('RESULT:', role);
-				return !!role;
+			}).then(function(counter){
+
+				return counter > 0;
 			})
 		;
 	},
+
+	getRoles: function role__getRoles(username){
+		debug('getRoles');
+
+		if (! _.isString(username)) {
+			throw new Error('Invalid argument');
+		}
+
+		debug(`getRoles ([${username}])`);
+
+		let s = this.sequelize;
+
+		return s.models.role.findAll({
+				include:[{
+					model: s.models.user,
+					through: 'role2user',
+					as: 'users',
+					where: { username : username }
+				}]
+			}).then(function(roles){
+
+				return roles;
+			})
+		;
+	},
+}
+
+let instanceMethods = {
 }

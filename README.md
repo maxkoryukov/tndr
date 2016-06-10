@@ -18,3 +18,8 @@ Here is the detailed article about the installation and starting the application
 ## Features
 
 All features are described in the appropriate documents (check files in project)
+
+## CREDITS
+
+* [Bootswatch](http://bootswatch.com/lumen/)
+* [Font-Awesome](http://fontawesome.io/)

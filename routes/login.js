@@ -64,12 +64,50 @@ router.route('*')
 
 		if (req.session && req.session.userId){
 
-			db.user.findById(req.session.userId).then(function(user){
-				user = _.omit(user, ['password', 'hash']);
-				req.current.user = user;
-				debug('CURRENT USER:', req.current.user);
-				next();
-			});
+			return db.user.findById(req.session.userId)
+				.then(function(user){
+
+					//user = _.omit(user, ['password', 'hash']);
+					req.current.user = user;
+					debug('CURRENT USER:', req.current.user.get('username'));
+
+					return [user, user.getRoles()];
+				})
+				.spread((user, roles) => {
+					req.current.user.roles = roles;
+					debug('TEST ROLES: ', req.current.user.roles);
+
+					// TODO : fill permissions
+					let perms = {'app.users.page' : true};
+					let is_root = false;
+
+					let old = req.app.locals.hbs._renderTemplate;
+					req.app.locals.hbs._renderTemplate = (function(hbs, old_func, perms, is_root){
+						return function(template, context, options){
+
+							if (is_root){
+								options.helpers['if-allow'] = function(perm, options){
+									return options.fn(this);
+								}
+							} else {
+								options.helpers['if-allow'] = function(perm, options){
+									if (perm in perms && perms[perm]){
+										return options.fn(this);
+									}
+									return options.inverse(this);
+								};
+							};
+
+							return old_func.apply(hbs, arguments);
+
+						};
+					})(req.app.locals.hbs, old, perms, is_root);
+				})
+				.then(next)
+				.catch( err => {
+					return next(err);
+				})
+			;
 		} else {
 			var b = new Buffer(req.originalUrl);
 			var backurl64 = b.toString('base64');
