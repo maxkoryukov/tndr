@@ -24,6 +24,8 @@ var app             = express();
 var promises        = require('bluebird');
 promises.longStackTraces();
 
+var hbsReqHelpers   = require('./lib/mw/hbs-per-request-helpers');
+
 debug('initializing');
 
 /*
@@ -123,6 +125,9 @@ models.init()
 
 	.then(function(){
 
+		// register MW, which copy LOCAL HBS-helpers from
+		// request to the HBS engine (for request handling time)
+		app.use(hbsReqHelpers);
 	/*
 	====================================
 	USER MESSAGES

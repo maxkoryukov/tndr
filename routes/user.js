@@ -5,13 +5,14 @@ var router   = express.Router();
 var debug    = require('debug')('tndr:routes:user');
 var _        = require('lodash');
 
+var allow    = require('../lib/mw/allow');
+
 var baseurl = '/user';
 var __ = x => x;
 
 var _init_users = function(users){
 	return _.chain(users)
 		.map(x => { return x.get(); })
-		.forEach(x => { x.is_root = x.username==='root'; })
 		.forEach(x => { x.enabled = !x.deleted_at; })
 		.forEach(x => { x.person.phone_link = x.person.getPhoneLink(); })
 		.map(_.partial(_.omit, _, 'deleted_at'))
@@ -57,7 +58,7 @@ ROUTES
 /* GET users listing. */
 router.route(`${baseurl}/list`)
 
-	.get(function(req, res, next) {
+	.get(allow.check('app.users.list'), function(req, res, next) {
 		let db = req.app.models;
 
 		// TODO : use model???
@@ -93,32 +94,33 @@ router.route(`${baseurl}/change_password`)
 		var pwn2 = req.body.passwordnew2;
 
 		if (pwn1 !== pwn2){
-			req.addMessage('warn', 'New passwords do not match!');
+			res.addMessage('warn', 'New passwords do not match!');
 			res.redirect('back');
 			return;
 		}
 
 		db.user.changePassword(un, pw, pwn1)
 			.catch( err => {
-				req.addMessage('warn', __('Old password is incorrect'));
+				res.addMessage('warn', __('Old password is incorrect'));
 				res.redirect('back');
 			})
 			.then( (result) => {
-				req.addMessage('success', __('Password changed!'));
+				res.addMessage('success', __('Password changed!'));
 				res.redirect(`${baseurl}/me`);
 			});
 	});
 
 router.route(`${baseurl}/create`)
 
-	.get(function(req, res, next) {
+	.get(allow.check('app.users.new'), function(req, res, next) {
 
 		res.render('user/create');
 		return;
 	})
 
-	.post(function(req, res, next) {
+	.post(allow.check('app.users.new'), function(req, res, next) {
 		/* GET VALUES */
+
 		let password2 = req.body.password2;
 		let user = _(req.body)
 			.pick(['username', 'password'])
@@ -130,7 +132,7 @@ router.route(`${baseurl}/create`)
 		user.person = person;
 
 		if (user.password !== password2){
-			req.addMessage('error', 'Passwords do not match!');
+			res.addMessage('error', 'Passwords do not match!');
 			res.redirect('back');
 			return;
 		}
@@ -140,12 +142,12 @@ router.route(`${baseurl}/create`)
 			include: [req.app.models.person]
 		})
 			.then(function(){
-				req.addMessage('success', 'User created!');
+				res.addMessage('success', 'User created!');
 				res.redirect(`${baseurl}/list`);
 				return;
 			})
 			.catch(function(err){
-				res.addMessage('error', err);
+				res.addMessage('error', err.message || err.toString());
 				res.render('user/create');
 				return;
 			});
@@ -167,7 +169,7 @@ router.route(`${baseurl}/:user`)
 
 router.route(`${baseurl}/:user/enabled`)
 	// TODO : replace with PATCH
-	.post(function(req, res, next) {
+	.post(allow.check('app.users.state'), function(req, res, next) {
 		var state = JSON.parse(req.body.enabled);
 
 		req.app.models.user.setState(req.user.id, state)

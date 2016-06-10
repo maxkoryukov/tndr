@@ -4,6 +4,30 @@ var debug   = require('debug')('tndr:models:role');
 var _       = require('lodash');
 var promise = require('bluebird');
 
+let _roles = [               'root',   'manager'       ];
+let _persmissions = {
+	'app.users.list':   [    true,     false,          ],
+	'app.users.state':  [    true,     false,          ],
+	'app.users.new':    [    true,     false,          ],
+};
+
+let permissions = {};
+
+debug('Remapping permissions');
+_(_roles)
+	.forEach((role, role_index) => {
+		_.forOwn(_persmissions, function(matrix, perm){
+			//debug(role, role, role_index, perm, matrix[role_index]);
+			if (matrix[role_index]){
+				if (!permissions[role]){
+					permissions[role] = {};
+				}
+				permissions[role][perm] = matrix[role_index];
+			};
+		});
+	});
+debug('Remapping permissions DONE');
+
 module.exports = function(sequelize, DataTypes) {
 
 	var role = sequelize.define("role", {
@@ -28,12 +52,12 @@ module.exports = function(sequelize, DataTypes) {
 				allowNull: true,
 			},
 
-			// permissions: {
-			// 	type: DataTypes.VIRTUAL,
-			// 	get: function() {
-			// 		return ['user.create'];
-			// 	}
-			// }
+			permissions: {
+				type: DataTypes.VIRTUAL,
+				get: function() {
+					return permissions[this.getDataValue('code')] || {};
+				}
+			}
 		},
 		{
 			paranoid: true,

@@ -6,7 +6,7 @@
     "open_browser" : false,
 
     "security" : {
-      "autologin" : 1
+      "autologin" : false
     },
 
     "cookie": {

@@ -10,6 +10,8 @@ var debug    = require('debug')('tndr:routes:tender');
 var _        = require('lodash');
 var path     = require('path');
 
+var allow    = require('../lib/mw/allow');
+
 var baseurl = '/tender';
 
 router.route(`${baseurl}/`)
@@ -42,7 +44,7 @@ router.route(`${baseurl}/wizard`)
 	})
 
 router.route(`${baseurl}/:id`)
-	.get(function(req, res, next){
+	.get(allow.check('never'), function(req, res, next){
 		let db = req.app.models;
 
 		if (! req.params.id.match( /\d+/ )) {

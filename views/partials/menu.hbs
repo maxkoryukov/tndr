@@ -18,7 +18,7 @@
 			{{! TODO: url }}
 				<li><a href="{{current.lang.href}}/tender/">{{__ "Tenders"}}</a></li>
 				<li><a href="{{current.lang.href}}/builder/index/">{{__ "Builders"}}</a></li>
-				{{#if-allow 'app.users.page'}}
+				{{#if-allow 'app.users.list'}}
 				<li><a href="{{current.lang.href}}/user/list/">{{__ "Users"}}</a></li>
 				{{/if-allow}}
 			</ul>

@@ -5,7 +5,12 @@ var router   = express.Router();
 var debug    = require('debug')('tndr:routes:login');
 var _        = require('lodash');
 
+var allow    = require('../lib/mw/allow');
+
 var baseurl = '';
+
+
+router.use(allow.hbsHelperMiddleware);
 
 router.route(`${baseurl}/login`)
 
@@ -35,12 +40,12 @@ router.route(`${baseurl}/login`)
 					}
 					res.redirect(url);
 				} else {
-					req.addMessage('warn', 'Unknown user!');
+					res.addMessage('warn', 'Unknown user!');
 					res.render('login', { backurl: backurl });
 				}
 			})
 			.catch(function auth_fail(){
-				req.addMessage('warn', 'Unknown user!');
+				res.addMessage('warn', 'Unknown user!');
 				res.render('login', { backurl: backurl });
 			});
 	});
@@ -75,33 +80,29 @@ router.route('*')
 				})
 				.spread((user, roles) => {
 					req.current.user.roles = roles;
-					debug('TEST ROLES: ', req.current.user.roles);
 
-					// TODO : fill permissions
-					let perms = {'app.users.page' : true};
-					let is_root = false;
+					let is_root = _.some(req.current.user.roles, ['code', 'root']);
+					let allowfun = () => false;
 
-					let old = req.app.locals.hbs._renderTemplate;
-					req.app.locals.hbs._renderTemplate = (function(hbs, old_func, perms, is_root){
-						return function(template, context, options){
+					if (is_root){
+						debug('PERMISSION: root access');
+						allowfun = ()=> true;
+					} else {
+						let perms = {};
+						_.forEach(roles, x=>{
+							_.assign(perms, x.permissions);
+						});
 
-							if (is_root){
-								options.helpers['if-allow'] = function(perm, options){
-									return options.fn(this);
-								}
-							} else {
-								options.helpers['if-allow'] = function(perm, options){
-									if (perm in perms && perms[perm]){
-										return options.fn(this);
-									}
-									return options.inverse(this);
-								};
-							};
-
-							return old_func.apply(hbs, arguments);
-
+						debug('PERMISSION: recalculate permissions for ' + user.username);
+						allowfun = function(perm){
+							let answer = _.get(perms, perm, false);
+							debug('allow requested: ', perm, answer);
+							return answer;
 						};
-					})(req.app.locals.hbs, old, perms, is_root);
+					};
+
+					req.current.user.allow = allowfun;
+
 				})
 				.then(next)
 				.catch( err => {
