@@ -17,17 +17,12 @@ var bodyParser      = require('body-parser');
 var session         = require('express-session');
 var flash           = require('connect-flash');
 var handlebars      = require('express-handlebars');
-
-var app             = express();
-
 var promises        = require('bluebird');
-promises.config({
-	longStackTraces: true
-});
 
 var hbsReqHelpers   = require('./lib/mw/hbs-per-request-helpers');
 
 debug('initializing');
+var app = express();
 
 /*
 ====================================

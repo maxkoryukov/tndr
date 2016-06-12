@@ -35,35 +35,6 @@
     }
   },
 
-  "test": {
-    "open_browser" : false,
-
-    "cookie": {
-      "secret" : "y3l1ejSg7EGfNdxvwtMA",
-      "secure" : true
-    },
-    "rproxy":
-    {
-      "trust_level" : 0
-    },
-
-    "models": {
-      "db" : {
-        "username": "tndr",
-        "password": "12345678",
-        "database": "db-tst",
-        "dialect": "sqlite",
-        "logging": "debug",
-        "benchmark": true,
-        "storage": "data/db/db-tst.sqlite"
-      },
-      "storage": {
-        "url_prefix": "/downloads",
-        "path": "./data/storage/test"
-      }
-    }
-  },
-
   "production": {
     "open_browser" : true,
 

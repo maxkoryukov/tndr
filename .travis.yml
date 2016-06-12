@@ -4,7 +4,8 @@ language: node_js
 
 node_js:
   - stable
-  - latest
+  - 4
+  - 6
 
 cache:
   directories:
