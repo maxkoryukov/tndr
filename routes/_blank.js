@@ -7,15 +7,14 @@
 var express  = require('express');
 var router   = express.Router();
 var debug    = require('debug')('tndr:routes:blank');
-var _        = require('lodash');
 
 var baseurl = '/blank';
 
-router.route(`${baseurl}/me`)
+router.route(`${baseurl}/`)
 
 	.get(function(req, res, next) {
-
-		res.render('blank/me');
+		debug('requested');
+		res.render('blank/index');
 	});
 
 module.exports = router;

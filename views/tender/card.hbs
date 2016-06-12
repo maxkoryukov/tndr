@@ -13,6 +13,12 @@
 		{{__ "Closing date"}} {{>timetag tender.closing_date}}
 	</p>
 
+	<div class="description">
+	{{#if tender.description}}
+		{{{tender.description}}}
+	{{/if}}
+	</div>
+
 	<section class="files">
 		<header>
 			<h2>{{__ "Attached files"}}</h2>

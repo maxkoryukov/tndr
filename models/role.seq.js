@@ -4,11 +4,13 @@ var debug   = require('debug')('tndr:models:role');
 var _       = require('lodash');
 var promise = require('bluebird');
 
-let _roles = [               'root',   'manager'       ];
+let _roles = [               'root',   'manager'         ];
 let _persmissions = {
-	'app.users.list':   [    true,     false,          ],
-	'app.users.state':  [    true,     false,          ],
-	'app.users.new':    [    true,     false,          ],
+	'app.users.list':     [       1,          0          ],
+	'app.users.state':    [       1,          0          ],
+	'app.users.new':      [       1,          0          ],
+
+	'app.tender.view':    [       1,          1          ]
 };
 
 let permissions = {};
@@ -23,7 +25,7 @@ _(_roles)
 					permissions[role] = {};
 				}
 				permissions[role][perm] = matrix[role_index];
-			};
+			}
 		});
 	});
 debug('Remapping permissions DONE');
@@ -31,40 +33,38 @@ debug('Remapping permissions DONE');
 module.exports = function(sequelize, DataTypes) {
 
 	var role = sequelize.define("role", {
-			id: {
-				type: DataTypes.INTEGER,
-				allowNull: false,
-				primaryKey: true,
-				autoIncrement: true
-			},
-			// this is the most important field - it will (and must) be used for permissions checks
-			code: {
-				type: DataTypes.STRING(256),
-				allowNull: false,
-				unique: true,
-			},
-			name: {
-				type: DataTypes.STRING(256),
-				allowNull: false,
-			},
-			note: {
-				type: DataTypes.STRING(4096),
-				allowNull: true,
-			},
-
-			permissions: {
-				type: DataTypes.VIRTUAL,
-				get: function() {
-					return permissions[this.getDataValue('code')] || {};
-				}
-			}
+		id: {
+			type: DataTypes.INTEGER,
+			allowNull: false,
+			primaryKey: true,
+			autoIncrement: true
 		},
-		{
-			paranoid: true,
-			classMethods: classMethods,
-			instanceMethods : instanceMethods,
+		// this is the most important field - it will (and must) be used for permissions checks
+		code: {
+			type: DataTypes.STRING(256),
+			allowNull: false,
+			unique: true,
+		},
+		name: {
+			type: DataTypes.STRING(256),
+			allowNull: false,
+		},
+		note: {
+			type: DataTypes.STRING(4096),
+			allowNull: true,
+		},
+
+		permissions: {
+			type: DataTypes.VIRTUAL,
+			get: function() {
+				return permissions[this.getDataValue('code')] || {};
+			}
 		}
-	);
+	}, {
+		paranoid: true,
+		classMethods: classMethods,
+		instanceMethods : instanceMethods,
+	});
 
 	debug('registered');
 	return role;
@@ -109,18 +109,17 @@ let classMethods = {
 		let s = this.sequelize;
 
 		return s.models.role.count({
-				where: { code: rolecode },
-				include:[{
-					model: s.models.user,
-					through: 'role2user',
-					as: 'users',
-					where: { username : username }
-				}]
-			}).then(function(counter){
+			where: { code: rolecode },
+			include:[{
+				model: s.models.user,
+				through: 'role2user',
+				as: 'users',
+				where: { username : username }
+			}]
+		}).then(function(counter){
 
-				return counter > 0;
-			})
-		;
+			return counter > 0;
+		})
 	},
 
 	getRoles: function role__getRoles(username){
@@ -135,17 +134,16 @@ let classMethods = {
 		let s = this.sequelize;
 
 		return s.models.role.findAll({
-				include:[{
-					model: s.models.user,
-					through: 'role2user',
-					as: 'users',
-					where: { username : username }
-				}]
-			}).then(function(roles){
+			include:[{
+				model: s.models.user,
+				through: 'role2user',
+				as: 'users',
+				where: { username : username }
+			}]
+		}).then(function(roles){
 
-				return roles;
-			})
-		;
+			return roles;
+		});
 	},
 }
 

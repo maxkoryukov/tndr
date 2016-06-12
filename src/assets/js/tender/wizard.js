@@ -9,8 +9,6 @@ $(document).ready(function doc_ready(){
 
 		var fdata = $form.serializeObject();
 
-		console.log(fdata);
-
 		$.ajax({
 			//{{! TODO : url }}
 			url: '/api/tender/',
@@ -34,8 +32,6 @@ $(document).ready(function doc_ready(){
 				showMessage(MSG.success, data.message);
 			})
 			.fail(function(data){
-				console.error('CREATE fail', data);
-
 				var resp = data.responseJSON;
 				showMessage(MSG.error, resp.error);
 			});
@@ -62,14 +58,10 @@ $(document).ready(function doc_ready(){
 			.done(function(data){
 				$('.modal').modal('hide');
 
-				var b = data.data;
-
 				showMessage(MSG.info, data.message);
 				$form.find('.cl-cancel').click();
 			})
 			.fail(function(data){
-				console.error('save fail', data);
-
 				$('.modal').modal('hide');
 
 				var resp = data.responseJSON;

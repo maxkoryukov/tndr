@@ -5,31 +5,29 @@ var debug = require('debug')('tndr:models:builder_category');
 module.exports = function(sequelize, DataTypes) {
 
 	var builder_category = sequelize.define("builder_category", {
-			id: {
-				type: DataTypes.INTEGER,
-				allowNull: false,
-				primaryKey: true,
-				autoIncrement: true
-			},
-			code: {
-				type: DataTypes.STRING(100),
-				allowNull: false,
-				unique: true
-			},
-			name: {
-				type: DataTypes.STRING(100),
-				allowNull: false,
-				unique: true
-			},
-			tip_usage: DataTypes.TEXT,
-			tip_price: DataTypes.TEXT,
-			note: DataTypes.TEXT,
-			sort: DataTypes.INTEGER,
+		id: {
+			type: DataTypes.INTEGER,
+			allowNull: false,
+			primaryKey: true,
+			autoIncrement: true
 		},
-		{
-			classMethods: classMethods,
-		}
-	);
+		code: {
+			type: DataTypes.STRING(100),
+			allowNull: false,
+			unique: true
+		},
+		name: {
+			type: DataTypes.STRING(100),
+			allowNull: false,
+			unique: true
+		},
+		tip_usage: DataTypes.TEXT,
+		tip_price: DataTypes.TEXT,
+		note: DataTypes.TEXT,
+		sort: DataTypes.INTEGER,
+	}, {
+		classMethods: classMethods,
+	});
 
 	debug('registered');
 	return builder_category;
@@ -43,12 +41,12 @@ var classMethods = {
 	initialFill: function(models) {
 		let bc = models.builder_category;
 		return bc.create({
-				code: 'priority',
-				name: 'Priority Builders',
-				tip_usage: 'Price Every Available Opportunity',
-				tip_price: 'Price Meticulously',
-				note: 'Reconsider if circumstances will affect our probability of success.',
-				sort: 10,
+			code: 'priority',
+			name: 'Priority Builders',
+			tip_usage: 'Price Every Available Opportunity',
+			tip_price: 'Price Meticulously',
+			note: 'Reconsider if circumstances will affect our probability of success.',
+			sort: 10,
 		}).then(
 			bc.create({
 				code: 'decent',

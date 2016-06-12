@@ -29,8 +29,6 @@ $(document).ready(function doc_ready(){
 				showMessage(MSG.success, data.message);
 			})
 			.fail(function(data){
-				console.error('delete fail', data);
-
 				$('.modal').modal('hide');
 
 				var resp = data.responseJSON;
@@ -65,8 +63,6 @@ $(document).ready(function doc_ready(){
 				$eform.find('.cl-cancel').click();
 			})
 			.fail(function(data){
-				console.error('save fail', data);
-
 				$('.modal').modal('hide');
 
 				var resp = data.responseJSON;
@@ -87,10 +83,10 @@ $(document).ready(function doc_ready(){
 	});
 
 	$eform.find('.cl-edit').click(function(){
-			$eform.find('.cl-state-edit').show();
-			$eform.find('.cl-state-read').hide();
+		$eform.find('.cl-state-edit').show();
+		$eform.find('.cl-state-read').hide();
 
-			$eform.find('.cl-editable').prop('disabled', false);
+		$eform.find('.cl-editable').prop('disabled', false);
 	});
 
 	$eform.find('.cl-create').click(function(){
@@ -121,9 +117,7 @@ $(document).ready(function doc_ready(){
 				showMessage(MSG.info, data.message);
 			})
 			.fail(function(data){
-				console.error('create fail', data);
 				$('.modal').modal('hide');
-
 
 				var resp = data.responseJSON;
 				showMessage(MSG.error, resp && resp.error);
@@ -156,8 +150,6 @@ $(document).ready(function doc_ready(){
 				ko.mapping.fromJS(data.data, viewModel.employees);
 			})
 			.fail(function(data){
-				console.error('employee get fail', data);
-
 				$('.modal').modal('hide');
 
 				var resp = data.responseJSON;
@@ -249,8 +241,6 @@ $(document).ready(function doc_ready(){
 				showMessage(MSG.success, data.message);
 			})
 			.fail(function(data){
-				console.error('employee save fail', data);
-
 				var resp = data.responseJSON;
 				showMessage(MSG.error, resp && resp.error || 'Error');
 			})
@@ -288,8 +278,6 @@ $(document).ready(function doc_ready(){
 				showMessage(MSG.success, data.message);
 			})
 			.fail(function(data){
-				console.error('employee create fail', data);
-
 				var resp = data.responseJSON;
 				showMessage(MSG.error, resp && resp.error || 'Error');
 			})
@@ -340,8 +328,6 @@ $(document).ready(function doc_ready(){
 				ko.mapping.fromJS(data.data, viewModel.employees);
 			})
 			.fail(function(data){
-				console.error('delete fail', data);
-
 				$('.modal').modal('hide');
 
 				var resp = data.responseJSON;

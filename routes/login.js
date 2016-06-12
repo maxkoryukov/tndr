@@ -99,7 +99,7 @@ router.route('*')
 							debug('allow requested: ', perm, answer);
 							return answer;
 						};
-					};
+					}
 
 					req.current.user.allow = allowfun;
 

@@ -44,7 +44,7 @@ router.route(`${baseurl}/wizard`)
 	})
 
 router.route(`${baseurl}/:id`)
-	.get(allow.check('never'), function(req, res, next){
+	.get(allow.check('app.tender.view'), function(req, res, next){
 		let db = req.app.models;
 
 		if (! req.params.id.match( /\d+/ )) {
@@ -63,10 +63,10 @@ router.route(`${baseurl}/:id`)
 		.then(tender => {
 			// TODO : handle not found
 			if (! tender){
-				return next('not found');
+				return next(new Error('not found'));
 			}
 
-			return [tender, tender.files_list()];
+			return [tender, tender.filesList()];
 		})
 		.catch(err => next(err))
 		.spread((tender, files) => {
@@ -87,6 +87,7 @@ router.route(`${baseurl}/:id`)
 		.catch(err => next(err))
 		;
 	})
+
 
 router.route(`${baseurl}/:state`)
 

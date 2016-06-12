@@ -200,8 +200,8 @@ if (_.get(app.config, 'debug.render_stack')) {
 	app.use(function tndr_global_error_dev(err, req, res, next) {
 		res.status(err.status || 500);
 		return res.render('error', {
-				message: err.message,
-				error: err
+			message: err.message,
+			error: err
 		});
 	});
 }

@@ -107,36 +107,34 @@ function __init_mod(config){
 		let user_root = null;
 
 		return db.user.create({
-					user: 1,
-					username: 'root',
-					password: '123',
-					person: {
-						name: 'root',
-						surname: 'root',
-						note: 'System account',
-					}
-				},{
-					include : [ db.person ],
-				}
-			)
-			.then(u => user_root = u)
-			.return([
-				db.role,
-				db.builder_category,
-			])
-			.map(m => m.initialFill(db))
-			.spread((roles) => {
-				return db.role.findOne({
-					where: {code: 'root'},
-					raw: false
-				});
-			})
-			.then( root_role => {
-				return user_root.addRole([root_role]);
-			})
+			user: 1,
+			username: 'root',
+			password: '123',
+			person: {
+				name: 'root',
+				surname: 'root',
+				note: 'System account',
+			}
+		}, {
+			include : [ db.person ],
+		})
+		.then(u => user_root = u)
+		.return([
+			db.role,
+			db.builder_category,
+		])
+		.map(m => m.initialFill(db))
+		.spread((/*roles*/) => {
+			return db.role.findOne({
+				where: {code: 'root'},
+				raw: false
+			});
+		})
+		.then( root_role => {
+			return user_root.addRole([root_role]);
+		})
 
-			.return(db)
-		;
+		.return(db);
 	};
 
 	return db;

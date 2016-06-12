@@ -6,7 +6,7 @@ let debug    = require('debug')('tndr:routes:api');
 let _        = require('lodash');
 
 let baseurl = '/api';
-let __ = x => x;
+//let __ = x => x;
 
 
 /*

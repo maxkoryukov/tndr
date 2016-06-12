@@ -14,39 +14,50 @@ exports = module.exports = function(sequelize, DataTypes) {
 	const STATE_NEW_CODE = 'new';
 
 	tender = sequelize.define("tender", {
-			id: {
-				type: DataTypes.INTEGER,
-				allowNull: false,
-				primaryKey: true,
-				autoIncrement: true
-			},
-			name: {
-				type: DataTypes.STRING(1000),
-				allowNull: false
-			},
-			simpro_quote_number: {
-				type: DataTypes.STRING(1000),
-			},
-
-			state_code: {
-				type: DataTypes.STRING(32),
-				allowNull: false,
-				defaultValue: STATE_NEW_CODE,
-			},
-
-			opening_date: {
-				type: DataTypes.DATE,
-			},
-			closing_date: {
-				type: DataTypes.DATE,
-			},
+		id: {
+			type: DataTypes.INTEGER,
+			allowNull: false,
+			primaryKey: true,
+			autoIncrement: true
 		},
-		{
-			paranoid: true,
-			classMethods: classMethods,
-			instanceMethods: instanceMethods,
-		}
-	);
+		name: {
+			type: DataTypes.STRING(1000),
+			allowNull: false
+		},
+		nameWrapper: {
+			type: new DataTypes.VIRTUAL(DataTypes.STRING(1000)),
+			get: function(){
+				let name = this.getDataValue('name');
+				if (name){ return name; }
+				let id = this.getDataValue('id');
+				return `<unnamed #${id}>`;
+			}
+		},
+		description: {
+			type: DataTypes.TEXT,
+			allowNull: true
+		},
+		simpro_quote_number: {
+			type: DataTypes.STRING(1000),
+		},
+
+		state_code: {
+			type: DataTypes.STRING(32),
+			allowNull: false,
+			defaultValue: STATE_NEW_CODE,
+		},
+
+		opening_date: {
+			type: DataTypes.DATE,
+		},
+		closing_date: {
+			type: DataTypes.DATE,
+		},
+	}, {
+		paranoid: true,
+		classMethods: classMethods,
+		instanceMethods: instanceMethods,
+	});
 
 	tender.hook('beforeBulkCreate', function() {
 		throw new Error('Unable to create tenders in bulk');
@@ -79,14 +90,14 @@ var classMethods = {
 }
 
 var instanceMethods = {
-	files_path: function() {
+	filesPath: function() {
 		let cfg = tender.config.storage;
 		return path.join(cfg.path, 'tender', this.id.toString());
 	},
 
-	files_list: function() {
+	filesList: function() {
 
-		let rt = this.files_path();
+		let rt = this.filesPath();
 		let path_rem_count = rt.split(path.sep).length;
 
 		return new promise(function(res, rej){

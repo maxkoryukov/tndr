@@ -5,23 +5,21 @@ var debug = require('debug')('tndr:models:builder');
 module.exports = function(sequelize, DataTypes) {
 
 	var builder = sequelize.define("builder", {
-			id: {
-				type: DataTypes.INTEGER,
-				allowNull: false,
-				primaryKey: true,
-				autoIncrement: true
-			},
-			name: {
-				type: DataTypes.STRING(100),
-				allowNull: false,
-				unique: true
-			},
+		id: {
+			type: DataTypes.INTEGER,
+			allowNull: false,
+			primaryKey: true,
+			autoIncrement: true
 		},
-		{
-			paranoid: true,
-			classMethods: classMethods,
-		}
-	);
+		name: {
+			type: DataTypes.STRING(100),
+			allowNull: false,
+			unique: true
+		},
+	}, {
+		paranoid: true,
+		classMethods: classMethods,
+	});
 
 	debug('registered');
 	return builder;

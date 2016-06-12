@@ -212,7 +212,7 @@ gulp.task('less', () => {
 // Fonts
 gulp.task('fonts', () => {
 	return gulp.src([
-			'./node_modules/font-awesome/fonts/*',
+		'./node_modules/font-awesome/fonts/*',
 	], {base: 'node_modules/font-awesome'})
 		.pipe(gulp.dest(paths.build.assets))
 	;

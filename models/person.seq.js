@@ -5,36 +5,34 @@ var debug = require('debug')('tndr:models:person');
 module.exports = function(sequelize, DataTypes) {
 
 	var person = sequelize.define("person", {
-			id: {
-				type: DataTypes.INTEGER,
-				allowNull: false,
-				primaryKey: true,
-				autoIncrement: true
-			},
-			name: {
-				type: DataTypes.STRING(500),
-				allowNull: false
-			},
-			surname: {
-				type: DataTypes.STRING(500),
-				allowNull: true
-			},
-			phone: {
-				type: DataTypes.STRING(500),
-				//allowNull: false
-			},
-			note: {
-				type: DataTypes.TEXT,
-				allowNull: true
-			},
+		id: {
+			type: DataTypes.INTEGER,
+			allowNull: false,
+			primaryKey: true,
+			autoIncrement: true
 		},
+		name: {
+			type: DataTypes.STRING(500),
+			allowNull: false
+		},
+		surname: {
+			type: DataTypes.STRING(500),
+			allowNull: true
+		},
+		phone: {
+			type: DataTypes.STRING(500),
+			//allowNull: false
+		},
+		note: {
+			type: DataTypes.TEXT,
+			allowNull: true
+		},
+	}, {
 		/* person OPTIONS */
-		{
-			paranoid: true,
-			classMethods: classMethods,
-			instanceMethods : instanceMethods,
-		}
-	);
+		paranoid: true,
+		classMethods: classMethods,
+		instanceMethods : instanceMethods,
+	});
 
 	debug('registered');
 	return person;

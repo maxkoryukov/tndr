@@ -61,6 +61,8 @@ router.route(`${baseurl}/list`)
 	.get(allow.check('app.users.list'), function(req, res, next) {
 		let db = req.app.models;
 
+		debug(`requested ${req.baseUrl}`);
+
 		// TODO : use model???
 		db.user.findAll({
 			raw: false,
@@ -101,10 +103,12 @@ router.route(`${baseurl}/change_password`)
 
 		db.user.changePassword(un, pw, pwn1)
 			.catch( err => {
+				debug(err);
 				res.addMessage('warn', __('Old password is incorrect'));
 				res.redirect('back');
 			})
 			.then( (result) => {
+				debug(result);
 				res.addMessage('success', __('Password changed!'));
 				res.redirect(`${baseurl}/me`);
 			});

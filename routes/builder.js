@@ -370,12 +370,11 @@ router.route(`${baseurl}/:builder`)
 			db.builder.findById(id, {
 				raw: false,
 				include: [{
-						model: db.person,
-						as: 'employees',
-						through : db.employer
-					},
-					db.builder_category,
-				],
+					model: db.person,
+					as: 'employees',
+					through : db.employer
+				},
+				db.builder_category ],
 			}),
 			// 2: ext
 			_extend_model_for_card(db)
