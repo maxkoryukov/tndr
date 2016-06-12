@@ -3,13 +3,18 @@ sudo: false
 language: node_js
 
 node_js:
-  - stable
+  - node
+  - "0.12"
   - 4
   - 6
 
 env:
   global:
     - NODE_ENV=dev
+
+matrix:
+  allow_failures:
+    - node_js: 4
 
 cache:
   directories:

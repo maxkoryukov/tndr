@@ -9,7 +9,6 @@ var allow    = require('../lib/mw/allow');
 
 var baseurl = '';
 
-
 router.use(allow.hbsHelperMiddleware);
 
 router.route(`${baseurl}/login`)
