@@ -14,6 +14,7 @@ environment:
   matrix:
     - nodejs_version: "4"
     - nodejs_version: "5"
+    - nodejs_version: "6"
 
 platform:
 #  - x86
@@ -27,7 +28,6 @@ install:
   # install modules
   - npm install
   - npm install -g gulp
-  - npm install gulp
 
 # Post-install test scripts.
 test_script:

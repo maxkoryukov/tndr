@@ -21,6 +21,7 @@ before_script:
 
 script:
   - gulp build
+  - npm test
 
 #after_script:
 #  - if [ $SENDCOVERAGE ]; then ./tools/coverage-calc.sh; ./tools/coverage-send.sh && rm -rf ./coverage; fi
