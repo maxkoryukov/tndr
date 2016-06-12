@@ -21,7 +21,9 @@ var handlebars      = require('express-handlebars');
 var app             = express();
 
 var promises        = require('bluebird');
-promises.longStackTraces();
+promises.config({
+	longStackTraces: true
+});
 
 var hbsReqHelpers   = require('./lib/mw/hbs-per-request-helpers');
 

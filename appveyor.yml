@@ -1,4 +1,4 @@
-version: 0.4.0.{build}-{branch}
+version: 0.4.1.{build}-{branch}
 
 # Fix line endings on Windows
 init:
@@ -11,11 +11,11 @@ hosts:
 environment:
   NODE_ENV: test
   matrix:
-#    - nodejs_version: "4"
+    - nodejs_version: "4"
     - nodejs_version: "5"
 
 platform:
-  - x86
+#  - x86
   - x64
 
 # Install scripts. (runs after repo cloning)
@@ -38,7 +38,7 @@ test_script:
 # Don't actually run MSBUILD, there is nothing to build...
 build: off
 before_test:
-  - gulp
+  - gulp build
 
 matrix:
   allow_failures:
