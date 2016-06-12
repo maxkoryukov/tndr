@@ -1,7 +1,6 @@
 "use strict";
 
-// HACK : play with env (for dev)
-try { require('dotenv').config(); } catch (e) {} // eslint-disable-line
+require('dotenv').config({silent: true});
 
 var gulp         = require('gulp');
 
