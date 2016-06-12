@@ -7,6 +7,10 @@ node_js:
   - 4
   - 6
 
+env:
+  global:
+    - NODE_ENV=dev
+
 cache:
   directories:
     - node_modules

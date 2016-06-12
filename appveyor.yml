@@ -9,7 +9,7 @@ hosts:
 
 # What combinations to test
 environment:
-  NODE_ENV: production
+  NODE_ENV: dev
   DEBUG: tndr*
   matrix:
     - nodejs_version: "4"
