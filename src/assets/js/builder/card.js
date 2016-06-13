@@ -57,13 +57,13 @@ $(document).ready(function doc_ready(){
 				$(this).prop('disabled', false);
 			})
 			.done(function(data){
-				$('.modal').modal('hide');
+				//$('.modal').modal('hide');
 
 				showMessage(MSG.info, data.message);
 				$eform.find('.cl-cancel').click();
 			})
 			.fail(function(data){
-				$('.modal').modal('hide');
+				//$('.modal').modal('hide');
 
 				var resp = data.responseJSON;
 				showMessage(MSG.error, resp.error);
@@ -108,7 +108,7 @@ $(document).ready(function doc_ready(){
 				$(this).prop('disabled', false);
 			})
 			.done(function(data){
-				$('.modal').modal('hide');
+				//$('.modal').modal('hide');
 
 				var b = data.data;
 
@@ -117,7 +117,7 @@ $(document).ready(function doc_ready(){
 				showMessage(MSG.info, data.message);
 			})
 			.fail(function(data){
-				$('.modal').modal('hide');
+				//$('.modal').modal('hide');
 
 				var resp = data.responseJSON;
 				showMessage(MSG.error, resp && resp.error);
@@ -150,7 +150,7 @@ $(document).ready(function doc_ready(){
 				ko.mapping.fromJS(data.data, viewModel.employees);
 			})
 			.fail(function(data){
-				$('.modal').modal('hide');
+				//$('.modal').modal('hide');
 
 				var resp = data.responseJSON;
 				showMessage(MSG.error, resp && resp.error || 'Error');

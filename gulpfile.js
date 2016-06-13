@@ -18,7 +18,6 @@ var uglify       = require('gulp-uglify');
 var zip          = require('gulp-zip');
 var filesize     = require('gulp-size');
 var gulpif       = require('gulp-if');
-// var notify    = require('gulp-notify'),
 // var minifycss = require('gulp-minify-css');
 // var concat    = require('gulp-concat'),
 
@@ -97,6 +96,9 @@ gulp.task('js:client:pre', () => {
 			'./node_modules/html5shiv/dist/html5shiv.min.js',
 			'./node_modules/Respond.js/dest/respond.min.js',
 			'./node_modules/bootstrap/dist/js/bootstrap.min.js',
+
+			'./node_modules/air-datepicker/dist/js/datepicker.min.js',
+			'./node_modules/air-datepicker/dist/js/i18n/datepicker.en.js',
 		])
 		// TODO : fix path
 		.pipe(gulp.dest(path.join(paths.build.assets, 'js3')))
@@ -111,7 +113,6 @@ gulp.task('js:client:my', () => {
 	return mkdirp(paths.build.jslint).then( () => {
 		return gulp.src(paths.client.script, {base: paths.client.base})
 
-			//.pipe(notify({message : "process file: <%= file.relative %>"}))
 			.pipe(jslint())
 			// TODO : remove path.join
 			.pipe(jslint.format(
@@ -135,7 +136,6 @@ gulp.task('js:client:my', () => {
 			.pipe(gulp.dest(paths.build.assets))
 			.pipe(size2)
 			.on('error', debug)
-			//.pipe(notify({ onLast:true, message: 'CSS task complete' }))
 	});
 });
 
@@ -147,7 +147,6 @@ gulp.task('js:server', () => {
 
 	return mkdirp(paths.build.jslint).then( () => {
 		return gulp.src(paths.client.script, {base: paths.client.base})
-			//.pipe(notify({message : "process file: <%= file.relative %>"}))
 			.pipe(gulp.dest(paths.build.tmp))
 			.pipe(size1)
 
@@ -164,7 +163,6 @@ gulp.task('js:server', () => {
 			.pipe(gulp.dest(paths.build.assets))
 			.pipe(size2)
 			.on('error', debug)
-			//.pipe(notify({ onLast:true, message: 'CSS task complete' }))
 	});
 });
 
@@ -176,13 +174,12 @@ STYLES
 =======================================
 */
 
-gulp.task('less', () => {
+gulp.task('style:less', () => {
 	const size1 = filesize(filesize_opt);
 	const size2 = filesize(filesize_opt);
 
 	return gulp.src(paths.client.style, {base: paths.client.base})
 
-		//.pipe(notify({message : "process file: <%= file.relative %>"}))
 		.pipe(less())
 		.pipe(gulp.dest(paths.build.tmp))
 		.pipe(size1)
@@ -204,9 +201,21 @@ gulp.task('less', () => {
 		.pipe(gulp.dest(paths.build.assets))
 		.pipe(size2)
 		//.on('error', debug)
-		//.pipe(notify({ onLast:true, message: 'CSS task complete' }))
 	;
 });
+
+
+gulp.task('style:pre', () => {
+	return gulp
+		.src([
+			'./node_modules/air-datepicker/dist/css/datepicker.min.css',
+		])
+		// TODO : fix path
+		.pipe(gulp.dest(path.join(paths.build.assets, 'css3')))
+	;
+});
+
+gulp.task('style', ['style:pre', 'style:less']);
 
 // Fonts
 gulp.task('fonts', () => {
@@ -256,7 +265,7 @@ function _zip(){
 	;
 }
 
-gulp.task('build', ['less', 'fonts', 'favicon', 'js']);
+gulp.task('build', ['style', 'fonts', 'favicon', 'js']);
 
 gulp.task('zip', ['build'], _zip);
 
@@ -268,7 +277,7 @@ gulp.task('start', ['build'], () => {
 	};
 
 	gulp.watch(paths.client.script, ['js:client:my'], cb);
-	gulp.watch(paths.client.style, ['less'], cb);
+	gulp.watch(paths.client.style, ['style:less'], cb);
 
 	//let app =
 	require('./bin/www');

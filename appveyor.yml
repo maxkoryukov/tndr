@@ -12,13 +12,17 @@ environment:
   NODE_ENV: dev
   DEBUG: tndr*
   matrix:
-    - nodejs_version: "0.12"
     - nodejs_version: "4"
+    - nodejs_version: "5"
     - nodejs_version: "6"
 
 platform:
 #  - x86
   - x64
+
+matrix:
+  allow_failures:
+    - nodejs_version: "4"
 
 # Install scripts. (runs after repo cloning)
 install:
@@ -29,22 +33,19 @@ install:
   - npm install
   - npm install -g gulp
 
-# Post-install test scripts.
-test_script:
+before_test:
   # Output useful info for debugging.
   - node --version
   - npm --version
+  - gulp build
+
+# Post-install test scripts.
+test_script:
   # run tests
   - npm test
 
 # Don't actually run MSBUILD, there is nothing to build...
 build: off
-before_test:
-  - gulp build
-
-matrix:
-  allow_failures:
-    - nodejs_version: "4"
 
 cache:
   - node_modules -> package.json

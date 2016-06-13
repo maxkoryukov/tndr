@@ -1,8 +1,9 @@
 "use strict";
 
 var promise  = require('bluebird');
-// var fs       = require('fs');
-// var fsasync  = promise.promisifyAll(fs);
+//var fs       = require('fs');
+//var fsp      = promise.promisifyAll(fs);
+var _        = require('lodash');
 var path     = require('path');
 var walk     = require('walk');
 var debug    = require('debug')('tndr:models:tender');
@@ -104,7 +105,7 @@ var instanceMethods = {
 			let files = [];
 			let w = walk.walk(rt);
 
-			debug('load files from', rt);
+			debug(`load files from [${rt}]`);
 
 			w.on('file', function(root, stat, next){
 				let parts = root.split(path.sep);
@@ -120,23 +121,19 @@ var instanceMethods = {
 			});
 
 			w.on('end', function(){
+				debug(`load files from [${rt}] DONE`);
 				res(files);
 			});
 
 			w.on('errors', function(root, stats, next){
-				debug('unhandled file ls error', root, stats);
-
-				rej(new Error(stats));
-				/*
-					[ { name: '3',
-					error:
-					 { [Error: ENOENT: no such file or directory, lstat 'data/storage/tender/3']
-					   errno: -2,
-					   code: 'ENOENT',
-					   syscall: 'lstat',
-					   path: 'data/storage/tender/3' } }
-					]
-				*/
+				if ('ENOENT' === _.get(stats, '[0].error.code')) {
+					// there is no tender-files directory, return empty list:
+					debug(`load files from [${rt}] DIR DOES NOT EXIST`);
+					res([]);
+				} else {
+					debug('unhandled file ls error', root, stats);
+					rej(new Error(stats));
+				};
 				next();
 			});
 		});

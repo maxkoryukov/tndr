@@ -1,16 +1,16 @@
 <article class="container tender">
-	<h1><small>{{__ "tender"}} </small>{{tender.name}}</h1>
+	<h1><small>{{__ "tender"}} </small>{{tender.nameWrapper}}</h1>
 
 	<p>
-		{{__ "Current state"}} <strong>{{tender.state.name}}</strong>
+		<strong class="badge tender-state-{{tender.state.code}}">{{tender.state.name}}</strong>
 	</p>
 
 	<p>
-		{{__ "Opening date"}} {{>timetag tender.opening_date}}
+		{{__ "From"}} <strong>{{>timetag tender.opening_date}}</strong>
 	</p>
 
 	<p>
-		{{__ "Closing date"}} {{>timetag tender.closing_date}}
+		{{__ "Till"}} <strong>{{>timetag tender.closing_date}}</strong>
 	</p>
 
 	<div class="description">
