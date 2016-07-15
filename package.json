@@ -45,6 +45,7 @@
     "walk": "^2.3.9"
   },
   "devDependencies": {
+    "@volebonet/eslint-config-volebonet": "^1.0.0",
     "Respond.js": "github:scottjehl/Respond#1.4.2",
     "bootstrap": "^3.3.6",
     "chai": "^3.5.0",
