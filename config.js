@@ -1,8 +1,8 @@
+"use strict";
+
 /*
  * @module config
  */
-
-"use strict";
 
 var debug           = require('debug')('tndr:config');
 var _               = require('lodash');

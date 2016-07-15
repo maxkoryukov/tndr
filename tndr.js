@@ -124,19 +124,21 @@ models.init()
 		// register MW, which copy LOCAL HBS-helpers from
 		// request to the HBS engine (for request handling time)
 		app.use(hbsReqHelpers);
-	/*
-	====================================
-	USER MESSAGES
-	====================================
-	*/
+
+		/*
+		====================================
+		USER MESSAGES
+		====================================
+		*/
+
 		var msgmw = require('./lib/mw/messages');
 		app.use('/', msgmw);
 
-	/*
-	====================================
-	LANG
-	====================================
-	*/
+		/*
+		====================================
+		LANG
+		====================================
+		*/
 
 		var langmw = require('./lib/mw/lang');
 
@@ -149,11 +151,11 @@ models.init()
 		}, langmw);
 
 
-	/*
-	====================================
-	ROUTING
-	====================================
-	*/
+		/*
+		====================================
+		ROUTING
+		====================================
+		*/
 		var login = require('./routes/login');
 		langmw.use('/', login);
 
