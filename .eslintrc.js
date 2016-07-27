@@ -1,6 +1,8 @@
+const path = require('path');
+
 exports = module.exports = {
 	"extends": [
-		"@volebonet/volebonet"
+		path.join(__dirname, 'node_modules', 'eslint-config-volebonet', 'index.js')
 	],
 
 	"env": {
